@@ -7,9 +7,17 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
+  --color-rb-red: #cf1317;
+  --color-rb-black: #010101;
+  --color-rb-green: #82bc40;
+  --color-rb-blue: #3dbbd3;
+  --color-rb-orange: #ea5a0b;
+  --color-rb-light-green: #f3f8ef;
+  --color-rb-light-blue: #ebf6f9;
+  --color-rb-peach: #fdefe8;
+  --font-sans: Verdana, Geneva, sans-serif;
   --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
+  --font-heading: var(--font-merriweather);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -123,6 +131,14 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading);
   }
   html {
     @apply font-sans;
