@@ -10,32 +10,53 @@ export type LinkItemType = {
 };
 
 type LinkItemProps = Omit<React.ComponentPropsWithoutRef<typeof Link>, "href"> &
-	LinkItemType;
+	LinkItemType & {
+		active?: boolean;
+		minimal?: boolean;
+	};
 
 export const LinkItem = React.forwardRef<HTMLAnchorElement, LinkItemProps>(
 	function LinkItem(
-		{ label, description, icon, className, href, ...props },
+		{
+			label,
+			description,
+			icon,
+			className,
+			href,
+			active = false,
+			minimal = false,
+			...props
+		},
 		ref
 	) {
 		return (
 			<Link
 				ref={ref}
-				className={cn("flex items-center gap-x-2", className)}
+				className={cn(
+					"group/link-item flex items-center gap-x-3 rounded-lg px-2.5 py-2.5 text-foreground/86 transition-colors hover:bg-muted/55 hover:text-rb-red",
+					minimal && "rounded-md px-2 py-2 hover:bg-muted/45",
+					active && "bg-rb-peach/35 text-rb-red",
+					className
+				)}
 				href={href}
 				{...props}
 			>
 				<div
 					className={cn(
-						"flex aspect-square size-12 items-center justify-center rounded-md border bg-card text-sm shadow-sm",
-						"[&_svg:not([class*='size-'])]:size-5 [&_svg:not([class*='size-'])]:text-foreground"
+						"flex size-10 shrink-0 items-center justify-center rounded-md border border-border/70 bg-card/80 text-sm text-foreground/78 transition-colors group-hover/link-item:border-rb-red/25 group-hover/link-item:bg-rb-peach/15 group-hover/link-item:text-rb-red",
+						minimal &&
+							"size-8 border-transparent bg-muted/45 text-foreground/68 group-hover/link-item:border-transparent group-hover/link-item:bg-rb-peach/20",
+						active &&
+							"border-rb-red/24 bg-rb-peach/18 text-rb-red group-hover/link-item:border-rb-red/24 group-hover/link-item:bg-rb-peach/18",
+						"[&_svg:not([class*='size-'])]:size-4"
 					)}
 				>
 					{icon}
 				</div>
-				<div className="flex flex-col items-start justify-center">
-					<span className="font-medium">{label}</span>
+				<div className="flex min-w-0 flex-col items-start justify-center">
+					<span className="font-medium leading-tight">{label}</span>
 					{description ? (
-						<span className="line-clamp-2 text-muted-foreground text-xs">
+						<span className="line-clamp-2 text-xs text-muted-foreground">
 							{description}
 						</span>
 					) : null}

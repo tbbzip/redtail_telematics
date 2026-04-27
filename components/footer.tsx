@@ -7,13 +7,16 @@ import {
 	SiInstagram,
 	SiX,
 } from "@icons-pack/react-simple-icons";
+
 import {
 	companyLinks,
-	primaryCtaLink,
+	getStartedCtaLink,
 	resourceLinks,
 	solutionFeaturedLinks,
 	solutionLinks,
+	topLevelLink,
 } from "@/components/nav-links";
+import { InfiniteSlider } from "@/components/ui/infinite-slider";
 
 function LinkedinGlyph() {
 	return (
@@ -27,18 +30,27 @@ function LinkedinGlyph() {
 	);
 }
 
+const trustedLogos = [
+	{ src: "/clients/t-mobile.svg", alt: "T-Mobile" },
+	{ src: "/clients/concirrus.svg", alt: "Concirrus" },
+	{ src: "/clients/jaguar.svg", alt: "Jaguar" },
+	{ src: "/clients/lojack.svg", alt: "LoJack" },
+	{ src: "/clients/fujitsu.svg", alt: "Fujitsu" },
+	{ src: "/clients/admiral.svg", alt: "Admiral" },
+];
+
 const mobileDownloads = [
-	{
-		prefix: "Get it on",
-		label: "Google Play",
-		href: "https://play.google.com/store/apps/details?id=com.redtailtelematics.rtfleet",
-		icon: <SiGoogleplay size={18} title="Google Play" />,
-	},
 	{
 		prefix: "Download on the",
 		label: "App Store",
 		href: "https://apps.apple.com/app/redtail-fleet-app",
-		icon: <SiAppstore size={18} title="App Store" />,
+		icon: <SiAppstore size={24} title="App Store" />,
+	},
+	{
+		prefix: "Get it on",
+		label: "Google Play",
+		href: "https://play.google.com/store/apps/details?id=com.redtailtelematics.rtfleet",
+		icon: <SiGoogleplay size={24} title="Google Play" />,
 	},
 ];
 
@@ -62,92 +74,178 @@ const socialLinks = [
 	},
 ];
 
-const footerSections = [
+const exploreLinks = [
+	topLevelLink,
+	...solutionFeaturedLinks,
+	...solutionLinks.slice(0, 3),
+	...resourceLinks.slice(0, 2),
+];
+
+const companyFooterLinks = [
+	...companyLinks.filter((link) =>
+		["About Us", "Our Technology", "Careers", "Contact Us"].includes(link.label)
+	),
+	getStartedCtaLink,
+];
+
+const legalLinks = [
+	{ label: "Privacy Policy", href: "/privacy-policy" },
+	{ label: "Terms", href: "/terms-and-conditions" },
+	{ label: "Cookie Policy", href: "/cookie-policy" },
+];
+
+type CertificationBadge = {
+	src: string;
+	alt: string;
+	label: string;
+	href?: string;
+};
+
+const certificationBadges: CertificationBadge[] = [
 	{
-		title: "Solutions",
-		links: [...solutionFeaturedLinks, ...solutionLinks],
+		src: "/certifications/nqa_iso9001.jpg",
+		alt: "ISO 9001 certification",
+		label: "ISO 9001",
+		href: "https://www.nqa.com/en-us/certification/standards/iso-9001",
 	},
 	{
-		title: "Resources",
-		links: resourceLinks,
+		src: "/certifications/nqa_iso27001.jpg",
+		alt: "ISO 27001 certification",
+		label: "ISO 27001",
+		href: "https://www.nqa.com/en-us/certification/standards/iso-27001",
 	},
 	{
-		title: "Company",
-		links: [...companyLinks, primaryCtaLink],
+		src: "/certifications/award-badge.png",
+		alt: "Best Telematics Provider award",
+		label: "Best Telematics Provider",
 	},
 ];
 
-const contactDetails = [
-	{ label: "UK", value: "+44 1799 533300", href: "tel:+441799533300" },
-	{ label: "US", value: "+1 619-546-9061", href: "tel:+16195469061" },
-	{
-		label: "Email",
-		value: "sales@redtailtelematics.com",
-		href: "mailto:sales@redtailtelematics.com",
-	},
-];
+function CertificationBadgeCard({ badge }: { badge: CertificationBadge }) {
+	const className =
+		"group flex h-11 min-w-24 items-center justify-center rounded-md border border-white/10 bg-white/[0.04] px-3 opacity-55 transition hover:border-rb-red/35 hover:bg-white/[0.08] hover:opacity-100";
 
-const offices = [
-	{
-		title: "UK HQ",
-		lines: [
-			"Plextek Building, London Road, Great Chesterford, Essex, CB10 1NY UK",
-		],
-	},
-	{
-		title: "San Diego",
-		lines: ["1420 Kettner Blvd Suite 100, San Diego, CA 92101 USA"],
-	},
-	{
-		title: "Las Vegas",
-		lines: ["2300 W Sahara Ave #800, Las Vegas, NV 89102 USA"],
-	},
-];
+	const content = (
+		<>
+			<Image
+				alt={badge.alt}
+				className="h-7 w-auto object-contain grayscale transition duration-300 group-hover:grayscale-0"
+				height={48}
+				src={badge.src}
+				width={112}
+			/>
+			<span className="sr-only">{badge.label}</span>
+		</>
+	);
+
+	if (badge.href) {
+		return (
+			<a
+				className={className}
+				href={badge.href}
+				rel="noreferrer"
+				target="_blank"
+			>
+				{content}
+			</a>
+		);
+	}
+
+	return <div className={className}>{content}</div>;
+}
 
 export function Footer() {
 	return (
-		<footer className="mt-auto border-t border-black/10 bg-rb-black text-white">
-			<div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-				<div className="grid gap-10 border-b border-white/12 pb-10 lg:grid-cols-[1.1fr_0.8fr_0.8fr_1.35fr]">
-					<div className="max-w-sm">
-						<Link className="inline-flex" href="/">
-							<Image
-								alt="Redtail"
-								className="h-9 w-auto"
-								height={52}
-								priority
-								src="/logo-white.svg"
-								width={176}
-							/>
-						</Link>
-						<p className="mt-5 max-w-xs text-sm leading-7 text-white/72">
-							Connected vehicle intelligence for fleets, insurers, and OEM
-							programs.
-						</p>
-						<div className="mt-6 flex flex-wrap gap-3 text-sm">
-							<Link
-								className="inline-flex items-center border border-white/18 px-4 py-2 font-medium text-white transition-colors hover:border-rb-red hover:text-rb-red"
-								href="/contact-us"
-							>
-								Contact Us
-							</Link>
-							<Link
-								className="inline-flex items-center bg-rb-red px-4 py-2 font-medium text-white transition-colors hover:bg-[#a81218]"
-								href={primaryCtaLink.href}
-							>
-								{primaryCtaLink.label}
-							</Link>
+		<footer className="relative mt-auto overflow-hidden bg-rb-black text-white rounded-t-4xl">
+			<div
+				aria-hidden="true"
+				className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-rb-red/80 to-transparent"
+			/>
+			<div
+				aria-hidden="true"
+				className="pointer-events-none absolute top-0 left-1/2 h-72 w-[44rem] -translate-x-1/2 rounded-full bg-white/[0.045] blur-3xl"
+			/>
+			<div
+				aria-hidden="true"
+				className="pointer-events-none absolute right-0 bottom-0 h-64 w-64 translate-x-1/3 translate-y-1/3 rounded-full bg-rb-red/12 blur-3xl"
+			/>
+			<div className="relative mx-auto max-w-7xl px-6 py-14 sm:px-8 sm:py-20 lg:px-10 lg:py-24">
+					<div className="mx-auto max-w-3xl">
+						<div className="relative overflow-hidden">
+							<div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-linear-to-r from-rb-black to-transparent" />
+							<div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-linear-to-l from-rb-black to-transparent" />
+							<InfiniteSlider gap={36} speed={18} speedOnHover={9}>
+								{trustedLogos.map((logo) => (
+									<div
+										className="flex min-w-[118px] items-center justify-center"
+										key={logo.src}
+									>
+										<Image
+											alt={logo.alt}
+											className="h-6 w-auto object-contain opacity-45 grayscale brightness-0 invert transition duration-300 hover:opacity-90"
+											height={36}
+											src={logo.src}
+											width={118}
+										/>
+									</div>
+								))}
+							</InfiniteSlider>
 						</div>
+						<p className="mt-8 text-center text-sm leading-7 text-white/72 sm:text-base">
+							Trusted by fleets, insurers, OEMs, and connected-vehicle partners
+							worldwide.
+						</p>
 					</div>
 
-					{footerSections.map((section) => (
-						<div key={section.title}>
-							<h3 className="text-xs font-semibold tracking-[0.22em] text-white/52 uppercase">
-								{section.title}
-							</h3>
-							<ul className="mt-4 space-y-3 text-sm text-white/70">
-								{section.links.map((link) => (
-									<li key={`${section.title}-${link.href}`}>
+					<div className="mt-16 grid gap-10 lg:grid-cols-[1.35fr_0.8fr_0.75fr_0.95fr] lg:gap-14">
+						<div>
+							<Link className="inline-flex" href="/">
+								<Image
+									alt="Redtail"
+									className="h-10 w-auto"
+									height={52}
+									priority
+									src="/logo-white.svg"
+									width={176}
+								/>
+							</Link>
+							<p className="mt-5 max-w-sm text-sm leading-7 text-white/68">
+								Connected vehicle intelligence for fleets, insurers, OEMs, and
+								partner programs that need reliable data from device to
+								platform.
+							</p>
+							<div className="mt-7 flex flex-wrap items-center gap-3">
+								{socialLinks.map((social) =>
+									social.href ? (
+										<a
+											aria-label={social.label}
+											className="inline-flex size-10 items-center justify-center rounded-md border border-white/12 text-white/82 transition hover:-translate-y-0.5 hover:border-rb-red/45 hover:text-rb-red"
+											href={social.href}
+											key={social.label}
+											rel="noreferrer"
+											target="_blank"
+										>
+											{social.icon}
+										</a>
+									) : (
+										<span
+											aria-label={`${social.label} link coming soon`}
+											className="inline-flex size-10 items-center justify-center rounded-md border border-white/10 text-white/36"
+											key={social.label}
+											role="img"
+										>
+											{social.icon}
+										</span>
+									)
+								)}
+							</div>
+						</div>
+
+						<nav aria-label="Explore links">
+							<h3 className="text-base font-semibold text-white">Explore</h3>
+							<ul className="mt-5 space-y-3 text-sm text-white/66">
+								{exploreLinks.map((link) => (
+									<li key={link.href}>
 										<Link
 											className="transition-colors hover:text-rb-red"
 											href={link.href}
@@ -157,113 +255,83 @@ export function Footer() {
 									</li>
 								))}
 							</ul>
-						</div>
-					))}
-				</div>
+						</nav>
 
-				<div className="grid gap-10 py-10 lg:grid-cols-[0.85fr_1.15fr]">
-					<div>
-						<h3 className="text-xs font-semibold tracking-[0.22em] text-white/52 uppercase">
-							Contact
-						</h3>
-						<ul className="mt-4 space-y-3 text-sm text-white/74">
-							{contactDetails.map((item) => (
-								<li key={item.label} className="flex flex-col gap-1">
-									<span className="text-[11px] font-semibold tracking-[0.18em] text-white/44 uppercase">
-										{item.label}
-									</span>
+						<nav aria-label="Company links">
+							<h3 className="text-base font-semibold text-white">Company</h3>
+							<ul className="mt-5 space-y-3 text-sm text-white/66">
+								{companyFooterLinks.map((link) => (
+									<li key={link.href}>
+										<Link
+											className="transition-colors hover:text-rb-red"
+											href={link.href}
+										>
+											{link.label}
+										</Link>
+									</li>
+								))}
+							</ul>
+						</nav>
+
+						<div>
+							<h3 className="text-base font-semibold text-white">Download App</h3>
+							<div className="mt-6 grid gap-3">
+								{mobileDownloads.map((download) => (
 									<a
-										className="transition-colors hover:text-rb-red"
-										href={item.href}
-									>
-										{item.value}
-									</a>
-								</li>
-							))}
-						</ul>
-					</div>
-
-					<div>
-						<h3 className="text-xs font-semibold tracking-[0.22em] text-white/52 uppercase">
-							Locations
-						</h3>
-						<div className="mt-4 grid gap-4 md:grid-cols-3">
-							{offices.map((office) => (
-								<div
-									className="border border-white/12 bg-white/[0.03] px-4 py-4"
-									key={office.title}
-								>
-									<h4 className="text-sm font-semibold text-white">
-										{office.title}
-									</h4>
-									<div className="mt-3 space-y-2 text-sm leading-6 text-white/70">
-										{office.lines.map((line) => (
-											<p key={`${office.title}-${line}`}>{line}</p>
-										))}
-									</div>
-								</div>
-							))}
-						</div>
-					</div>
-				</div>
-
-				<div className="border-t border-white/12 pt-6">
-					<div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-						<div className="flex flex-wrap items-center gap-3">
-							{socialLinks.map((social) =>
-								social.href ? (
-									<a
-										aria-label={social.label}
-										className="inline-flex size-11 items-center justify-center rounded-md border border-white/16 text-white transition-colors hover:border-rb-red hover:text-rb-red"
-										href={social.href}
-										key={social.label}
+										className="group inline-flex min-w-[200px] items-center gap-4 rounded-lg border border-white/14 bg-white/[0.035] px-4 py-3 text-white shadow-[0_18px_40px_rgba(207,19,23,0.08)] transition hover:-translate-y-0.5 hover:border-rb-red/45 hover:bg-white/[0.07]"
+										href={download.href}
+										key={download.label}
 										rel="noreferrer"
 										target="_blank"
 									>
-										{social.icon}
+										<div className="text-white transition-colors group-hover:text-rb-red">
+											{download.icon}
+										</div>
+										<div className="flex flex-col">
+											<span className="text-[10px] font-medium text-white/68">
+												{download.prefix}
+											</span>
+											<span className="text-lg leading-none font-semibold">
+												{download.label}
+											</span>
+										</div>
 									</a>
-								) : (
-									<span
-										aria-label={`${social.label} link coming soon`}
-										className="inline-flex size-11 items-center justify-center rounded-md border border-white/16 text-white/80"
-										key={social.label}
-										role="img"
+								))}
+							</div>
+						</div>
+					</div>
+
+					<div className="mt-12 border-t border-white/10 pt-6">
+						<div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+							<div
+								aria-label="Certifications and recognitions"
+								className="flex flex-wrap items-center gap-3"
+							>
+								{certificationBadges.map((badge) => (
+									<CertificationBadgeCard badge={badge} key={badge.src} />
+								))}
+							</div>
+
+							<nav
+								aria-label="Legal links"
+								className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-white/48"
+							>
+								{legalLinks.map((link) => (
+									<Link
+										className="transition-colors hover:text-rb-red"
+										href={link.href}
+										key={link.href}
 									>
-										{social.icon}
-									</span>
-								)
-							)}
+										{link.label}
+									</Link>
+								))}
+							</nav>
 						</div>
-
-						<div className="flex flex-wrap gap-3 lg:justify-end">
-							{mobileDownloads.map((download) => (
-								<a
-									className="inline-flex min-w-[188px] items-center gap-3 rounded-md bg-white px-4 py-3 text-rb-black transition-transform duration-150 hover:-translate-y-0.5"
-									href={download.href}
-									key={download.label}
-									rel="noreferrer"
-									target="_blank"
-								>
-									<div className="flex size-9 items-center justify-center rounded-md bg-rb-black text-white">
-										{download.icon}
-									</div>
-									<div className="flex flex-col">
-										<span className="text-[10px] font-semibold tracking-[0.18em] text-rb-black/56 uppercase">
-											{download.prefix}
-										</span>
-										<span className="text-lg leading-none font-semibold">
-											{download.label}
-										</span>
-									</div>
-								</a>
-							))}
-						</div>
+						<p className="mt-6 text-sm text-white/40">
+							&copy; {new Date().getFullYear()} Redtail Telematics. All rights
+							reserved.
+						</p>
 					</div>
-
-					<div className="mt-6 border-t border-white/12 pt-5 text-sm text-white/48">
-						<p>&copy; {new Date().getFullYear()} Redtail Telematics. All rights reserved.</p>
-					</div>
-				</div>
 			</div>
 		</footer>
 	);

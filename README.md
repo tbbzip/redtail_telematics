@@ -22,3 +22,6 @@ Open `http://localhost:3000`.
 npm run lint
 npm run build
 ```
+
+
+Minimalist line icon, clean vector style, consistent stroke weight (2.2px), rounded corners, modern UI icon, black color, no fill (outline only), icon should fill most of the canvas with strong presence, minimal padding, centered composition, perfectly aligned, designed on a 24x24 grid, balanced margins on all sides, no tiny details, no excessive whitespace, no shadows, no gradients, no textures, flat vector, no 3D, no realism, transparent background, SVG vector, editable in Adobe Illustrator

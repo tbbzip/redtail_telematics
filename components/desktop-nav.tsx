@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import {
 	NavigationMenu,
@@ -10,65 +13,149 @@ import {
 } from "@/components/ui/navigation-menu";
 import {
 	companyLinks,
+	companyMatchers,
 	industryLinks,
+	industryMatchers,
+	pathnameMatchesAny,
+	platformMatchers,
 	primaryCtaLink,
 	resourceLinks,
+	resourceMatchers,
+	secondaryCtaLink,
 	solutionFeaturedLinks,
 	solutionLinks,
+	solutionMatchers,
 	topLevelLink,
 } from "@/components/nav-links";
-import { LinkItem } from "@/components/sheard";
+import { LinkItem, type LinkItemType } from "@/components/sheard";
+
+const itemLinkClassName = "p-0 hover:bg-transparent focus:bg-transparent";
+const primaryIndustryLinks = industryLinks.slice(0, 6);
+const secondaryIndustryLinks = industryLinks.slice(6);
+
+function CompactMenuLink({
+	active,
+	item,
+}: {
+	active: boolean;
+	item: LinkItemType;
+}) {
+	return (
+		<Link
+			className={cn(
+				"group/compact-link flex items-center gap-2.5 rounded-md px-2.5 py-2 text-sm font-medium text-foreground/82 transition-colors hover:bg-muted/55 hover:text-rb-red",
+				active && "bg-rb-peach/25 text-rb-red"
+			)}
+			href={item.href}
+		>
+			<span
+				className={cn(
+					"flex size-7 shrink-0 items-center justify-center rounded-md bg-muted/45 text-foreground/68 transition-colors group-hover/compact-link:bg-rb-peach/20 group-hover/compact-link:text-rb-red",
+					active && "bg-rb-peach/20 text-rb-red",
+					"[&_svg:not([class*='size-'])]:size-3.5"
+				)}
+			>
+				{item.icon}
+			</span>
+			<span>{item.label}</span>
+		</Link>
+	);
+}
+
+function getTriggerClass(active: boolean, overlay: boolean) {
+	return cn(
+		"bg-transparent",
+		overlay &&
+			"text-white/88 hover:text-white focus-visible:text-white data-popup-open:text-white data-open:text-white after:bg-white/75",
+		active &&
+			(overlay
+				? "text-white after:scale-x-100"
+				: "text-rb-red after:scale-x-100")
+	);
+}
 
 export function DesktopNav({ overlay = false }: { overlay?: boolean }) {
-	const overlayTextClass = overlay
-		? "text-white/88 hover:text-white focus-visible:text-white data-popup-open:text-white data-open:text-white after:bg-white/75"
-		: "";
+	const pathname = usePathname();
+	const solutionsActive = pathnameMatchesAny(pathname, solutionMatchers);
+	const industriesActive = pathnameMatchesAny(pathname, industryMatchers);
+	const resourcesActive = pathnameMatchesAny(pathname, resourceMatchers);
+	const companyActive = pathnameMatchesAny(pathname, companyMatchers);
+	const platformActive = pathnameMatchesAny(pathname, platformMatchers);
 
 	return (
-		<NavigationMenu className="hidden md:flex">
-			<NavigationMenuList>
-				<NavigationMenuItem className="bg-transparent">
+		<NavigationMenu className="hidden lg:flex" viewport={false}>
+			<NavigationMenuList className="gap-0.5">
+				<NavigationMenuItem>
 					<NavigationMenuTrigger
-						className={cn("bg-transparent", overlayTextClass)}
+						className={getTriggerClass(solutionsActive, overlay)}
 					>
 						Solutions
 					</NavigationMenuTrigger>
-					<NavigationMenuContent className="bg-muted/50 p-1 pr-1.5 dark:bg-background">
-						<div className="grid w-[46rem] grid-cols-[1.4fr_0.8fr] gap-3">
-							<div className="rounded-2xl border bg-popover p-2 shadow">
-								<div className="grid grid-cols-2 gap-2">
-									{solutionLinks.map((item, i) => (
-										<NavigationMenuLink asChild key={`solution-${item.label}-${i}`}>
-											<LinkItem {...item} />
+					<NavigationMenuContent className="p-2.5">
+						<div className="grid w-[38rem] grid-cols-[minmax(0,1fr)_13.5rem] gap-2.5">
+							<div className="p-2">
+								<div className="mb-3">
+									<p className="text-xs font-medium tracking-[0.18em] text-muted-foreground uppercase">
+										Solutions
+									</p>
+									<p className="mt-1 text-sm text-muted-foreground">
+										Choose the program model that matches your fleet,
+										insurance, or partner strategy.
+									</p>
+								</div>
+								<div className="grid gap-1.5">
+									{solutionLinks.map((item) => (
+										<NavigationMenuLink
+											asChild
+											className={itemLinkClassName}
+											key={item.href}
+										>
+											<LinkItem
+												active={pathname === item.href}
+												minimal
+												{...item}
+											/>
 										</NavigationMenuLink>
 									))}
 								</div>
 							</div>
-							<div className="rounded-2xl border bg-background/80 p-3">
+							<div className="border-l border-border/70 py-2 pr-1 pl-4">
 								<p className="text-xs font-medium tracking-[0.18em] text-muted-foreground uppercase">
-									Featured
+									Deployment
 								</p>
 								<div className="mt-2 space-y-1">
-									{solutionFeaturedLinks.map((item, i) => (
-										<NavigationMenuLink asChild key={`featured-${item.label}-${i}`}>
-											<Link
-												className="justify-between rounded-2xl px-3 py-2"
-												href={item.href}
-											>
-												<span>{item.label}</span>
-												{item.icon}
-											</Link>
+									{solutionFeaturedLinks.map((item) => (
+										<NavigationMenuLink
+											asChild
+											className={itemLinkClassName}
+											key={item.href}
+										>
+											<LinkItem
+												active={pathname === item.href}
+												minimal
+												{...item}
+											/>
 										</NavigationMenuLink>
 									))}
 								</div>
-								<div className="mt-4 rounded-2xl border bg-muted/40 px-3 py-3 text-sm text-muted-foreground">
-									<div>Already using the platform?</div>
-									<Link
-										className="mt-2 inline-flex font-medium text-foreground hover:underline"
-										href={primaryCtaLink.href}
-									>
-										{primaryCtaLink.label}
-									</Link>
+								<div className="mt-4 border-t border-border/70 pt-4">
+									<p className="text-xs font-medium tracking-[0.18em] text-muted-foreground uppercase">
+										Need a closer look?
+									</p>
+									<div className="mt-2 grid gap-1">
+										<Link
+											className="text-sm font-medium text-foreground transition-colors hover:text-rb-red"
+											href={primaryCtaLink.href}
+										>
+											{primaryCtaLink.label}
+										</Link>
+										<Link
+											className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+											href={secondaryCtaLink.href}
+										>
+											{secondaryCtaLink.label}
+										</Link>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -76,77 +163,140 @@ export function DesktopNav({ overlay = false }: { overlay?: boolean }) {
 				</NavigationMenuItem>
 				<NavigationMenuItem>
 					<NavigationMenuTrigger
-						className={cn("bg-transparent", overlayTextClass)}
+						className={getTriggerClass(industriesActive, overlay)}
 					>
-						Explore
+						Industries
 					</NavigationMenuTrigger>
-					<NavigationMenuContent className="bg-muted/50 p-1 pr-1.5 pb-1.5 dark:bg-background">
-						<div className="grid w-[58rem] grid-cols-[1.45fr_0.9fr] gap-3">
-							<div className="rounded-2xl border bg-popover p-2 shadow">
-								<p className="px-2 pb-2 text-xs font-medium tracking-[0.18em] text-muted-foreground uppercase">
-									Industries
-								</p>
-								<div className="grid grid-cols-2 gap-2">
-									{industryLinks.map((item, i) => (
-										<NavigationMenuLink asChild key={`industry-${item.label}-${i}`}>
-											<LinkItem {...item} />
+					<NavigationMenuContent className="p-2.5">
+						<div className="grid w-[40rem] grid-cols-[minmax(0,1fr)_14rem] gap-2.5 p-2">
+							<div className="pr-1">
+								<div className="mb-3 flex items-end justify-between gap-8">
+									<div>
+										<p className="text-xs font-medium tracking-[0.18em] text-muted-foreground uppercase">
+											Industries
+										</p>
+										<p className="mt-1 text-sm text-muted-foreground">
+											See how Redtail adapts to sector-specific fleets, assets,
+											and programs.
+										</p>
+									</div>
+									<Link
+										className="shrink-0 text-sm font-medium text-foreground transition-colors hover:text-rb-red"
+										href={primaryCtaLink.href}
+									>
+										Talk to sales
+									</Link>
+								</div>
+								<div className="grid grid-cols-2 gap-1.5">
+									{primaryIndustryLinks.map((item) => (
+										<NavigationMenuLink
+											asChild
+											className={itemLinkClassName}
+											key={item.href}
+										>
+											<LinkItem
+												active={pathname === item.href}
+												minimal
+												{...item}
+											/>
 										</NavigationMenuLink>
 									))}
 								</div>
 							</div>
-							<div className="rounded-2xl border bg-background/80 p-3">
-								<div>
-									<p className="text-xs font-medium tracking-[0.18em] text-muted-foreground uppercase">
-										Resources
-									</p>
-									<div className="mt-2 space-y-1">
-										{resourceLinks.map((item, i) => (
-											<NavigationMenuLink asChild key={`resource-${item.label}-${i}`}>
-												<Link
-													className="justify-between rounded-2xl px-3 py-2"
-													href={item.href}
-												>
-													<span>{item.label}</span>
-													{item.icon}
-												</Link>
-											</NavigationMenuLink>
-										))}
-									</div>
-								</div>
-								<div className="mt-4 border-t pt-4">
-									<p className="text-xs font-medium tracking-[0.18em] text-muted-foreground uppercase">
-										Company
-									</p>
-									<div className="mt-2 space-y-1">
-										{companyLinks.map((item, i) => (
-											<NavigationMenuLink asChild key={`company-${item.label}-${i}`}>
-												<Link
-													className="justify-between rounded-2xl px-3 py-2"
-													href={item.href}
-												>
-													<span>{item.label}</span>
-													{item.icon}
-												</Link>
-											</NavigationMenuLink>
-										))}
-									</div>
+							<div className="border-l border-border/70 py-1 pr-1 pl-4">
+								<p className="text-xs font-medium tracking-[0.18em] text-muted-foreground uppercase">
+									More sectors
+								</p>
+								<div className="mt-2 space-y-1">
+									{secondaryIndustryLinks.map((item) => (
+										<NavigationMenuLink
+											asChild
+											className={itemLinkClassName}
+											key={item.href}
+										>
+											<CompactMenuLink
+												active={pathname === item.href}
+												item={item}
+											/>
+										</NavigationMenuLink>
+									))}
 								</div>
 							</div>
 						</div>
 					</NavigationMenuContent>
 				</NavigationMenuItem>
-				<NavigationMenuLink asChild className="px-4">
+				<NavigationMenuLink asChild className="px-1">
 					<Link
 						className={cn(
-							"relative inline-flex h-9 items-center px-2 py-2 text-sm font-medium text-foreground/72 transition-colors hover:text-rb-red focus-visible:text-rb-red focus-visible:outline-none after:absolute after:right-2 after:bottom-1 after:left-2 after:h-px after:origin-left after:scale-x-0 after:bg-rb-red/70 after:transition-transform after:duration-200 hover:after:scale-x-100 focus-visible:after:scale-x-100",
+							"relative inline-flex h-9 items-center px-3 py-2 text-sm font-medium text-foreground/72 transition-colors hover:text-rb-red focus-visible:text-rb-red focus-visible:outline-none after:absolute after:right-3 after:bottom-1 after:left-3 after:h-px after:origin-left after:scale-x-0 after:bg-rb-red/70 after:transition-transform after:duration-200 hover:after:scale-x-100 focus-visible:after:scale-x-100",
 							overlay &&
-								"text-white/88 hover:text-white focus-visible:text-white after:bg-white/75"
+								"text-white/88 hover:text-white focus-visible:text-white after:bg-white/75",
+							platformActive &&
+								(overlay
+									? "text-white after:scale-x-100"
+									: "text-rb-red after:scale-x-100")
 						)}
 						href={topLevelLink.href}
 					>
 						{topLevelLink.label}
 					</Link>
 				</NavigationMenuLink>
+				<NavigationMenuItem>
+					<NavigationMenuTrigger
+						className={getTriggerClass(resourcesActive, overlay)}
+					>
+						Resources
+					</NavigationMenuTrigger>
+					<NavigationMenuContent className="p-2.5">
+						<div className="w-[18rem] p-1.5">
+							<p className="text-xs font-medium tracking-[0.18em] text-muted-foreground uppercase">
+								Resources
+							</p>
+							<div className="mt-2 grid gap-1">
+								{resourceLinks.map((item) => (
+									<NavigationMenuLink
+										asChild
+										className={itemLinkClassName}
+										key={item.href}
+									>
+										<CompactMenuLink
+											active={pathname === item.href}
+											item={item}
+										/>
+									</NavigationMenuLink>
+								))}
+							</div>
+						</div>
+					</NavigationMenuContent>
+				</NavigationMenuItem>
+				<NavigationMenuItem>
+					<NavigationMenuTrigger
+						className={getTriggerClass(companyActive, overlay)}
+					>
+						Company
+					</NavigationMenuTrigger>
+					<NavigationMenuContent className="p-2.5">
+						<div className="w-[19rem] p-1.5">
+							<p className="text-xs font-medium tracking-[0.18em] text-muted-foreground uppercase">
+								Company
+							</p>
+							<div className="mt-2 grid gap-1">
+								{companyLinks.map((item) => (
+									<NavigationMenuLink
+										asChild
+										className={itemLinkClassName}
+										key={item.href}
+									>
+										<CompactMenuLink
+											active={pathname === item.href}
+											item={item}
+										/>
+									</NavigationMenuLink>
+								))}
+							</div>
+						</div>
+					</NavigationMenuContent>
+				</NavigationMenuItem>
 			</NavigationMenuList>
 		</NavigationMenu>
 	);

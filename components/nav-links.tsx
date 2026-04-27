@@ -22,6 +22,8 @@ import {
   WrenchIcon,
 } from "lucide-react";
 
+export type NavMatcher = readonly string[];
+
 type RouteEntry = {
   label: string;
   href: string;
@@ -30,39 +32,41 @@ type RouteEntry = {
 
 export const solutionLinks: LinkItemType[] = [
   {
-    label: "Usage Based Insurance",
+    label: "Usage-Based Insurance",
     href: "/solutions/usage-based-insurance",
     icon: <ShieldIcon />,
+    description: "Driving data for insurer programs.",
   },
   {
     label: "Fleet Management",
     href: "/solutions/fleet-management",
     icon: <LayoutDashboardIcon />,
+    description: "Visibility, alerts, and fleet insight.",
   },
   {
     label: "Reseller Program",
     href: "/solutions/reseller-program",
     icon: <UsersIcon />,
+    description: "Partner-ready telematics delivery.",
   },
   {
     label: "White Label",
     href: "/solutions/white-label",
     icon: <FileTextIcon />,
+    description: "Branded platform and app programs.",
   },
 ];
 
 export const solutionFeaturedLinks: LinkItemType[] = [
   {
-    label: "Platform & Apps",
-    href: "/platform-and-apps",
-    icon: <LayoutDashboardIcon />,
-  },
-  {
     label: "Devices",
     href: "/solutions/devices",
     icon: <PackageIcon />,
+    description: "Hardware built for reliable deployments.",
   },
 ];
+
+export const solutionMatchers = ["/solutions"] as const;
 
 export const industryLinks: LinkItemType[] = [
   {
@@ -122,6 +126,8 @@ export const industryLinks: LinkItemType[] = [
   },
 ];
 
+export const industryMatchers = ["/industries"] as const;
+
 export const resourceLinks: LinkItemType[] = [
   {
     label: "Blog",
@@ -145,6 +151,8 @@ export const resourceLinks: LinkItemType[] = [
   },
 ];
 
+export const resourceMatchers = ["/resources"] as const;
+
 export const companyLinks: LinkItemType[] = [
   {
     label: "About Us",
@@ -162,7 +170,7 @@ export const companyLinks: LinkItemType[] = [
     icon: <FileTextIcon />,
   },
   {
-    label: "Redtail Careers",
+    label: "Careers",
     href: "/careers",
     icon: <BriefcaseIcon />,
   },
@@ -173,19 +181,33 @@ export const companyLinks: LinkItemType[] = [
   },
 ];
 
+export const companyMatchers = [
+  "/about-us",
+  "/our-technology",
+  "/contact-us",
+  "/careers",
+] as const;
+
 export const topLevelLink = {
   label: "Platform & Apps",
   href: "/platform-and-apps",
 };
 
+export const platformMatchers = [topLevelLink.href] as const;
+
 export const secondaryCtaLink = {
+  label: "Login",
+  href: "/login",
+};
+
+export const primaryCtaLink = {
   label: "Contact Us",
   href: "/contact-us",
 };
 
-export const primaryCtaLink = {
-  label: "Login",
-  href: "/login",
+export const getStartedCtaLink = {
+  label: "Get Started",
+  href: "/platform-and-apps",
 };
 
 const routeEntries: RouteEntry[] = [
@@ -231,4 +253,19 @@ export function getRouteEntry(href: string) {
 
 export function getRouteEntriesByPrefix(prefix: string) {
   return allRouteEntries.filter((entry) => entry.href.startsWith(prefix));
+}
+
+export function pathnameMatches(pathname: string | null | undefined, matcher: string) {
+  if (!pathname) {
+    return false;
+  }
+
+  return pathname === matcher || pathname.startsWith(`${matcher}/`);
+}
+
+export function pathnameMatchesAny(
+  pathname: string | null | undefined,
+  matchers: NavMatcher
+) {
+  return matchers.some((matcher) => pathnameMatches(pathname, matcher));
 }

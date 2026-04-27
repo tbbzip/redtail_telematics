@@ -31,7 +31,7 @@ export function MediaHero({
   priority = false,
 }: MediaHeroProps) {
   return (
-    <section className="relative isolate min-h-[92svh] overflow-hidden border-b border-black/10 text-white">
+    <section className="relative isolate min-h-[92svh] overflow-hidden border-b border-black/10 text-white rounded-b-3xl">
       <Image
         alt={imageAlt}
         className="object-cover object-center"

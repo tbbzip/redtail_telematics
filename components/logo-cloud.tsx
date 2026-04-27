@@ -9,9 +9,9 @@ export const clientLogos = [
 		height: 36,
 	},
 	{
-		src: "/clients/ford.svg",
-		alt: "Ford",
-		width: 94,
+		src: "/clients/concirrus.svg",
+		alt: "Concirrus",
+		width: 136,
 		height: 36,
 	},
 	{
@@ -21,9 +21,9 @@ export const clientLogos = [
 		height: 36,
 	},
 	{
-		src: "/clients/lr.svg",
-		alt: "Land Rover",
-		width: 102,
+		src: "/clients/lojack.svg",
+		alt: "LoJack",
+		width: 118,
 		height: 36,
 	},
 	{

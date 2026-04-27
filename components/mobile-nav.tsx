@@ -1,34 +1,118 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import React from "react";
-import { Portal, PortalBackdrop } from "@/components/ui/portal";
+import { AnimatePresence, motion } from "motion/react";
+import { Portal } from "@/components/ui/portal";
 import { Button } from "@/components/ui/button";
 import {
 	companyLinks,
+	companyMatchers,
+	getStartedCtaLink,
 	industryLinks,
+	industryMatchers,
+	pathnameMatchesAny,
 	primaryCtaLink,
 	resourceLinks,
+	resourceMatchers,
 	secondaryCtaLink,
 	solutionFeaturedLinks,
 	solutionLinks,
-	topLevelLink,
+	solutionMatchers,
 } from "@/components/nav-links";
 import { LinkItem } from "@/components/sheard";
-import { XIcon, MenuIcon } from "lucide-react";
+import {
+	ArrowRightIcon,
+	ChevronDownIcon,
+	MenuIcon,
+	PhoneIcon,
+	XIcon,
+} from "lucide-react";
 
-export function MobileNav({ overlay = false }: { overlay?: boolean }) {
+type MobileSection = {
+	id: string;
+	label: string;
+	items: React.ComponentProps<typeof LinkItem>[];
+	matchers: readonly string[];
+};
+
+const mobileTextActionClassName =
+	"relative inline-flex h-9 items-center justify-center gap-1.5 px-1 text-sm font-medium text-foreground/72 transition-colors after:absolute after:right-1 after:bottom-1 after:left-1 after:h-px after:origin-left after:scale-x-0 after:bg-rb-red after:transition-transform after:duration-300 after:ease-out hover:text-rb-red hover:after:scale-x-100 focus-visible:text-rb-red focus-visible:after:scale-x-100 focus-visible:outline-none";
+
+const sections: MobileSection[] = [
+	{
+		id: "solutions",
+		label: "Solutions",
+		items: [...solutionLinks, ...solutionFeaturedLinks],
+		matchers: solutionMatchers,
+	},
+	{
+		id: "industries",
+		label: "Industries",
+		items: industryLinks,
+		matchers: industryMatchers,
+	},
+	{
+		id: "resources",
+		label: "Resources",
+		items: resourceLinks,
+		matchers: resourceMatchers,
+	},
+	{
+		id: "company",
+		label: "Company",
+		items: companyLinks,
+		matchers: companyMatchers,
+	},
+];
+
+function getActiveSection(pathname: string | null) {
+	return (
+		sections.find((section) => pathnameMatchesAny(pathname, section.matchers))
+			?.id ?? null
+	);
+}
+
+export function MobileNav({
+	onOpenChange,
+	overlay = false,
+}: {
+	onOpenChange?: (open: boolean) => void;
+	overlay?: boolean;
+}) {
+	const pathname = usePathname();
 	const [open, setOpen] = React.useState(false);
+	const activeSection = React.useMemo(() => getActiveSection(pathname), [pathname]);
+	const [expandedSection, setExpandedSection] = React.useState<string | null>(
+		activeSection
+	);
 
 	const handleClose = React.useCallback(() => setOpen(false), []);
 
+	React.useEffect(() => {
+		onOpenChange?.(open);
+	}, [onOpenChange, open]);
+
+	React.useEffect(() => {
+		setOpen(false);
+	}, [pathname]);
+
+	React.useEffect(() => {
+		if (activeSection) {
+			setExpandedSection(activeSection);
+		}
+	}, [activeSection]);
+
 	return (
-		<div className="md:hidden">
+		<div className="lg:hidden">
 			<Button
 				aria-controls="mobile-menu"
 				aria-expanded={open}
 				aria-label="Toggle menu"
 				className={cn(
-					"md:hidden",
+					"lg:hidden",
 					overlay &&
 						"border-white/20 bg-white/8 text-white hover:border-white/34 hover:bg-white/14 hover:text-white"
 				)}
@@ -55,86 +139,113 @@ export function MobileNav({ overlay = false }: { overlay?: boolean }) {
 			</Button>
 			{open && (
 				<Portal className="top-14">
-					<PortalBackdrop />
 					<div
 						className={cn(
-							"size-full overflow-y-auto p-4",
+							"flex size-full flex-col overflow-hidden bg-background",
 							"data-[slot=open]:zoom-in-97 ease-out data-[slot=open]:animate-in"
 						)}
 						data-slot={open ? "open" : "closed"}
 					>
-						<div className="flex w-full flex-col gap-y-5">
-							<Link
-								className="rounded-2xl border bg-background px-4 py-3 text-sm font-medium"
-								href={topLevelLink.href}
-								onClick={handleClose}
-							>
-								{topLevelLink.label}
-							</Link>
-							<div className="flex flex-col gap-y-2">
-								<span className="text-xs font-medium tracking-[0.18em] text-muted-foreground uppercase">
-									Solutions
-								</span>
-								{[...solutionLinks, ...solutionFeaturedLinks].map((link) => (
-									<LinkItem
-										className="rounded-2xl p-2 active:bg-muted dark:active:bg-muted/50"
-										key={`solution-${link.label}`}
-										onClick={handleClose}
-										{...link}
-									/>
-								))}
-							</div>
-							<div className="flex flex-col gap-y-2">
-								<span className="text-xs font-medium tracking-[0.18em] text-muted-foreground uppercase">
-									Industries
-								</span>
-								{industryLinks.map((link) => (
-									<LinkItem
-										className="rounded-2xl p-2 active:bg-muted dark:active:bg-muted/50"
-										key={`industry-${link.label}`}
-										onClick={handleClose}
-										{...link}
-									/>
-								))}
-							</div>
-							<div className="flex flex-col gap-y-2">
-								<span className="text-xs font-medium tracking-[0.18em] text-muted-foreground uppercase">
-									Resources
-								</span>
-								{resourceLinks.map((link) => (
-									<LinkItem
-										className="rounded-2xl p-2 active:bg-muted dark:active:bg-muted/50"
-										key={`resource-${link.label}`}
-										onClick={handleClose}
-										{...link}
-									/>
-								))}
-							</div>
-							<div className="flex flex-col gap-y-2">
-								<span className="text-xs font-medium tracking-[0.18em] text-muted-foreground uppercase">
-									Company
-								</span>
-								{companyLinks.map((link) => (
-									<LinkItem
-										className="rounded-2xl p-2 active:bg-muted dark:active:bg-muted/50"
-										key={`company-${link.label}`}
-										onClick={handleClose}
-										{...link}
-									/>
-								))}
+						<div className="flex-1 overflow-y-auto px-4 pt-4 pb-8">
+							<div className="mx-auto w-full max-w-md">
+								<div className="divide-y divide-border/70">
+									{sections.map((section, index) => {
+										const expanded = expandedSection === section.id;
+										const sectionActive = pathnameMatchesAny(
+											pathname,
+											section.matchers
+										);
+
+										return (
+											<div
+												className={cn(
+													index === 0 && "border-t border-border/70"
+												)}
+												key={section.id}
+											>
+												<button
+													aria-controls={`mobile-section-${section.id}`}
+													aria-expanded={expanded}
+													className={cn(
+														"flex w-full items-center justify-between px-1 py-4 text-left text-base font-medium transition-colors",
+														sectionActive
+															? "text-rb-red"
+															: "text-foreground/86"
+													)}
+													onClick={() =>
+														setExpandedSection((current) =>
+															current === section.id ? null : section.id
+														)
+													}
+													type="button"
+												>
+													<span>{section.label}</span>
+													<ChevronDownIcon
+														className={cn(
+															"size-4 transition-transform duration-200",
+															expanded && "rotate-180"
+														)}
+													/>
+												</button>
+												<AnimatePresence initial={false}>
+													{expanded ? (
+														<motion.div
+															animate={{ height: "auto", opacity: 1 }}
+															className="overflow-hidden"
+															exit={{ height: 0, opacity: 0 }}
+															id={`mobile-section-${section.id}`}
+															initial={{ height: 0, opacity: 0 }}
+															transition={{
+																duration: 0.22,
+																ease: [0.22, 1, 0.36, 1],
+															}}
+														>
+															<div className="grid gap-1 pb-4">
+																{section.items.map((link) => (
+																	<LinkItem
+																		active={pathname === link.href}
+																		className="px-2 py-2.5"
+																		key={`${section.id}-${link.href}`}
+																		onClick={handleClose}
+																		{...link}
+																	/>
+																))}
+															</div>
+														</motion.div>
+													) : null}
+												</AnimatePresence>
+											</div>
+										);
+									})}
+								</div>
 							</div>
 						</div>
-						<div className="mt-5 flex flex-col gap-2">
-							<Button asChild className="w-full" variant="outline">
-								<Link href={secondaryCtaLink.href} onClick={handleClose}>
-									{secondaryCtaLink.label}
-								</Link>
-							</Button>
-							<Button asChild className="w-full">
-								<Link href={primaryCtaLink.href} onClick={handleClose}>
-									{primaryCtaLink.label}
-								</Link>
-							</Button>
+						<div className="border-t border-border/70 bg-background px-4 py-4">
+							<div className="mx-auto grid w-full max-w-md gap-3">
+								<div className="grid grid-cols-2 gap-2">
+									<Link
+										className={mobileTextActionClassName}
+										href={secondaryCtaLink.href}
+										onClick={handleClose}
+									>
+										{secondaryCtaLink.label}
+									</Link>
+									<Link
+										className={mobileTextActionClassName}
+										href={primaryCtaLink.href}
+										onClick={handleClose}
+									>
+										<PhoneIcon className="size-4" />
+										{primaryCtaLink.label}
+									</Link>
+								</div>
+								<Button asChild className="w-full">
+									<Link href={getStartedCtaLink.href} onClick={handleClose}>
+										{getStartedCtaLink.label}
+										<ArrowRightIcon />
+									</Link>
+								</Button>
+							</div>
 						</div>
 					</div>
 				</Portal>
