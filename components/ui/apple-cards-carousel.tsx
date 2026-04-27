@@ -15,6 +15,7 @@ import { createPortal } from "react-dom";
 import { ArrowLeftIcon, ArrowRightIcon, XIcon } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 
+import { Button } from "@/components/ui/button";
 import { useOutsideClick } from "@/hooks/use-outside-click";
 import { cn } from "@/lib/utils";
 
@@ -369,14 +370,19 @@ export function Card({
 															operation.
 														</p>
 													</div>
-													<Link
-														className="group inline-flex w-full items-center justify-center gap-2 rounded-lg bg-rb-red px-5 py-3 text-sm font-semibold text-white shadow-[0_14px_32px_rgba(220,17,26,0.25)] transition hover:-translate-y-0.5 hover:bg-red-700 sm:w-auto"
-														href={card.ctaHref ?? "/contact-us"}
-														onClick={handleClose}
+													<Button
+														asChild
+														className="group w-full shadow-[0_14px_32px_rgba(220,17,26,0.25)] sm:w-auto"
+														size="lg"
 													>
-														{card.ctaLabel ?? "Request a demo"}
-														<ArrowRightIcon className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
-													</Link>
+														<Link
+															href={card.ctaHref ?? "/contact-us"}
+															onClick={handleClose}
+														>
+															{card.ctaLabel ?? "Request a demo"}
+															<ArrowRightIcon className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
+														</Link>
+													</Button>
 												</div>
 											</div>
 										</div>

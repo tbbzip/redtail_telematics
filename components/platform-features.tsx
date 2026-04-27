@@ -698,44 +698,18 @@ export function PlatformFeatures() {
 						</motion.div>
 						))}
 
-						<motion.div
-							className="absolute top-16 left-1/2 z-20 flex -translate-x-1/2 items-center gap-4 rounded-full bg-rb-black px-5 py-4 text-white shadow-[0_24px_70px_rgba(1,1,1,0.32)]"
-						initial={{ opacity: 0, y: 12, scale: 0.98 }}
-						transition={{ delay: 0.42, duration: 0.58, ease: "easeOut" }}
-						viewport={{ once: true }}
-						whileInView={{ opacity: 1, y: 0, scale: 1 }}
-					>
-						{!reducedMotion && (
-							<>
-								<motion.span
-									animate={{ opacity: [0.18, 0, 0.18], scale: [1, 1.8, 1] }}
-									className="absolute left-4 size-12 rounded-full border border-rb-red/50"
-									transition={{
-										duration: 3.4,
-										ease: "easeInOut",
-										repeat: Infinity,
-									}}
-								/>
-								<motion.span
-									animate={{ opacity: [0.12, 0, 0.12], scale: [1, 2.25, 1] }}
-									className="absolute left-4 size-12 rounded-full border border-white/20"
-									transition={{
-										delay: 0.8,
-										duration: 4.2,
-										ease: "easeInOut",
-										repeat: Infinity,
-									}}
-								/>
-							</>
-						)}
-						<span className="relative flex size-10 items-center justify-center rounded-full border border-white/22 bg-white/5">
-							<RadioTowerIcon className="size-5 text-rb-red" />
-						</span>
-						<Image
-							alt="Redtail"
-							className="relative h-8 w-auto"
-							height={48}
-							src="/logo-white.svg"
+							<motion.div
+								className="absolute top-16 left-1/2 z-20 flex -translate-x-1/2 items-center justify-center rounded-full bg-rb-black px-7 py-4 text-white shadow-[0_24px_70px_rgba(1,1,1,0.32)]"
+							initial={{ opacity: 0, y: 12, scale: 0.98 }}
+							transition={{ delay: 0.42, duration: 0.58, ease: "easeOut" }}
+							viewport={{ once: true }}
+							whileInView={{ opacity: 1, y: 0, scale: 1 }}
+						>
+							<Image
+								alt="Redtail"
+								className="relative h-8 w-auto"
+								height={48}
+								src="/logo-white.svg"
 							width={158}
 						/>
 					</motion.div>

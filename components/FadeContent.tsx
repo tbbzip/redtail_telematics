@@ -12,6 +12,7 @@ interface FadeContentProps extends React.HTMLAttributes<HTMLDivElement> {
   delay?: number;
   threshold?: number;
   initialOpacity?: number;
+  yOffset?: number;
   disappearAfter?: number;
   disappearDuration?: number;
   disappearEase?: string;
@@ -28,6 +29,7 @@ const FadeContent: React.FC<FadeContentProps> = ({
   delay = 0,
   threshold = 0.1,
   initialOpacity = 0,
+  yOffset = 0,
   disappearAfter = 0,
   disappearDuration = 0.5,
   disappearEase = 'power2.in',
@@ -49,6 +51,7 @@ const FadeContent: React.FC<FadeContentProps> = ({
       el.style.opacity = '1';
       el.style.visibility = 'visible';
       el.style.filter = 'none';
+      el.style.transform = 'none';
       return;
     }
 
@@ -77,6 +80,7 @@ const FadeContent: React.FC<FadeContentProps> = ({
       gsap.set(el, {
         autoAlpha: initialOpacity,
         filter: blur ? 'blur(10px)' : 'blur(0px)',
+        y: yOffset,
         willChange: 'opacity, filter, transform'
       });
 
@@ -89,6 +93,7 @@ const FadeContent: React.FC<FadeContentProps> = ({
             gsap.to(el, {
               autoAlpha: initialOpacity,
               filter: blur ? 'blur(10px)' : 'blur(0px)',
+              y: yOffset,
               delay: getSeconds(disappearAfter),
               duration: getSeconds(disappearDuration),
               ease: disappearEase,
@@ -101,6 +106,7 @@ const FadeContent: React.FC<FadeContentProps> = ({
       tl.to(el, {
         autoAlpha: 1,
         filter: 'blur(0px)',
+        y: 0,
         duration: getSeconds(duration),
         ease: ease
       });
@@ -139,6 +145,7 @@ const FadeContent: React.FC<FadeContentProps> = ({
     onComplete,
     onDisappearanceComplete,
     threshold,
+    yOffset,
   ]);
 
   return (
@@ -147,6 +154,7 @@ const FadeContent: React.FC<FadeContentProps> = ({
       className={className}
       style={{
         opacity: initialOpacity,
+        transform: yOffset ? `translateY(${yOffset}px)` : undefined,
         visibility: initialOpacity === 0 ? 'hidden' : undefined,
         ...style
       }}
