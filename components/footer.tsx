@@ -123,16 +123,16 @@ const certificationBadges: CertificationBadge[] = [
 
 function CertificationBadgeCard({ badge }: { badge: CertificationBadge }) {
 	const className =
-		"group flex h-11 min-w-24 items-center justify-center rounded-md border border-white/10 bg-white/[0.04] px-3 opacity-55 transition hover:border-rb-red/35 hover:bg-white/[0.08] hover:opacity-100";
+		"group inline-flex h-14 items-center justify-center opacity-80 transition duration-300 hover:-translate-y-0.5 hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rb-red/50 focus-visible:ring-offset-4 focus-visible:ring-offset-rb-black";
 
 	const content = (
 		<>
 			<Image
 				alt={badge.alt}
-				className="h-7 w-auto object-contain grayscale transition duration-300 group-hover:grayscale-0"
-				height={48}
+				className="h-11 w-auto max-w-36 object-contain transition duration-300"
+				height={64}
 				src={badge.src}
-				width={112}
+				width={144}
 			/>
 			<span className="sr-only">{badge.label}</span>
 		</>
@@ -305,7 +305,7 @@ export function Footer() {
 						<div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
 							<div
 								aria-label="Certifications and recognitions"
-								className="flex flex-wrap items-center gap-3"
+								className="flex flex-wrap items-center gap-x-6 gap-y-4"
 							>
 								{certificationBadges.map((badge) => (
 									<CertificationBadgeCard badge={badge} key={badge.src} />

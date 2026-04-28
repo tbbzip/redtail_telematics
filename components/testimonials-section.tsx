@@ -1,10 +1,9 @@
 "use client";
 
 import { ArrowUpRightIcon, MessageSquareIcon, StarIcon } from "lucide-react";
-import { motion, useReducedMotion } from "motion/react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 
+import Stack from "@/components/Stack";
 import { Button } from "@/components/ui/button";
 
 const testimonials = [
@@ -75,16 +74,16 @@ const testimonials = [
 
 const stats = [
 	{
-		label: "Happy Client",
-		value: "100+",
+		label: "Devices shipped",
+		value: "6M+",
 	},
 	{
-		label: "Revenue Added",
-		value: "$250m",
+		label: "Miles tracked",
+		value: "30B+",
 	},
 	{
-		label: "Average Rating",
-		value: "4.8",
+		label: "Years in telematics",
+		value: "30+",
 	},
 ];
 
@@ -133,35 +132,17 @@ function TestimonialCard({
 	);
 }
 
+const testimonialCards = testimonials.map((testimonial) => (
+	<TestimonialCard key={testimonial.name} testimonial={testimonial} />
+));
+
 export function TestimonialsSection() {
-	const shouldReduceMotion = useReducedMotion();
-	const [step, setStep] = useState(0);
-	const frontIndex = Math.floor(step / 2) % testimonials.length;
-	const backIndex = (frontIndex + 1) % testimonials.length;
-	const isFlipped = step % 2 === 1;
-	const deckShifted = step % 2 === 1;
-
-	useEffect(() => {
-		if (shouldReduceMotion) {
-			return;
-		}
-
-		const interval = window.setInterval(() => {
-			setStep((currentStep) => currentStep + 1);
-		}, 4200);
-
-		return () => window.clearInterval(interval);
-	}, [shouldReduceMotion]);
-
 	return (
 		<section className="border-y border-black/10 bg-white px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
 			<div className="mx-auto max-w-7xl">
 				<div className="grid gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
 					<div>
-						<p className="inline-flex rounded-sm border border-black/12 px-2 py-1 text-xs font-medium text-rb-black">
-							Testimonials
-						</p>
-						<div className="mt-4 grid gap-6 lg:grid-cols-[0.9fr_1fr] lg:gap-12">
+						<div className="grid gap-6 lg:grid-cols-[0.9fr_1fr] lg:gap-12">
 							<h2 className="text-3xl font-semibold tracking-tight text-rb-black sm:text-4xl lg:text-5xl">
 								Trusted by clients around the globe.
 							</h2>
@@ -219,90 +200,24 @@ export function TestimonialsSection() {
 						</div>
 					</div>
 
-					<div className="relative mx-auto w-full max-w-xl pt-10 lg:pt-16">
-						<motion.div
-							aria-hidden="true"
-							animate={
-								shouldReduceMotion
-									? { opacity: 0.7 }
-									: {
-											opacity: deckShifted ? 0.56 : 0.72,
-											rotate: deckShifted ? -1.8 : -0.4,
-											scale: deckShifted ? 0.96 : 1,
-											x: deckShifted ? -8 : 0,
-											y: deckShifted ? 13 : 0,
-										}
-							}
-							className="absolute top-2 left-[11%] h-56 w-[78%] overflow-hidden rounded-2xl border border-black/10 bg-white shadow-sm"
-							transition={{
-								delay: 0.04,
-								duration: 0.72,
-								ease: [0.22, 1, 0.36, 1],
-							}}
-						>
-							<div className="h-full bg-linear-to-b from-rb-red/[0.035] to-transparent" />
-						</motion.div>
-						<motion.div
-							aria-hidden="true"
-							animate={
-								shouldReduceMotion
-									? { opacity: 0.85 }
-									: {
-											opacity: deckShifted ? 0.82 : 0.68,
-											rotate: deckShifted ? 0.8 : -1.2,
-											scale: deckShifted ? 1 : 0.98,
-											x: deckShifted ? 7 : 0,
-											y: deckShifted ? -5 : 0,
-										}
-							}
-							className="absolute top-7 left-[6%] h-56 w-[88%] overflow-hidden rounded-2xl border border-black/10 bg-white shadow-sm"
-							transition={{
-								delay: 0.14,
-								duration: 0.72,
-								ease: [0.22, 1, 0.36, 1],
-							}}
-						>
-							<div className="h-full bg-linear-to-b from-black/[0.025] to-transparent" />
-						</motion.div>
-						<motion.button
-							animate={
-								shouldReduceMotion
-									? { y: 0 }
-									: { y: deckShifted ? -2 : 0 }
-							}
-							aria-label="Show next testimonial"
-							className="relative block h-[19rem] w-full cursor-pointer [perspective:1200px] sm:h-[20rem]"
-							onClick={() => setStep((currentStep) => currentStep + 1)}
-							transition={{
-								delay: 0.2,
-								duration: 0.65,
-								ease: [0.22, 1, 0.36, 1],
-							}}
-							type="button"
-						>
-							<motion.div
-								animate={shouldReduceMotion ? { rotateY: 0 } : { rotateY: isFlipped ? 180 : 0 }}
-								className="relative h-full w-full"
-								style={{ transformStyle: "preserve-3d" }}
-								transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
-							>
-								<div
-									className="absolute inset-0"
-									style={{ backfaceVisibility: "hidden" }}
-								>
-									<TestimonialCard testimonial={testimonials[frontIndex]} />
-								</div>
-								<div
-									className="absolute inset-0"
-									style={{
-										backfaceVisibility: "hidden",
-										transform: "rotateY(180deg)",
-									}}
-								>
-									<TestimonialCard testimonial={testimonials[backIndex]} />
-								</div>
-							</motion.div>
-						</motion.button>
+					<div className="relative mx-auto h-[21rem] w-full max-w-xl pt-10 lg:pt-16">
+						<div className="h-[19rem] sm:h-[20rem]">
+							<Stack
+								animationConfig={{ stiffness: 240, damping: 24 }}
+								autoplay
+								autoplayDelay={3800}
+								cards={testimonialCards}
+								mobileClickOnly
+								offsetX={12}
+								offsetY={-12}
+								pauseOnHover
+								rotationStep={2.4}
+								scaleStep={0.05}
+								sendToBackOnClick
+								sensitivity={160}
+								visibleDepth={3}
+							/>
+						</div>
 					</div>
 				</div>
 			</div>

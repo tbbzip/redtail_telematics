@@ -1,25 +1,13 @@
 import type { LinkItemType } from "@/components/sheard";
+import type { CSSProperties } from "react";
 import {
-  BoltIcon,
   BookOpenIcon,
   BriefcaseIcon,
-  Building2Icon,
-  BusIcon,
   CalendarIcon,
-  CarIcon,
   CpuIcon,
   FileTextIcon,
-  GraduationCapIcon,
-  LandmarkIcon,
-  LayoutDashboardIcon,
   NewspaperIcon,
-  PackageIcon,
-  ShieldIcon,
-  TruckIcon,
   UsersIcon,
-  UtensilsCrossedIcon,
-  VanIcon,
-  WrenchIcon,
 } from "lucide-react";
 
 export type NavMatcher = readonly string[];
@@ -30,29 +18,46 @@ type RouteEntry = {
   section: string;
 };
 
+function MaskIcon({ src }: { src: string }) {
+  return (
+    <span
+      aria-hidden="true"
+      className="block size-[18px] bg-current"
+      style={
+        {
+          filter:
+            "drop-shadow(0.35px 0 0 currentColor) drop-shadow(0 0.35px 0 currentColor)",
+          WebkitMask: `url(${src}) center / contain no-repeat`,
+          mask: `url(${src}) center / contain no-repeat`,
+        } as CSSProperties
+      }
+    />
+  );
+}
+
 export const solutionLinks: LinkItemType[] = [
   {
     label: "Usage-Based Insurance",
     href: "/solutions/usage-based-insurance",
-    icon: <ShieldIcon />,
+    icon: <MaskIcon src="/icons/ubi.svg" />,
     description: "Driving data for insurer programs.",
   },
   {
     label: "Fleet Management",
     href: "/solutions/fleet-management",
-    icon: <LayoutDashboardIcon />,
+    icon: <MaskIcon src="/icons/fleet-management.svg" />,
     description: "Visibility, alerts, and fleet insight.",
   },
   {
     label: "Reseller Program",
     href: "/solutions/reseller-program",
-    icon: <UsersIcon />,
+    icon: <MaskIcon src="/icons/reseller-program.svg" />,
     description: "Partner-ready telematics delivery.",
   },
   {
     label: "White Label",
     href: "/solutions/white-label",
-    icon: <FileTextIcon />,
+    icon: <MaskIcon src="/icons/white-label.svg" />,
     description: "Branded platform and app programs.",
   },
 ];
@@ -61,7 +66,7 @@ export const solutionFeaturedLinks: LinkItemType[] = [
   {
     label: "Devices",
     href: "/solutions/devices",
-    icon: <PackageIcon />,
+    icon: <MaskIcon src="/icons/devices.svg" />,
     description: "Hardware built for reliable deployments.",
   },
 ];
@@ -70,59 +75,54 @@ export const solutionMatchers = ["/solutions"] as const;
 
 export const industryLinks: LinkItemType[] = [
   {
-    label: "Auto OEM",
-    href: "/industries/auto-oem",
-    icon: <CarIcon />,
-  },
-  {
     label: "Car Rental",
     href: "/industries/car-rental",
-    icon: <VanIcon />,
+    icon: <MaskIcon src="/icons/car-rental.svg" />,
   },
   {
     label: "Construction",
     href: "/industries/construction",
-    icon: <Building2Icon />,
+    icon: <MaskIcon src="/icons/construction.svg" />,
   },
   {
     label: "Education",
     href: "/industries/education",
-    icon: <GraduationCapIcon />,
+    icon: <MaskIcon src="/icons/education.svg" />,
   },
   {
     label: "Emergency Vehicles",
     href: "/industries/emergency-vehicles",
-    icon: <ShieldIcon />,
+    icon: <MaskIcon src="/icons/emergency-vehicle.svg" />,
   },
   {
     label: "Field Services",
     href: "/industries/field-services",
-    icon: <WrenchIcon />,
+    icon: <MaskIcon src="/icons/field-services.svg" />,
   },
   {
     label: "Food & Beverage",
     href: "/industries/food-and-beverage",
-    icon: <UtensilsCrossedIcon />,
+    icon: <MaskIcon src="/icons/food.svg" />,
   },
   {
     label: "Government",
     href: "/industries/government",
-    icon: <LandmarkIcon />,
+    icon: <MaskIcon src="/icons/goverment.svg" />,
   },
   {
     label: "Logistics",
     href: "/industries/transportation-and-logistics",
-    icon: <TruckIcon />,
+    icon: <MaskIcon src="/icons/logistics.svg" />,
   },
   {
     label: "Passenger Transit",
     href: "/industries/passenger-transit",
-    icon: <BusIcon />,
+    icon: <MaskIcon src="/icons/passenger-transit.svg" />,
   },
   {
     label: "Utilities",
     href: "/industries/utilities",
-    icon: <BoltIcon />,
+    icon: <MaskIcon src="/icons/utilities.svg" />,
   },
 ];
 

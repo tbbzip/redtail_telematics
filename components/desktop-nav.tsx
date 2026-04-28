@@ -18,10 +18,8 @@ import {
 	industryMatchers,
 	pathnameMatchesAny,
 	platformMatchers,
-	primaryCtaLink,
 	resourceLinks,
 	resourceMatchers,
-	secondaryCtaLink,
 	solutionFeaturedLinks,
 	solutionLinks,
 	solutionMatchers,
@@ -30,8 +28,9 @@ import {
 import { LinkItem, type LinkItemType } from "@/components/sheard";
 
 const itemLinkClassName = "p-0 hover:bg-transparent focus:bg-transparent";
-const primaryIndustryLinks = industryLinks.slice(0, 6);
-const secondaryIndustryLinks = industryLinks.slice(6);
+const solutionMenuLinks = [...solutionLinks, ...solutionFeaturedLinks];
+const sectionTitleClassName =
+	"mb-3 text-xs font-medium tracking-[0.18em] text-muted-foreground uppercase";
 
 function CompactMenuLink({
 	active,
@@ -43,15 +42,15 @@ function CompactMenuLink({
 	return (
 		<Link
 			className={cn(
-				"group/compact-link flex items-center gap-2.5 rounded-md px-2.5 py-2 text-sm font-medium text-foreground/82 transition-colors hover:bg-muted/55 hover:text-rb-red",
-				active && "bg-rb-peach/25 text-rb-red"
+				"group/compact-link flex items-center gap-2.5 rounded-md px-2.5 py-2 text-sm font-medium text-foreground/82 transition-all duration-200 hover:translate-x-0.5 hover:text-rb-red focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rb-red/30",
+				active && "text-rb-red"
 			)}
 			href={item.href}
 		>
 			<span
 				className={cn(
-					"flex size-7 shrink-0 items-center justify-center rounded-md bg-muted/45 text-foreground/68 transition-colors group-hover/compact-link:bg-rb-peach/20 group-hover/compact-link:text-rb-red",
-					active && "bg-rb-peach/20 text-rb-red",
+					"flex size-7 shrink-0 items-center justify-center text-foreground/58 transition-colors group-hover/compact-link:text-rb-red",
+					active && "text-rb-red",
 					"[&_svg:not([class*='size-'])]:size-3.5"
 				)}
 			>
@@ -92,71 +91,22 @@ export function DesktopNav({ overlay = false }: { overlay?: boolean }) {
 						Solutions
 					</NavigationMenuTrigger>
 					<NavigationMenuContent className="p-2.5">
-						<div className="grid w-[38rem] grid-cols-[minmax(0,1fr)_13.5rem] gap-2.5">
-							<div className="p-2">
-								<div className="mb-3">
-									<p className="text-xs font-medium tracking-[0.18em] text-muted-foreground uppercase">
-										Solutions
-									</p>
-									<p className="mt-1 text-sm text-muted-foreground">
-										Choose the program model that matches your fleet,
-										insurance, or partner strategy.
-									</p>
-								</div>
-								<div className="grid gap-1.5">
-									{solutionLinks.map((item) => (
-										<NavigationMenuLink
-											asChild
-											className={itemLinkClassName}
-											key={item.href}
-										>
-											<LinkItem
-												active={pathname === item.href}
-												minimal
-												{...item}
-											/>
-										</NavigationMenuLink>
-									))}
-								</div>
-							</div>
-							<div className="border-l border-border/70 py-2 pr-1 pl-4">
-								<p className="text-xs font-medium tracking-[0.18em] text-muted-foreground uppercase">
-									Deployment
-								</p>
-								<div className="mt-2 space-y-1">
-									{solutionFeaturedLinks.map((item) => (
-										<NavigationMenuLink
-											asChild
-											className={itemLinkClassName}
-											key={item.href}
-										>
-											<LinkItem
-												active={pathname === item.href}
-												minimal
-												{...item}
-											/>
-										</NavigationMenuLink>
-									))}
-								</div>
-								<div className="mt-4 border-t border-border/70 pt-4">
-									<p className="text-xs font-medium tracking-[0.18em] text-muted-foreground uppercase">
-										Need a closer look?
-									</p>
-									<div className="mt-2 grid gap-1">
-										<Link
-											className="text-sm font-medium text-foreground transition-colors hover:text-rb-red"
-											href={primaryCtaLink.href}
-										>
-											{primaryCtaLink.label}
-										</Link>
-										<Link
-											className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-											href={secondaryCtaLink.href}
-										>
-											{secondaryCtaLink.label}
-										</Link>
-									</div>
-								</div>
+						<div className="w-[20rem] p-2">
+							<p className={sectionTitleClassName}>Solutions</p>
+							<div className="grid gap-1.5">
+								{solutionMenuLinks.map((item) => (
+									<NavigationMenuLink
+										asChild
+										className={itemLinkClassName}
+										key={item.href}
+									>
+										<LinkItem
+											active={pathname === item.href}
+											minimal
+											{...item}
+										/>
+									</NavigationMenuLink>
+								))}
 							</div>
 						</div>
 					</NavigationMenuContent>
@@ -168,59 +118,22 @@ export function DesktopNav({ overlay = false }: { overlay?: boolean }) {
 						Industries
 					</NavigationMenuTrigger>
 					<NavigationMenuContent className="p-2.5">
-						<div className="grid w-[40rem] grid-cols-[minmax(0,1fr)_14rem] gap-2.5 p-2">
-							<div className="pr-1">
-								<div className="mb-3 flex items-end justify-between gap-8">
-									<div>
-										<p className="text-xs font-medium tracking-[0.18em] text-muted-foreground uppercase">
-											Industries
-										</p>
-										<p className="mt-1 text-sm text-muted-foreground">
-											See how Redtail adapts to sector-specific fleets, assets,
-											and programs.
-										</p>
-									</div>
-									<Link
-										className="shrink-0 text-sm font-medium text-foreground transition-colors hover:text-rb-red"
-										href={primaryCtaLink.href}
+						<div className="w-[34rem] p-2">
+							<p className={sectionTitleClassName}>Industries</p>
+							<div className="grid grid-cols-2 gap-1.5">
+								{industryLinks.map((item) => (
+									<NavigationMenuLink
+										asChild
+										className={itemLinkClassName}
+										key={item.href}
 									>
-										Talk to sales
-									</Link>
-								</div>
-								<div className="grid grid-cols-2 gap-1.5">
-									{primaryIndustryLinks.map((item) => (
-										<NavigationMenuLink
-											asChild
-											className={itemLinkClassName}
-											key={item.href}
-										>
-											<LinkItem
-												active={pathname === item.href}
-												minimal
-												{...item}
-											/>
-										</NavigationMenuLink>
-									))}
-								</div>
-							</div>
-							<div className="border-l border-border/70 py-1 pr-1 pl-4">
-								<p className="text-xs font-medium tracking-[0.18em] text-muted-foreground uppercase">
-									More sectors
-								</p>
-								<div className="mt-2 space-y-1">
-									{secondaryIndustryLinks.map((item) => (
-										<NavigationMenuLink
-											asChild
-											className={itemLinkClassName}
-											key={item.href}
-										>
-											<CompactMenuLink
-												active={pathname === item.href}
-												item={item}
-											/>
-										</NavigationMenuLink>
-									))}
-								</div>
+										<LinkItem
+											active={pathname === item.href}
+											minimal
+											{...item}
+										/>
+									</NavigationMenuLink>
+								))}
 							</div>
 						</div>
 					</NavigationMenuContent>
@@ -248,11 +161,9 @@ export function DesktopNav({ overlay = false }: { overlay?: boolean }) {
 						Resources
 					</NavigationMenuTrigger>
 					<NavigationMenuContent className="p-2.5">
-						<div className="w-[18rem] p-1.5">
-							<p className="text-xs font-medium tracking-[0.18em] text-muted-foreground uppercase">
-								Resources
-							</p>
-							<div className="mt-2 grid gap-1">
+						<div className="w-[18rem] p-2">
+							<p className={sectionTitleClassName}>Resources</p>
+							<div className="grid gap-1.5">
 								{resourceLinks.map((item) => (
 									<NavigationMenuLink
 										asChild
@@ -276,11 +187,9 @@ export function DesktopNav({ overlay = false }: { overlay?: boolean }) {
 						Company
 					</NavigationMenuTrigger>
 					<NavigationMenuContent className="p-2.5">
-						<div className="w-[19rem] p-1.5">
-							<p className="text-xs font-medium tracking-[0.18em] text-muted-foreground uppercase">
-								Company
-							</p>
-							<div className="mt-2 grid gap-1">
+						<div className="w-[19rem] p-2">
+							<p className={sectionTitleClassName}>Company</p>
+							<div className="grid gap-1.5">
 								{companyLinks.map((item) => (
 									<NavigationMenuLink
 										asChild

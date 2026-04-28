@@ -33,9 +33,10 @@ export const LinkItem = React.forwardRef<HTMLAnchorElement, LinkItemProps>(
 			<Link
 				ref={ref}
 				className={cn(
-					"group/link-item flex items-center gap-x-3 rounded-lg px-2.5 py-2.5 text-foreground/86 transition-colors hover:bg-muted/55 hover:text-rb-red",
-					minimal && "rounded-md px-2 py-2 hover:bg-muted/45",
-					active && "bg-rb-peach/35 text-rb-red",
+					"group/link-item flex items-center gap-x-3 rounded-lg px-2.5 py-2.5 text-foreground/86 transition-all duration-200 hover:bg-muted/55 hover:text-rb-red",
+					minimal &&
+						"rounded-md px-2 py-2 hover:translate-x-0.5 hover:bg-transparent",
+					active && (minimal ? "text-rb-red" : "bg-rb-peach/35 text-rb-red"),
 					className
 				)}
 				href={href}
@@ -45,9 +46,11 @@ export const LinkItem = React.forwardRef<HTMLAnchorElement, LinkItemProps>(
 					className={cn(
 						"flex size-10 shrink-0 items-center justify-center rounded-md border border-border/70 bg-card/80 text-sm text-foreground/78 transition-colors group-hover/link-item:border-rb-red/25 group-hover/link-item:bg-rb-peach/15 group-hover/link-item:text-rb-red",
 						minimal &&
-							"size-8 border-transparent bg-muted/45 text-foreground/68 group-hover/link-item:border-transparent group-hover/link-item:bg-rb-peach/20",
+							"size-8 border-transparent bg-transparent text-foreground/58 group-hover/link-item:border-transparent group-hover/link-item:bg-transparent",
 						active &&
-							"border-rb-red/24 bg-rb-peach/18 text-rb-red group-hover/link-item:border-rb-red/24 group-hover/link-item:bg-rb-peach/18",
+							(minimal
+								? "border-transparent bg-transparent text-rb-red group-hover/link-item:border-transparent group-hover/link-item:bg-transparent"
+								: "border-rb-red/24 bg-rb-peach/18 text-rb-red group-hover/link-item:border-rb-red/24 group-hover/link-item:bg-rb-peach/18"),
 						"[&_svg:not([class*='size-'])]:size-4"
 					)}
 				>
@@ -55,7 +58,7 @@ export const LinkItem = React.forwardRef<HTMLAnchorElement, LinkItemProps>(
 				</div>
 				<div className="flex min-w-0 flex-col items-start justify-center">
 					<span className="font-medium leading-tight">{label}</span>
-					{description ? (
+					{description && !minimal ? (
 						<span className="line-clamp-2 text-xs text-muted-foreground">
 							{description}
 						</span>
