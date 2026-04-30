@@ -261,10 +261,10 @@ export function Footer() {
 								<h3 className="text-sm font-semibold tracking-[0.2em] text-white/48 uppercase">
 									Contact
 								</h3>
-								<div className="mt-5 grid gap-3 sm:grid-cols-3">
+								<div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-[minmax(0,0.85fr)_minmax(0,0.95fr)_minmax(15rem,1.35fr)]">
 									{contactDetails.map((detail) => (
 										<a
-											className="group rounded-lg border border-white/10 bg-white/[0.035] p-4 transition hover:-translate-y-0.5 hover:border-rb-red/40 hover:bg-white/[0.06]"
+											className="group min-w-0 rounded-lg border border-white/10 bg-white/[0.035] p-4 transition hover:-translate-y-0.5 hover:border-rb-red/40 hover:bg-white/[0.06]"
 											href={detail.href}
 											key={`${detail.label}-${detail.value}`}
 										>
@@ -276,7 +276,7 @@ export function Footer() {
 												/>
 												{detail.label}
 											</div>
-											<p className="mt-2 text-sm font-semibold text-white transition-colors group-hover:text-rb-red">
+											<p className="mt-2 min-w-0 text-sm font-semibold break-words text-white transition-colors group-hover:text-rb-red [overflow-wrap:anywhere]">
 												{detail.value}
 											</p>
 										</a>
