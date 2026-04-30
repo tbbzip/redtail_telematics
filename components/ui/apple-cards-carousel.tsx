@@ -12,9 +12,14 @@ import type { ImageProps } from "next/image";
 import Image from "next/image";
 import Link from "next/link";
 import { createPortal } from "react-dom";
-import { ArrowLeftIcon, ArrowRightIcon, XIcon } from "lucide-react";
+import {
+	ArrowLeft01Icon,
+	ArrowRight01Icon,
+	Cancel01Icon,
+} from "@hugeicons/core-free-icons";
 import { AnimatePresence, motion } from "motion/react";
 
+import { HugeIcon } from "@/components/huge-icon";
 import { Button } from "@/components/ui/button";
 import { useOutsideClick } from "@/hooks/use-outside-click";
 import { cn } from "@/lib/utils";
@@ -230,7 +235,11 @@ export function Carousel({ items, initialScroll = 0 }: CarouselProps) {
 							onClick={scrollLeft}
 							type="button"
 						>
-							<ArrowLeftIcon className="size-5 text-gray-500" />
+							<HugeIcon
+								className="size-5 text-gray-500"
+								icon={ArrowLeft01Icon}
+								size={20}
+							/>
 						</button>
 
 						<button
@@ -240,7 +249,11 @@ export function Carousel({ items, initialScroll = 0 }: CarouselProps) {
 							onClick={scrollRight}
 							type="button"
 						>
-							<ArrowRightIcon className="size-5 text-gray-500" />
+							<HugeIcon
+								className="size-5 text-gray-500"
+								icon={ArrowRight01Icon}
+								size={20}
+							/>
 						</button>
 					</div>
 				</div>
@@ -318,7 +331,7 @@ export function Card({
 											onClick={handleClose}
 											type="button"
 										>
-											<XIcon className="size-5" />
+											<HugeIcon className="size-5" icon={Cancel01Icon} size={20} />
 										</button>
 										<div className="relative h-60 w-full sm:h-72 md:h-[22rem]">
 											<BlurImage
@@ -380,7 +393,11 @@ export function Card({
 															onClick={handleClose}
 														>
 															{card.ctaLabel ?? "Request a demo"}
-															<ArrowRightIcon className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
+															<HugeIcon
+																className="size-4 transition-transform duration-300 group-hover:translate-x-1"
+																icon={ArrowRight01Icon}
+																size={16}
+															/>
 														</Link>
 													</Button>
 												</div>
@@ -429,7 +446,11 @@ export function Card({
 						<span className="relative after:absolute after:right-0 after:-bottom-1 after:left-0 after:h-px after:origin-left after:scale-x-0 after:bg-rb-red after:transition-transform after:duration-300 group-hover:after:scale-x-100">
 							Explore
 						</span>
-						<ArrowRightIcon className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
+						<HugeIcon
+							className="size-4 transition-transform duration-300 group-hover:translate-x-1"
+							icon={ArrowRight01Icon}
+							size={16}
+						/>
 					</div>
 				</div>
 				<BlurImage

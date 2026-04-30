@@ -1,23 +1,26 @@
 "use client";
 
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import {
-	ActivityIcon,
+	Activity01Icon,
+	ComputerIcon,
 	DatabaseIcon,
-	MapIcon,
-	MonitorIcon,
-	RadioTowerIcon,
-	ShieldCheckIcon,
-	SmartphoneIcon,
-	WrenchIcon,
-	type LucideIcon,
-} from "lucide-react";
+	DeviceAccessIcon,
+	MapsLocation01Icon,
+	ShieldIcon,
+	SmartPhone01Icon,
+	Wrench01Icon,
+} from "@hugeicons/core-free-icons";
+import { type IconSvgElement } from "@hugeicons/react";
 import { motion, useReducedMotion } from "motion/react";
+
+import { HugeIcon } from "@/components/huge-icon";
 
 const integrationNodes = [
 	{
 		label: "Devices",
-		Icon: RadioTowerIcon,
+		Icon: DeviceAccessIcon,
 		position: "left-0 top-8",
 	},
 	{
@@ -27,17 +30,17 @@ const integrationNodes = [
 	},
 	{
 		label: "Web platform",
-		Icon: MonitorIcon,
+		Icon: ComputerIcon,
 		position: "right-0 top-8",
 	},
 	{
 		label: "Mobile app",
-		Icon: SmartphoneIcon,
+		Icon: SmartPhone01Icon,
 		position: "right-0 top-28",
 	},
 ] satisfies {
 	label: string;
-	Icon: LucideIcon;
+	Icon: IconSvgElement;
 	position: string;
 }[];
 
@@ -174,7 +177,7 @@ const featureCards = [
 		title: "Live fleet visibility",
 		description:
 			"Track vehicles, journeys, and assets from one operating view.",
-		Icon: MapIcon,
+		Icon: MapsLocation01Icon,
 		tone: "bg-[#f4f1ee]",
 		visual: "map",
 	},
@@ -182,7 +185,7 @@ const featureCards = [
 		title: "Risk and incident insight",
 		description:
 			"Turn behaviour events and incident context into faster decisions.",
-		Icon: ShieldCheckIcon,
+		Icon: ShieldIcon,
 		tone: "bg-[#edf7fa]",
 		visual: "risk",
 	},
@@ -190,14 +193,14 @@ const featureCards = [
 		title: "Install and asset health",
 		description:
 			"Monitor device status and deployment quality as programs scale.",
-		Icon: WrenchIcon,
+		Icon: Wrench01Icon,
 		tone: "bg-[#f4f8f0]",
 		visual: "health",
 	},
 ] satisfies {
 	title: string;
 	description: string;
-	Icon: LucideIcon;
+	Icon: IconSvgElement;
 	tone: string;
 	visual: "map" | "risk" | "health";
 	}[];
@@ -400,7 +403,7 @@ function FeatureVisual({
 								}}
 							/>
 							<div className="relative flex size-12 shrink-0 items-center justify-center rounded-full bg-rb-black text-white">
-								<ActivityIcon className="size-5" />
+								<HugeIcon className="size-5" icon={Activity01Icon} size={20} />
 							</div>
 							<div className="min-w-0 flex-1">
 								<p className="text-sm font-semibold text-rb-black">
@@ -446,7 +449,11 @@ function FeatureVisual({
 											repeat: reducedMotion ? 0 : Infinity,
 										}}
 									/>
-									<WrenchIcon className="relative size-5 text-rb-red" />
+									<HugeIcon
+										className="relative size-5 text-rb-red"
+										icon={Wrench01Icon}
+										size={20}
+									/>
 								</div>
 								<div>
 									<p className="text-sm font-semibold text-rb-black">
@@ -499,19 +506,31 @@ function FeatureVisual({
 export function PlatformFeatures() {
 	const shouldReduceMotion = useReducedMotion();
 	const reducedMotion = Boolean(shouldReduceMotion);
+	const [mobileViewport, setMobileViewport] = useState(false);
+	const animateMobileDiagram = !reducedMotion && !mobileViewport;
+
+	useEffect(() => {
+		const mediaQuery = window.matchMedia("(max-width: 767px)");
+		const updateViewport = () => setMobileViewport(mediaQuery.matches);
+
+		updateViewport();
+		mediaQuery.addEventListener("change", updateViewport);
+
+		return () => mediaQuery.removeEventListener("change", updateViewport);
+	}, []);
 
 	return (
-		<section className="relative overflow-hidden border-y border-black/10 bg-white py-16 sm:py-20 lg:py-24">
+		<section className="relative overflow-hidden border-y border-black/10 bg-white py-12 sm:py-20 lg:py-24">
 			<div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_28%,rgba(207,19,23,0.06),transparent_28%),linear-gradient(to_bottom,rgba(1,1,1,0.025),transparent_18%,transparent_82%,rgba(1,1,1,0.025))]" />
 				<div className="relative mx-auto max-w-[88rem] px-4 sm:px-6 lg:px-8">
 				<header className="mx-auto max-w-4xl text-center">
 					<p className="mx-auto inline-flex rounded-full border border-black/10 bg-white px-4 py-1.5 text-xs font-semibold text-rb-black/68 shadow-sm">
 						Platform features
 					</p>
-					<h2 className="mt-5 text-3xl font-semibold tracking-tight text-balance text-rb-black sm:text-4xl lg:text-5xl">
+					<h2 className="mt-5 text-[2rem] font-semibold leading-tight tracking-tight text-balance text-rb-black sm:text-4xl lg:text-5xl">
 						One telematics platform connecting every vehicle, device, and team
 					</h2>
-					<p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-rb-black/60 sm:text-lg">
+					<p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-rb-black/60 sm:text-lg sm:leading-7">
 						Redtail brings device data, fleet activity, safety events, and
 						deployment health into one operating layer for modern telematics
 						programs.
@@ -692,7 +711,7 @@ export function PlatformFeatures() {
 							whileInView={{ opacity: 1, y: 0, scale: 1 }}
 						>
 							<span className="flex size-8 items-center justify-center rounded-xl bg-rb-peach text-rb-red">
-								<Icon className="size-4" />
+								<HugeIcon className="size-4" icon={Icon} size={16} />
 							</span>
 							{label}
 						</motion.div>
@@ -715,39 +734,51 @@ export function PlatformFeatures() {
 					</motion.div>
 				</div>
 
-					<div className="mt-10 lg:hidden">
+					<div className="mt-8 lg:hidden">
 						<motion.div
-							className="relative overflow-hidden rounded-[1.75rem] border border-black/10 bg-white p-5 shadow-sm"
-							initial={{ opacity: 0, y: 16 }}
+							className="relative overflow-hidden rounded-[1.4rem] border border-black/10 bg-white p-4 shadow-sm"
+							initial={
+								animateMobileDiagram ? { opacity: 0, y: 16 } : false
+							}
+							animate={mobileViewport ? { opacity: 1, y: 0 } : undefined}
 							transition={{ duration: 0.5, ease: "easeOut" }}
 							viewport={{ once: true, amount: 0.35 }}
-							whileInView={{ opacity: 1, y: 0 }}
+							whileInView={
+								animateMobileDiagram ? { opacity: 1, y: 0 } : undefined
+							}
 						>
 							<div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_42%,rgba(207,19,23,0.07),transparent_34%)]" />
 							<span className="absolute top-12 bottom-12 left-1/2 w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-black/12 to-transparent" />
 								<p className="relative z-10 mb-3 text-center text-[10px] font-semibold uppercase tracking-[0.24em] text-rb-black/45">
 								Data sources
 							</p>
-							<div className="relative z-10 grid grid-cols-2 gap-3">
+							<div className="relative z-10 grid grid-cols-2 gap-2.5">
 								{integrationNodes.slice(0, 2).map(({ label, Icon }, index) => (
 									<motion.div
-										className="flex items-center gap-3 rounded-2xl border border-black/10 bg-white px-3 py-3 text-sm font-semibold text-rb-black shadow-sm"
-										initial={{ opacity: 0, y: 10 }}
+										className="flex min-h-14 items-center gap-2.5 rounded-xl border border-black/10 bg-white px-3 py-2.5 text-sm font-semibold text-rb-black shadow-sm"
+										initial={
+											animateMobileDiagram ? { opacity: 0, y: 10 } : false
+										}
+										animate={
+											mobileViewport ? { opacity: 1, y: 0 } : undefined
+										}
 										key={label}
 										transition={{ delay: index * 0.08, duration: 0.42 }}
 										viewport={{ once: true }}
-										whileInView={{ opacity: 1, y: 0 }}
+										whileInView={
+											animateMobileDiagram ? { opacity: 1, y: 0 } : undefined
+										}
 									>
 										<span className="flex size-8 items-center justify-center rounded-xl bg-rb-peach text-rb-red">
-											<Icon className="size-4" />
+											<HugeIcon className="size-4" icon={Icon} size={16} />
 										</span>
 										{label}
 									</motion.div>
 								))}
 							</div>
 
-							<div className="relative z-20 my-6 flex justify-center">
-								<div className="rounded-full bg-rb-black px-5 py-3 shadow-[0_20px_60px_rgba(1,1,1,0.22)]">
+							<div className="relative z-20 my-5 flex justify-center">
+								<div className="rounded-full bg-rb-black px-5 py-2.5 shadow-[0_20px_60px_rgba(1,1,1,0.22)]">
 									<Image
 										alt="Redtail"
 										className="h-7 w-auto"
@@ -761,18 +792,25 @@ export function PlatformFeatures() {
 							<p className="relative z-10 mb-3 text-center text-[10px] font-semibold uppercase tracking-[0.24em] text-rb-black/45">
 								Team tools
 							</p>
-							<div className="relative z-10 grid grid-cols-2 gap-3">
+							<div className="relative z-10 grid grid-cols-2 gap-2.5">
 								{integrationNodes.slice(2).map(({ label, Icon }, index) => (
 									<motion.div
-										className="flex items-center gap-3 rounded-2xl border border-black/10 bg-white px-3 py-3 text-sm font-semibold text-rb-black shadow-sm"
-										initial={{ opacity: 0, y: 10 }}
+										className="flex min-h-14 items-center gap-2.5 rounded-xl border border-black/10 bg-white px-3 py-2.5 text-sm font-semibold text-rb-black shadow-sm"
+										initial={
+											animateMobileDiagram ? { opacity: 0, y: 10 } : false
+										}
+										animate={
+											mobileViewport ? { opacity: 1, y: 0 } : undefined
+										}
 										key={label}
 										transition={{ delay: 0.16 + index * 0.08, duration: 0.42 }}
 										viewport={{ once: true }}
-										whileInView={{ opacity: 1, y: 0 }}
+										whileInView={
+											animateMobileDiagram ? { opacity: 1, y: 0 } : undefined
+										}
 									>
 										<span className="flex size-8 items-center justify-center rounded-xl bg-rb-peach text-rb-red">
-											<Icon className="size-4" />
+											<HugeIcon className="size-4" icon={Icon} size={16} />
 										</span>
 										{label}
 									</motion.div>
@@ -781,10 +819,10 @@ export function PlatformFeatures() {
 						</motion.div>
 					</div>
 
-						<div className="mt-8 flex snap-x gap-4 overflow-x-auto pb-3 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:mt-0 lg:grid lg:grid-cols-3 lg:gap-5 lg:overflow-visible lg:pb-0 xl:gap-6">
+						<div className="mt-6 flex snap-x gap-4 overflow-x-auto pb-3 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:mt-0 lg:grid lg:grid-cols-3 lg:gap-5 lg:overflow-visible lg:pb-0 xl:gap-6">
 						{featureCards.map((feature, index) => (
 							<motion.article
-								className="group min-w-[84vw] snap-center overflow-hidden rounded-[1.65rem] border border-black/10 bg-white shadow-sm shadow-black/5 transition-colors duration-300 hover:border-rb-red/20 lg:min-w-0"
+								className="group min-w-[82vw] snap-center overflow-hidden rounded-[1.45rem] border border-black/10 bg-white shadow-sm shadow-black/5 transition-colors duration-300 hover:border-rb-red/20 sm:min-w-[23rem] lg:min-w-0 lg:rounded-[1.65rem]"
 							initial={{ opacity: 0, y: 22 }}
 							key={feature.title}
 							transition={{
@@ -796,10 +834,14 @@ export function PlatformFeatures() {
 							whileHover={reducedMotion ? undefined : { y: -5 }}
 							whileInView={{ opacity: 1, y: 0 }}
 						>
-								<div className="p-6 sm:p-7 lg:p-8">
+								<div className="p-5 sm:p-7 lg:p-8">
 								<div className="flex items-start gap-4">
 									<div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-rb-peach text-rb-red transition-transform duration-300 group-hover:scale-105">
-										<feature.Icon className="size-5" />
+										<HugeIcon
+											className="size-5"
+											icon={feature.Icon}
+											size={20}
+										/>
 									</div>
 									<div>
 										<h3 className="text-lg font-semibold text-rb-black">

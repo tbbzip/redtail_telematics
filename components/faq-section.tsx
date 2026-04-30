@@ -1,9 +1,10 @@
 "use client";
 
-import { ChevronDownIcon, MessageSquareTextIcon } from "lucide-react";
+import { ArrowDown01Icon, MessageQuestionIcon } from "@hugeicons/core-free-icons";
 import Link from "next/link";
 import { useState } from "react";
 
+import { HugeIcon } from "@/components/huge-icon";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -74,13 +75,13 @@ export function FaqSection() {
 	const [openQuestion, setOpenQuestion] = useState(0);
 
 	return (
-		<section className="border-y border-black/10 bg-white px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
+		<section className="border-y border-black/10 bg-white px-4 py-12 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
 			<div className="mx-auto max-w-7xl">
 				<header className="max-w-3xl">
 					<p className="text-xs font-semibold uppercase tracking-[0.24em] text-rb-red">
 						FAQ
 					</p>
-					<h2 className="mt-4 text-3xl font-semibold tracking-tight text-rb-black sm:text-4xl lg:text-5xl">
+					<h2 className="mt-4 text-[2rem] font-semibold leading-tight tracking-tight text-rb-black sm:text-4xl lg:text-5xl">
 						Common Questions You Might Have
 					</h2>
 					<p className="mt-4 max-w-2xl text-base leading-7 text-rb-black/58 sm:text-lg">
@@ -89,7 +90,7 @@ export function FaqSection() {
 					</p>
 				</header>
 
-				<div className="mt-12 grid gap-8 lg:mt-16 lg:grid-cols-[1fr_23rem] lg:items-start xl:grid-cols-[1fr_25rem]">
+				<div className="mt-9 grid gap-7 lg:mt-16 lg:grid-cols-[1fr_23rem] lg:items-start xl:grid-cols-[1fr_25rem]">
 					<div className="overflow-hidden rounded-xl border border-black/12 bg-white">
 						{faqItems.map((item, index) => {
 							const isOpen = openQuestion === index;
@@ -108,11 +109,13 @@ export function FaqSection() {
 										<span className="text-sm font-semibold leading-6 text-rb-black sm:text-base">
 											{item.question}
 										</span>
-										<ChevronDownIcon
+										<HugeIcon
 											className={cn(
 												"size-4 shrink-0 text-rb-black/55 transition duration-200",
 												isOpen && "rotate-180 text-rb-red"
 											)}
+											icon={ArrowDown01Icon}
+											size={16}
 										/>
 									</button>
 									<div
@@ -136,7 +139,12 @@ export function FaqSection() {
 
 					<aside className="rounded-xl border border-rb-black bg-white p-6 text-center lg:sticky lg:top-28">
 						<div className="mx-auto flex size-16 items-center justify-center text-rb-black">
-							<MessageSquareTextIcon className="size-14 stroke-[1.7]" />
+							<HugeIcon
+								className="size-14"
+								icon={MessageQuestionIcon}
+								size={56}
+								strokeWidth={2.05}
+							/>
 						</div>
 						<h3 className="mt-5 text-lg font-semibold text-rb-black">
 							Still have questions?

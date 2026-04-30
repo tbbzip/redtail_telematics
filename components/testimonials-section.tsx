@@ -1,9 +1,14 @@
 "use client";
 
-import { ArrowUpRightIcon, MessageSquareIcon, StarIcon } from "lucide-react";
+import {
+	ArrowUpRight01Icon,
+	Message01Icon,
+	StarIcon,
+} from "@hugeicons/core-free-icons";
 import Link from "next/link";
 
 import Stack from "@/components/Stack";
+import { HugeIcon } from "@/components/huge-icon";
 import { Button } from "@/components/ui/button";
 
 const testimonials = [
@@ -121,7 +126,13 @@ function TestimonialCard({
 			<div className="p-5 sm:p-6">
 				<div className="flex gap-1 text-rb-red">
 					{Array.from({ length: 5 }).map((_, index) => (
-						<StarIcon className="size-5 fill-current" key={index} />
+						<HugeIcon
+							className="size-5 fill-current"
+							icon={StarIcon}
+							key={index}
+							size={20}
+							strokeWidth={2.15}
+						/>
 					))}
 				</div>
 				<p className="mt-6 text-base leading-7 text-rb-black/62 sm:text-lg sm:leading-8">
@@ -138,22 +149,22 @@ const testimonialCards = testimonials.map((testimonial) => (
 
 export function TestimonialsSection() {
 	return (
-		<section className="border-y border-black/10 bg-white px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
+		<section className="border-y border-black/10 bg-white px-4 py-12 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
 			<div className="mx-auto max-w-7xl">
-				<div className="grid gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+				<div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-14">
 					<div>
 						<div className="grid gap-6 lg:grid-cols-[0.9fr_1fr] lg:gap-12">
-							<h2 className="text-3xl font-semibold tracking-tight text-rb-black sm:text-4xl lg:text-5xl">
+							<h2 className="text-[2rem] font-semibold leading-tight tracking-tight text-rb-black sm:text-4xl lg:text-5xl">
 								Trusted by clients around the globe.
 							</h2>
-							<p className="text-lg leading-8 text-rb-black/58 lg:pt-1">
+							<p className="text-base leading-7 text-rb-black/58 sm:text-lg sm:leading-8 lg:pt-1">
 								Redtail partners with fleets, insurers, OEMs, and connected
 								vehicle teams that rely on accurate data to improve operations
 								and scale telematics programs.
 							</p>
 						</div>
 
-						<p className="mt-14 text-center text-lg leading-8 text-rb-black/58 sm:text-xl lg:text-left">
+						<p className="mt-8 text-center text-base leading-7 text-rb-black/58 sm:mt-14 sm:text-xl sm:leading-8 lg:text-left">
 							Customer results across fleet visibility, UBI, theft recovery, and
 							operational efficiency.
 						</p>
@@ -171,7 +182,7 @@ export function TestimonialsSection() {
 							))}
 						</div>
 
-						<div className="mt-8 border-y border-black/10 py-8">
+						<div className="mt-8 border-y border-black/10 py-6 sm:py-8">
 							<div className="flex flex-wrap items-center justify-center gap-4 lg:justify-start">
 								<Button
 									asChild
@@ -181,7 +192,7 @@ export function TestimonialsSection() {
 								>
 									<Link href="/contact-us">
 										Let&apos;s talk
-										<MessageSquareIcon className="size-4" />
+										<HugeIcon className="size-4" icon={Message01Icon} size={16} />
 									</Link>
 								</Button>
 								<Button
@@ -192,7 +203,11 @@ export function TestimonialsSection() {
 									<Link href="/platform-and-apps">
 										Get Started
 										<span className="flex size-5 items-center justify-center rounded-md bg-white text-rb-black">
-											<ArrowUpRightIcon className="size-3.5" />
+											<HugeIcon
+												className="size-3.5"
+												icon={ArrowUpRight01Icon}
+												size={14}
+											/>
 										</span>
 									</Link>
 								</Button>
@@ -200,7 +215,7 @@ export function TestimonialsSection() {
 						</div>
 					</div>
 
-					<div className="relative mx-auto h-[21rem] w-full max-w-xl pt-10 lg:pt-16">
+					<div className="relative mx-auto h-[20rem] w-full max-w-xl pt-6 sm:h-[21rem] lg:pt-16">
 						<div className="h-[19rem] sm:h-[20rem]">
 							<Stack
 								animationConfig={{ stiffness: 240, damping: 24 }}

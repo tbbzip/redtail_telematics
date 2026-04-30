@@ -3,9 +3,12 @@
 import * as React from 'react'
 
 import { cva, type VariantProps } from 'class-variance-authority'
-import { StarIcon, type LucideProps } from 'lucide-react'
+import { StarIcon } from '@hugeicons/core-free-icons'
 
+import { HugeIcon, type HugeIconProps } from '@/components/huge-icon'
 import { cn } from '@/lib/utils'
+
+type RatingIconElement = React.ReactElement<HugeIconProps>
 
 // Variants
 const ratingVariants = cva('transition-colors', {
@@ -29,7 +32,7 @@ const RATING_DEFAULTS = {
   maxStars: 5,
   size: 20,
   variant: 'default' as const,
-  icon: <StarIcon />
+  icon: <HugeIcon icon={StarIcon} />
 } as const
 
 // Types
@@ -43,7 +46,7 @@ interface RatingItemProps extends React.ComponentProps<'label'> {
   readOnly?: boolean
   disabled?: boolean
   precision: number
-  Icon: React.ReactElement<LucideProps>
+  Icon: RatingIconElement
   onMouseLeave: React.MouseEventHandler<HTMLLabelElement>
   onValueHover: (value: number) => void
   onValueChange?: (value: number) => void
@@ -55,7 +58,7 @@ interface RatingProps extends React.ComponentProps<'div'> {
   name?: string
   max?: number
   size?: number
-  icon?: React.ReactElement<LucideProps>
+  icon?: RatingIconElement
   variant?: VariantProps<typeof ratingVariants>['variant']
   readOnly?: boolean
   disabled?: boolean

@@ -1,12 +1,18 @@
 "use client";
 
+import {
+	ArrowDown01Icon,
+	ArrowRight01Icon,
+	Call02Icon,
+	Cancel01Icon,
+	Menu01Icon,
+} from "@hugeicons/core-free-icons";
+import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
 import React from "react";
-import { AnimatePresence, motion } from "motion/react";
-import { Portal } from "@/components/ui/portal";
-import { Button } from "@/components/ui/button";
+
+import { HugeIcon } from "@/components/huge-icon";
 import {
 	companyLinks,
 	companyMatchers,
@@ -22,24 +28,20 @@ import {
 	solutionLinks,
 	solutionMatchers,
 } from "@/components/nav-links";
-import { LinkItem } from "@/components/sheard";
-import {
-	ArrowRightIcon,
-	ChevronDownIcon,
-	MenuIcon,
-	PhoneIcon,
-	XIcon,
-} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Portal } from "@/components/ui/portal";
+import { cn } from "@/lib/utils";
+import { type LinkItemType } from "@/components/sheard";
 
 type MobileSection = {
 	id: string;
 	label: string;
-	items: React.ComponentProps<typeof LinkItem>[];
+	items: LinkItemType[];
 	matchers: readonly string[];
 };
 
 const mobileTextActionClassName =
-	"relative inline-flex h-9 items-center justify-center gap-1.5 px-1 text-sm font-medium text-foreground/72 transition-colors after:absolute after:right-1 after:bottom-1 after:left-1 after:h-px after:origin-left after:scale-x-0 after:bg-rb-red after:transition-transform after:duration-300 after:ease-out hover:text-rb-red hover:after:scale-x-100 focus-visible:text-rb-red focus-visible:after:scale-x-100 focus-visible:outline-none";
+	"relative inline-flex h-9 items-center justify-center gap-1.5 px-1 text-sm font-medium text-rb-black/68 transition-colors after:absolute after:right-1 after:bottom-1 after:left-1 after:h-px after:origin-left after:scale-x-0 after:bg-rb-red after:transition-transform after:duration-300 after:ease-out hover:text-rb-red hover:after:scale-x-100 focus-visible:text-rb-red focus-visible:after:scale-x-100 focus-visible:outline-none";
 
 const sections: MobileSection[] = [
 	{
@@ -75,6 +77,66 @@ function getActiveSection(pathname: string | null) {
 	);
 }
 
+function MobileMenuLink({
+	active,
+	index,
+	item,
+	onClick,
+}: {
+	active: boolean;
+	index: number;
+	item: LinkItemType;
+	onClick: () => void;
+}) {
+	return (
+		<motion.div
+			animate={{ opacity: 1, x: 0 }}
+			exit={{ opacity: 0, x: -6 }}
+			initial={{ opacity: 0, x: -8 }}
+			transition={{
+				delay: index * 0.035,
+				duration: 0.22,
+				ease: [0.22, 1, 0.36, 1],
+			}}
+		>
+			<Link
+				className={cn(
+					"group/mobile-link relative flex items-center gap-3 rounded-xl px-2.5 py-3 text-rb-black transition-colors hover:text-rb-red focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rb-red/30",
+					active && "text-rb-red"
+				)}
+				href={item.href}
+				onClick={onClick}
+			>
+				<span
+					aria-hidden="true"
+					className={cn(
+						"absolute top-3 bottom-3 left-0 w-0.5 rounded-full bg-rb-red opacity-0 transition-opacity",
+						active && "opacity-100"
+					)}
+				/>
+				<span
+					className={cn(
+						"flex size-9 shrink-0 items-center justify-center rounded-xl bg-white text-rb-black/58 shadow-sm ring-1 ring-black/8 transition-colors group-hover/mobile-link:text-rb-red",
+						active && "text-rb-red ring-rb-red/22"
+					)}
+				>
+					{item.icon}
+				</span>
+				<span className="min-w-0 flex-1">
+					<span className="block text-[15px] font-semibold leading-5">
+						{item.label}
+					</span>
+					{item.description ? (
+						<span className="mt-0.5 line-clamp-1 block text-xs text-rb-black/48">
+							{item.description}
+						</span>
+					) : null}
+				</span>
+			</Link>
+		</motion.div>
+	);
+}
+
 export function MobileNav({
 	onOpenChange,
 	overlay = false,
@@ -105,6 +167,17 @@ export function MobileNav({
 		}
 	}, [activeSection]);
 
+	React.useEffect(() => {
+		if (!open) return;
+
+		const originalOverflow = document.body.style.overflow;
+		document.body.style.overflow = "hidden";
+
+		return () => {
+			document.body.style.overflow = originalOverflow;
+		};
+	}, [open]);
+
 	return (
 		<div className="lg:hidden">
 			<Button
@@ -113,7 +186,9 @@ export function MobileNav({
 				aria-label="Toggle menu"
 				className={cn(
 					"lg:hidden",
+					open && "border-rb-red/35 bg-white text-rb-red hover:bg-white",
 					overlay &&
+						!open &&
 						"border-white/20 bg-white/8 text-white hover:border-white/34 hover:bg-white/14 hover:text-white"
 				)}
 				onClick={() => setOpen(!open)}
@@ -126,7 +201,7 @@ export function MobileNav({
 						open ? "scale-100 opacity-100" : "scale-0 opacity-0"
 					)}
 				>
-					<XIcon />
+					<HugeIcon icon={Cancel01Icon} />
 				</div>
 				<div
 					className={cn(
@@ -134,22 +209,30 @@ export function MobileNav({
 						open ? "scale-0 opacity-0" : "scale-100 opacity-100"
 					)}
 				>
-					<MenuIcon />
+					<HugeIcon icon={Menu01Icon} />
 				</div>
 			</Button>
 			{open && (
-				<Portal className="top-14">
+				<Portal className="top-14 z-[45] bg-[#fcfbf9]">
 					<div
-						className={cn(
-							"flex size-full flex-col overflow-hidden bg-background",
-							"data-[slot=open]:zoom-in-97 ease-out data-[slot=open]:animate-in"
-						)}
+						className="flex h-full min-h-0 w-full flex-col overflow-hidden bg-[#fcfbf9] data-[slot=open]:animate-in data-[slot=open]:fade-in-0 data-[slot=open]:slide-in-from-top-2 data-[slot=open]:duration-200"
 						data-slot={open ? "open" : "closed"}
+						id="mobile-menu"
 					>
-						<div className="flex-1 overflow-y-auto px-4 pt-4 pb-8">
+						<div className="flex-1 overflow-y-auto px-5 pt-4 pb-8">
 							<div className="mx-auto w-full max-w-md">
-								<div className="divide-y divide-border/70">
-									{sections.map((section, index) => {
+								<div className="border-b border-black/10 pb-5">
+									<p className="text-[11px] font-semibold tracking-[0.24em] text-rb-red uppercase">
+										Redtail navigation
+									</p>
+									<p className="mt-2 max-w-xs text-sm leading-6 text-rb-black/58">
+										Find telematics solutions, industries, resources, and
+										company information.
+									</p>
+								</div>
+
+								<div className="divide-y divide-black/10">
+									{sections.map((section) => {
 										const expanded = expandedSection === section.id;
 										const sectionActive = pathnameMatchesAny(
 											pathname,
@@ -157,20 +240,15 @@ export function MobileNav({
 										);
 
 										return (
-											<div
-												className={cn(
-													index === 0 && "border-t border-border/70"
-												)}
-												key={section.id}
-											>
+											<div key={section.id}>
 												<button
 													aria-controls={`mobile-section-${section.id}`}
 													aria-expanded={expanded}
 													className={cn(
-														"flex w-full items-center justify-between px-1 py-4 text-left text-base font-medium transition-colors",
+														"flex w-full items-center justify-between py-4 text-left text-base font-semibold transition-colors",
 														sectionActive
 															? "text-rb-red"
-															: "text-foreground/86"
+															: "text-rb-black/88"
 													)}
 													onClick={() =>
 														setExpandedSection((current) =>
@@ -180,11 +258,13 @@ export function MobileNav({
 													type="button"
 												>
 													<span>{section.label}</span>
-													<ChevronDownIcon
+													<HugeIcon
 														className={cn(
 															"size-4 transition-transform duration-200",
 															expanded && "rotate-180"
 														)}
+														icon={ArrowDown01Icon}
+														size={16}
 													/>
 												</button>
 												<AnimatePresence initial={false}>
@@ -196,18 +276,18 @@ export function MobileNav({
 															id={`mobile-section-${section.id}`}
 															initial={{ height: 0, opacity: 0 }}
 															transition={{
-																duration: 0.22,
+																duration: 0.24,
 																ease: [0.22, 1, 0.36, 1],
 															}}
 														>
-															<div className="grid gap-1 pb-4">
-																{section.items.map((link) => (
-																	<LinkItem
+															<div className="grid gap-0.5 pb-4">
+																{section.items.map((link, index) => (
+																	<MobileMenuLink
 																		active={pathname === link.href}
-																		className="px-2 py-2.5"
+																		index={index}
+																		item={link}
 																		key={`${section.id}-${link.href}`}
 																		onClick={handleClose}
-																		{...link}
 																	/>
 																))}
 															</div>
@@ -220,7 +300,8 @@ export function MobileNav({
 								</div>
 							</div>
 						</div>
-						<div className="border-t border-border/70 bg-background px-4 py-4">
+
+						<div className="border-t border-black/10 bg-[#fcfbf9]/98 px-5 py-4 shadow-[0_-18px_50px_rgba(1,1,1,0.06)]">
 							<div className="mx-auto grid w-full max-w-md gap-3">
 								<div className="grid grid-cols-2 gap-2">
 									<Link
@@ -235,14 +316,14 @@ export function MobileNav({
 										href={primaryCtaLink.href}
 										onClick={handleClose}
 									>
-										<PhoneIcon className="size-4" />
+										<HugeIcon className="size-4" icon={Call02Icon} size={16} />
 										{primaryCtaLink.label}
 									</Link>
 								</div>
 								<Button asChild className="w-full">
 									<Link href={getStartedCtaLink.href} onClick={handleClose}>
 										{getStartedCtaLink.label}
-										<ArrowRightIcon />
+										<HugeIcon icon={ArrowRight01Icon} />
 									</Link>
 								</Button>
 							</div>

@@ -8,11 +8,11 @@ export function CardsCarousel() {
 	));
 
 	return (
-		<section className="relative overflow-hidden border-b border-black/10 bg-white py-14 sm:py-20 lg:py-24">
+		<section className="relative overflow-hidden border-b border-black/10 bg-white py-12 sm:py-20 lg:py-24">
 			<div className="pointer-events-none absolute inset-0 -z-10 bg-linear-to-b from-white via-rb-light-blue/8 to-white" />
 			<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
 				<header className="mx-auto max-w-3xl text-center">
-					<h2 className="text-3xl font-semibold tracking-tight text-balance text-rb-black sm:text-4xl lg:text-5xl">
+					<h2 className="text-[2rem] font-semibold leading-tight tracking-tight text-balance text-rb-black sm:text-4xl lg:text-5xl">
 						Why teams choose Redtail Telematics
 					</h2>
 					<p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-gray-600 sm:text-base sm:leading-7">
@@ -23,7 +23,7 @@ export function CardsCarousel() {
 				</header>
 			</div>
 
-			<div className="mt-6 sm:mt-8">
+			<div className="mt-5 sm:mt-8">
 				<Carousel items={cards} />
 			</div>
 		</section>

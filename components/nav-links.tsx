@@ -1,14 +1,31 @@
 import type { LinkItemType } from "@/components/sheard";
-import type { CSSProperties } from "react";
+import { type IconSvgElement } from "@hugeicons/react";
 import {
-  BookOpenIcon,
-  BriefcaseIcon,
-  CalendarIcon,
+  AmbulanceIcon,
+  BookOpenTextIcon,
+  Briefcase01Icon,
+  Calendar03Icon,
+  CarTimeIcon,
+  ConstructionIcon,
+  ContactIcon,
+  CourtHouseIcon,
   CpuIcon,
-  FileTextIcon,
-  NewspaperIcon,
-  UsersIcon,
-} from "lucide-react";
+  DeliveryTruckIcon,
+  DeviceAccessIcon,
+  ElectricTowerIcon,
+  FileChartColumnIcon,
+  HierarchySquare03Icon,
+  LabelIcon,
+  News01Icon,
+  Route03Icon,
+  SchoolIcon,
+  ShieldUserIcon,
+  SpoonAndForkIcon,
+  ToolboxIcon,
+  UserGroupIcon,
+  BusIcon,
+} from "@hugeicons/core-free-icons";
+import { HugeIcon } from "@/components/huge-icon";
 
 export type NavMatcher = readonly string[];
 
@@ -18,19 +35,13 @@ type RouteEntry = {
   section: string;
 };
 
-function MaskIcon({ src }: { src: string }) {
+function NavIcon({ icon }: { icon: IconSvgElement }) {
   return (
-    <span
-      aria-hidden="true"
-      className="block size-[18px] bg-current"
-      style={
-        {
-          filter:
-            "drop-shadow(0.35px 0 0 currentColor) drop-shadow(0 0.35px 0 currentColor)",
-          WebkitMask: `url(${src}) center / contain no-repeat`,
-          mask: `url(${src}) center / contain no-repeat`,
-        } as CSSProperties
-      }
+    <HugeIcon
+      className="block size-[19px]"
+      icon={icon}
+      size={19}
+      strokeWidth={2.45}
     />
   );
 }
@@ -39,25 +50,25 @@ export const solutionLinks: LinkItemType[] = [
   {
     label: "Usage-Based Insurance",
     href: "/solutions/usage-based-insurance",
-    icon: <MaskIcon src="/icons/ubi.svg" />,
+    icon: <NavIcon icon={ShieldUserIcon} />,
     description: "Driving data for insurer programs.",
   },
   {
     label: "Fleet Management",
     href: "/solutions/fleet-management",
-    icon: <MaskIcon src="/icons/fleet-management.svg" />,
+    icon: <NavIcon icon={Route03Icon} />,
     description: "Visibility, alerts, and fleet insight.",
   },
   {
     label: "Reseller Program",
     href: "/solutions/reseller-program",
-    icon: <MaskIcon src="/icons/reseller-program.svg" />,
+    icon: <NavIcon icon={HierarchySquare03Icon} />,
     description: "Partner-ready telematics delivery.",
   },
   {
     label: "White Label",
     href: "/solutions/white-label",
-    icon: <MaskIcon src="/icons/white-label.svg" />,
+    icon: <NavIcon icon={LabelIcon} />,
     description: "Branded platform and app programs.",
   },
 ];
@@ -66,7 +77,7 @@ export const solutionFeaturedLinks: LinkItemType[] = [
   {
     label: "Devices",
     href: "/solutions/devices",
-    icon: <MaskIcon src="/icons/devices.svg" />,
+    icon: <NavIcon icon={DeviceAccessIcon} />,
     description: "Hardware built for reliable deployments.",
   },
 ];
@@ -77,52 +88,52 @@ export const industryLinks: LinkItemType[] = [
   {
     label: "Car Rental",
     href: "/industries/car-rental",
-    icon: <MaskIcon src="/icons/car-rental.svg" />,
+    icon: <NavIcon icon={CarTimeIcon} />,
   },
   {
     label: "Construction",
     href: "/industries/construction",
-    icon: <MaskIcon src="/icons/construction.svg" />,
+    icon: <NavIcon icon={ConstructionIcon} />,
   },
   {
     label: "Education",
     href: "/industries/education",
-    icon: <MaskIcon src="/icons/education.svg" />,
+    icon: <NavIcon icon={SchoolIcon} />,
   },
   {
     label: "Emergency Vehicles",
     href: "/industries/emergency-vehicles",
-    icon: <MaskIcon src="/icons/emergency-vehicle.svg" />,
+    icon: <NavIcon icon={AmbulanceIcon} />,
   },
   {
     label: "Field Services",
     href: "/industries/field-services",
-    icon: <MaskIcon src="/icons/field-services.svg" />,
+    icon: <NavIcon icon={ToolboxIcon} />,
   },
   {
     label: "Food & Beverage",
     href: "/industries/food-and-beverage",
-    icon: <MaskIcon src="/icons/food.svg" />,
+    icon: <NavIcon icon={SpoonAndForkIcon} />,
   },
   {
     label: "Government",
     href: "/industries/government",
-    icon: <MaskIcon src="/icons/goverment.svg" />,
+    icon: <NavIcon icon={CourtHouseIcon} />,
   },
   {
     label: "Logistics",
     href: "/industries/transportation-and-logistics",
-    icon: <MaskIcon src="/icons/logistics.svg" />,
+    icon: <NavIcon icon={DeliveryTruckIcon} />,
   },
   {
     label: "Passenger Transit",
     href: "/industries/passenger-transit",
-    icon: <MaskIcon src="/icons/passenger-transit.svg" />,
+    icon: <NavIcon icon={BusIcon} />,
   },
   {
     label: "Utilities",
     href: "/industries/utilities",
-    icon: <MaskIcon src="/icons/utilities.svg" />,
+    icon: <NavIcon icon={ElectricTowerIcon} />,
   },
 ];
 
@@ -132,22 +143,22 @@ export const resourceLinks: LinkItemType[] = [
   {
     label: "Blog",
     href: "/resources/blog",
-    icon: <NewspaperIcon />,
+    icon: <NavIcon icon={News01Icon} />,
   },
   {
     label: "Case Studies",
     href: "/resources/case-studies",
-    icon: <FileTextIcon />,
+    icon: <NavIcon icon={FileChartColumnIcon} />,
   },
   {
     label: "Guides",
     href: "/resources/guides",
-    icon: <BookOpenIcon />,
+    icon: <NavIcon icon={BookOpenTextIcon} />,
   },
   {
     label: "Events",
     href: "/resources/events",
-    icon: <CalendarIcon />,
+    icon: <NavIcon icon={Calendar03Icon} />,
   },
 ];
 
@@ -157,27 +168,27 @@ export const companyLinks: LinkItemType[] = [
   {
     label: "About Us",
     href: "/about-us",
-    icon: <UsersIcon />,
+    icon: <NavIcon icon={UserGroupIcon} />,
   },
   {
     label: "Our Technology",
     href: "/our-technology",
-    icon: <CpuIcon />,
+    icon: <NavIcon icon={CpuIcon} />,
   },
   {
     label: "Contact Us",
     href: "/contact-us",
-    icon: <FileTextIcon />,
+    icon: <NavIcon icon={ContactIcon} />,
   },
   {
     label: "Careers",
     href: "/careers",
-    icon: <BriefcaseIcon />,
+    icon: <NavIcon icon={Briefcase01Icon} />,
   },
   {
     label: "Life at Redtail",
     href: "/careers/life-at-redtail",
-    icon: <BookOpenIcon />,
+    icon: <NavIcon icon={BookOpenTextIcon} />,
   },
 ];
 

@@ -7,6 +7,7 @@ interface FadeContentProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
   container?: Element | string | null;
   blur?: boolean;
+  disableOnMobile?: boolean;
   duration?: number;
   ease?: string;
   delay?: number;
@@ -24,6 +25,7 @@ const FadeContent: React.FC<FadeContentProps> = ({
   children,
   container,
   blur = false,
+  disableOnMobile = true,
   duration = 1000,
   ease = 'power2.out',
   delay = 0,
@@ -46,8 +48,10 @@ const FadeContent: React.FC<FadeContentProps> = ({
     if (!el) return;
 
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const mobileViewport =
+      disableOnMobile && window.matchMedia('(max-width: 767px)').matches;
 
-    if (reduceMotion) {
+    if (reduceMotion || mobileViewport) {
       el.style.opacity = '1';
       el.style.visibility = 'visible';
       el.style.filter = 'none';
@@ -136,6 +140,7 @@ const FadeContent: React.FC<FadeContentProps> = ({
     blur,
     container,
     delay,
+    disableOnMobile,
     disappearAfter,
     disappearDuration,
     disappearEase,

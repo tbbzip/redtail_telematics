@@ -1,8 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRightIcon, MapPinIcon, PhoneIcon } from "lucide-react";
+import { ArrowRight01Icon, Call02Icon, MapPinIcon } from "@hugeicons/core-free-icons";
 
 import FadeContent from "@/components/FadeContent";
+import { HugeIcon } from "@/components/huge-icon";
 import { Button } from "@/components/ui/button";
 
 const aboutStats = [
@@ -99,7 +100,7 @@ export function AboutSection() {
               <Button asChild size="lg">
                 <Link href="/contact-us">
                   Get in Touch
-                  <ArrowRightIcon data-icon="inline-end" />
+                  <HugeIcon data-icon="inline-end" icon={ArrowRight01Icon} />
                 </Link>
               </Button>
             </div>
@@ -159,11 +160,19 @@ export function AboutSection() {
                 </h3>
                 <div className="mt-5 space-y-4 text-sm leading-7 text-foreground/74 sm:text-[15px]">
                   <div className="flex items-start gap-3">
-                    <MapPinIcon className="mt-1 size-4 shrink-0 text-rb-red" />
+                    <HugeIcon
+                      className="mt-1 size-4 shrink-0 text-rb-red"
+                      icon={MapPinIcon}
+                      size={16}
+                    />
                     <p className="max-w-md">{office.address}</p>
                   </div>
                   <div className="flex items-start gap-3">
-                    <PhoneIcon className="mt-1 size-4 shrink-0 text-rb-red" />
+                    <HugeIcon
+                      className="mt-1 size-4 shrink-0 text-rb-red"
+                      icon={Call02Icon}
+                      size={16}
+                    />
                     <a
                       className="inline-flex transition-colors hover:text-rb-red"
                       href={office.phoneHref}
@@ -180,7 +189,7 @@ export function AboutSection() {
                     target="_blank"
                   >
                     View on map
-                    <ArrowRightIcon className="size-4" />
+                    <HugeIcon className="size-4" icon={ArrowRight01Icon} size={16} />
                   </a>
                 </div>
               </article>

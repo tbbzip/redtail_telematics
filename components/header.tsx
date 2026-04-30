@@ -4,9 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
-import { ArrowRightIcon, PhoneIcon } from "lucide-react";
+import { ArrowRight01Icon, Call02Icon } from "@hugeicons/core-free-icons";
 import { cn } from "@/lib/utils";
 import { useScroll } from "@/hooks/use-scroll";
+import { HugeIcon } from "@/components/huge-icon";
 import { Button } from "@/components/ui/button";
 import { DesktopNav } from "@/components/desktop-nav";
 import { MobileNav } from "@/components/mobile-nav";
@@ -75,7 +76,7 @@ export function Header() {
 						)}
 						href={primaryCtaLink.href}
 					>
-						<PhoneIcon className="size-4" />
+						<HugeIcon className="size-4" icon={Call02Icon} size={16} />
 						{primaryCtaLink.label}
 					</Link>
 					<Button
@@ -88,7 +89,7 @@ export function Header() {
 					>
 						<Link href={getStartedCtaLink.href}>
 							{getStartedCtaLink.label}
-							<ArrowRightIcon />
+							<HugeIcon icon={ArrowRight01Icon} />
 						</Link>
 					</Button>
 				</div>

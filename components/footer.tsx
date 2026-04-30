@@ -1,6 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import {
+	Call02Icon,
+	CheckmarkCircle02Icon,
+	Location01Icon,
+	Mail01Icon,
+} from "@hugeicons/core-free-icons";
+import {
 	SiAppstore,
 	SiFacebook,
 	SiGoogleplay,
@@ -16,6 +22,8 @@ import {
 	solutionLinks,
 	topLevelLink,
 } from "@/components/nav-links";
+import { FooterDemoForm } from "@/components/footer-demo-form";
+import { HugeIcon } from "@/components/huge-icon";
 import { InfiniteSlider } from "@/components/ui/infinite-slider";
 
 function LinkedinGlyph() {
@@ -121,6 +129,49 @@ const certificationBadges: CertificationBadge[] = [
 	},
 ];
 
+const demoBenefits = [
+	"Real-time vehicle and asset visibility",
+	"Driver risk, incident insight, and operational alerts",
+	"Device health and deployment support as programs scale",
+];
+
+const contactDetails = [
+	{
+		label: "UK",
+		value: "+44 1799 533300",
+		href: "tel:+441799533300",
+		icon: Call02Icon,
+	},
+	{
+		label: "US",
+		value: "+1 619-546-9061",
+		href: "tel:+16195469061",
+		icon: Call02Icon,
+	},
+	{
+		label: "Sales",
+		value: "sales@redtailtelematics.com",
+		href: "mailto:sales@redtailtelematics.com",
+		icon: Mail01Icon,
+	},
+];
+
+const officeLocations = [
+	{
+		label: "UK HQ",
+		address:
+			"Plextek Building, London Road, Great Chesterford, Essex, CB10 1NY UK",
+	},
+	{
+		label: "San Diego",
+		address: "1420 Kettner Blvd Suite 100, San Diego, CA 92101 USA",
+	},
+	{
+		label: "Las Vegas",
+		address: "2300 W Sahara Ave #800, Las Vegas, NV 89102 USA",
+	},
+];
+
 function CertificationBadgeCard({ badge }: { badge: CertificationBadge }) {
 	const className =
 		"group inline-flex h-14 items-center justify-center opacity-80 transition duration-300 hover:-translate-y-0.5 hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rb-red/50 focus-visible:ring-offset-4 focus-visible:ring-offset-rb-black";
@@ -129,10 +180,10 @@ function CertificationBadgeCard({ badge }: { badge: CertificationBadge }) {
 		<>
 			<Image
 				alt={badge.alt}
-				className="h-11 w-auto max-w-36 object-contain transition duration-300"
-				height={64}
+				className="h-20 w-auto max-w-44 object-contain transition duration-300"
+				height={80}
 				src={badge.src}
-				width={144}
+				width={176}
 			/>
 			<span className="sr-only">{badge.label}</span>
 		</>
@@ -170,7 +221,100 @@ export function Footer() {
 				className="pointer-events-none absolute right-0 bottom-0 h-64 w-64 translate-x-1/3 translate-y-1/3 rounded-full bg-rb-red/12 blur-3xl"
 			/>
 			<div className="relative mx-auto max-w-7xl px-6 py-14 sm:px-8 sm:py-20 lg:px-10 lg:py-24">
-					<div className="mx-auto max-w-3xl">
+					<section
+						aria-labelledby="footer-demo-heading"
+						className="grid gap-10 border-b border-white/10 pb-14 sm:pb-16 lg:grid-cols-[1fr_28rem] lg:items-start lg:gap-20 lg:pb-20"
+					>
+						<div className="max-w-2xl">
+							<p className="text-xs font-semibold tracking-[0.28em] text-rb-red uppercase">
+								Connect with Redtail
+							</p>
+							<h2
+								className="mt-5 max-w-xl text-[2.15rem] leading-tight font-semibold tracking-tight text-white sm:text-5xl lg:text-[3.25rem]"
+								id="footer-demo-heading"
+							>
+								Ready to see Redtail in action?
+							</h2>
+							<p className="mt-5 max-w-xl text-base leading-7 text-white/68 sm:text-lg sm:leading-8">
+								Schedule a demo with our team to see how Redtail supports
+								fleets, insurers, OEMs, and partner programs with reliable
+								telematics data.
+							</p>
+
+							<ul className="mt-8 grid gap-4 text-sm text-white/78">
+								{demoBenefits.map((benefit) => (
+									<li className="flex items-start gap-3" key={benefit}>
+										<span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full border border-rb-red/55 text-rb-red">
+											<HugeIcon
+												className="size-3.5"
+												icon={CheckmarkCircle02Icon}
+												size={14}
+												strokeWidth={2.2}
+											/>
+										</span>
+										<span>{benefit}</span>
+									</li>
+								))}
+							</ul>
+
+							<div className="mt-10 border-t border-white/10 pt-8">
+								<h3 className="text-sm font-semibold tracking-[0.2em] text-white/48 uppercase">
+									Contact
+								</h3>
+								<div className="mt-5 grid gap-3 sm:grid-cols-3">
+									{contactDetails.map((detail) => (
+										<a
+											className="group rounded-lg border border-white/10 bg-white/[0.035] p-4 transition hover:-translate-y-0.5 hover:border-rb-red/40 hover:bg-white/[0.06]"
+											href={detail.href}
+											key={`${detail.label}-${detail.value}`}
+										>
+											<div className="flex items-center gap-2 text-xs font-semibold text-white/46">
+												<HugeIcon
+													className="size-4 text-rb-red"
+													icon={detail.icon}
+													size={16}
+												/>
+												{detail.label}
+											</div>
+											<p className="mt-2 text-sm font-semibold text-white transition-colors group-hover:text-rb-red">
+												{detail.value}
+											</p>
+										</a>
+									))}
+								</div>
+							</div>
+
+							<div className="mt-8">
+								<h3 className="text-sm font-semibold tracking-[0.2em] text-white/48 uppercase">
+									Locations
+								</h3>
+								<div className="mt-5 grid gap-4 lg:grid-cols-3">
+									{officeLocations.map((office) => (
+										<div
+											className="border-l border-rb-red/60 pl-4"
+											key={office.label}
+										>
+											<div className="flex items-center gap-2 text-sm font-semibold text-white">
+												<HugeIcon
+													className="size-4 text-rb-red"
+													icon={Location01Icon}
+													size={16}
+												/>
+												{office.label}
+											</div>
+											<p className="mt-2 text-sm leading-6 text-white/58">
+												{office.address}
+											</p>
+										</div>
+									))}
+								</div>
+							</div>
+						</div>
+
+						<FooterDemoForm />
+					</section>
+
+					<div className="mx-auto mt-14 max-w-3xl sm:mt-16 lg:mt-20">
 						<div className="relative overflow-hidden">
 							<div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-linear-to-r from-rb-black to-transparent" />
 							<div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-linear-to-l from-rb-black to-transparent" />
