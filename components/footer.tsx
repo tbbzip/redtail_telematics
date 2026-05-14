@@ -127,6 +127,16 @@ const certificationBadges: CertificationBadge[] = [
 		alt: "Best Telematics Provider award",
 		label: "Best Telematics Provider",
 	},
+	{
+		src: "/certifications/st100-tech.svg",
+		alt: "The Sunday Times 100 Tech recognition",
+		label: "The Sunday Times 100 Tech",
+	},
+	{
+		src: "/certifications/kings-award-enterprise-2026.png",
+		alt: "The King's Awards for Enterprise 2026 recognition",
+		label: "The King's Awards for Enterprise 2026",
+	},
 ];
 
 const demoBenefits = [
@@ -174,7 +184,7 @@ const officeLocations = [
 
 function CertificationBadgeCard({ badge }: { badge: CertificationBadge }) {
 	const className =
-		"group inline-flex h-14 items-center justify-center opacity-80 transition duration-300 hover:-translate-y-0.5 hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rb-red/50 focus-visible:ring-offset-4 focus-visible:ring-offset-rb-black";
+		"group inline-flex h-20 items-center justify-center opacity-80 transition duration-300 hover:-translate-y-0.5 hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rb-red/50 focus-visible:ring-offset-4 focus-visible:ring-offset-rb-black";
 
 	const content = (
 		<>

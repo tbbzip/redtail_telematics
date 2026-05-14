@@ -21,6 +21,19 @@ export const structure: StructureResolver = (S) =>
 		.title("Redtail Content")
 		.items([
 			S.listItem()
+				.title("Career vacancies")
+				.icon(CaseIcon)
+				.child(
+					S.documentList()
+						.id("career-vacancies")
+						.title("Career vacancies")
+						.schemaType("careerVacancy")
+						.apiVersion(apiVersion)
+						.filter('_type == "careerVacancy"')
+						.defaultOrdering([{ field: "_createdAt", direction: "desc" }]),
+				),
+			S.divider(),
+			S.listItem()
 				.title("Posts")
 				.icon(BookIcon)
 				.child(

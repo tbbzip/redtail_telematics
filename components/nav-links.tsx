@@ -218,7 +218,7 @@ export const primaryCtaLink = {
 
 export const getStartedCtaLink = {
   label: "Get Started",
-  href: "/platform-and-apps",
+  href: "/get-started",
 };
 
 const routeEntries: RouteEntry[] = [

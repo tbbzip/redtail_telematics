@@ -131,12 +131,13 @@ function PromoCard({
 					<Image
 						alt={imageAlt}
 						className={cn(
-							imageContain ? "object-contain p-4" : "object-cover",
+							imageContain ? "h-full w-full object-contain p-4" : "h-full w-full object-cover",
 							"transition duration-500 group-hover/promo:scale-[1.03]"
 						)}
-						fill
+						height={405}
 						sizes="280px"
 						src={imageSrc}
+						width={720}
 					/>
 					<div className="absolute inset-0 bg-linear-to-t from-rb-black/28 to-transparent" />
 				</div>
@@ -221,8 +222,7 @@ export function DesktopNav({ overlay = false }: { overlay?: boolean }) {
 									description="Review live fleet activity on web and mobile with one platform for operations teams."
 									href="/contact-us"
 									imageAlt="Redtail web and mobile platform views"
-									imageContain
-									imageSrc="/platform-screenshots/redtail_lap-mob.png"
+									imageSrc="/navigation/featured-solutions.png"
 									title="See Redtail in action"
 								/>
 							</div>
@@ -258,7 +258,7 @@ export function DesktopNav({ overlay = false }: { overlay?: boolean }) {
 									description="Match Redtail telematics to the teams, vehicles, and workflows you operate every day."
 									href="/contact-us"
 									imageAlt="Fleet operations vehicle"
-									imageSrc="/carousel/fleet.jpg"
+									imageSrc="/navigation/featured-industries.png"
 									title="Built for real operating teams"
 								/>
 							</div>
@@ -269,7 +269,7 @@ export function DesktopNav({ overlay = false }: { overlay?: boolean }) {
 				<NavigationMenuLink asChild className="px-1">
 					<Link
 						className={cn(
-							"relative inline-flex h-9 items-center px-3 py-2 text-[15px] font-semibold text-foreground/80 transition-colors hover:text-rb-red focus-visible:text-rb-red focus-visible:outline-none after:absolute after:right-3 after:bottom-1 after:left-3 after:h-px after:origin-left after:scale-x-0 after:bg-rb-red/70 after:transition-transform after:duration-200 hover:after:scale-x-100 focus-visible:after:scale-x-100",
+							"relative inline-flex h-9 items-center px-3 py-2 text-[15px] font-medium text-foreground/72 transition-colors hover:text-rb-red focus-visible:text-rb-red focus-visible:outline-none after:absolute after:right-3 after:bottom-1 after:left-3 after:h-px after:origin-left after:scale-x-0 after:bg-rb-red/70 after:transition-transform after:duration-200 hover:after:scale-x-100 focus-visible:after:scale-x-100",
 							overlay &&
 								"text-white/92 hover:text-white focus-visible:text-white after:bg-white/75",
 							platformActive &&
@@ -310,7 +310,7 @@ export function DesktopNav({ overlay = false }: { overlay?: boolean }) {
 									description="Read fleet insights, customer stories, guides, and Redtail updates for modern telematics programs."
 									href="/resources/blog"
 									imageAlt="Redtail fleet resources"
-									imageSrc="/carousel/fleet-web.jpg"
+									imageSrc="/navigation/featured-resources.png"
 									title="Learn from real deployments"
 								/>
 							</div>
@@ -346,7 +346,7 @@ export function DesktopNav({ overlay = false }: { overlay?: boolean }) {
 									description="Connect with our UK and US teams for sales, support, partnerships, and product conversations."
 									href="/contact-us"
 									imageAlt="Redtail headquarters"
-									imageSrc="/about/redtail_telematics_hq.jpg"
+									imageSrc="/navigation/featured-company.png"
 									title="Built by telematics specialists"
 								/>
 							</div>

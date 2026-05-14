@@ -60,7 +60,7 @@ function NavigationMenuItem({
 }
 
 const navigationMenuTriggerStyle = cva(
-  "group/navigation-menu-trigger relative inline-flex h-9 w-max items-center justify-center px-3.5 py-2 text-[15px] font-semibold text-foreground/80 transition-colors outline-none hover:text-rb-red focus-visible:text-rb-red focus-visible:ring-3 focus-visible:ring-ring/30 focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-popup-open:text-rb-red data-open:text-rb-red after:absolute after:right-3.5 after:bottom-1 after:left-3.5 after:h-px after:origin-left after:scale-x-0 after:bg-rb-red/70 after:transition-transform after:duration-200 hover:after:scale-x-100 focus-visible:after:scale-x-100 data-popup-open:after:scale-x-100 data-open:after:scale-x-100"
+  "group/navigation-menu-trigger relative inline-flex h-9 w-max items-center justify-center px-3.5 py-2 text-[15px] font-medium text-foreground/72 transition-colors outline-none hover:text-rb-red focus-visible:text-rb-red focus-visible:ring-3 focus-visible:ring-ring/30 focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-popup-open:text-rb-red data-open:text-rb-red after:absolute after:right-3.5 after:bottom-1 after:left-3.5 after:h-px after:origin-left after:scale-x-0 after:bg-rb-red/70 after:transition-transform after:duration-200 hover:after:scale-x-100 focus-visible:after:scale-x-100 data-popup-open:after:scale-x-100 data-open:after:scale-x-100"
 )
 
 function NavigationMenuTrigger({

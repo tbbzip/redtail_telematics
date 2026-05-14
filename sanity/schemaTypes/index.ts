@@ -1,7 +1,15 @@
 import authors from "./authors";
+import careerVacancy from "./career-vacancy";
 import categories from "./categories";
 import events from "./events";
 import guides from "./guides";
 import posts from "./posts";
 
-export const schemaTypes = [posts, events, authors, categories, guides];
+export const schemaTypes = [
+	posts,
+	events,
+	authors,
+	categories,
+	guides,
+	careerVacancy,
+];

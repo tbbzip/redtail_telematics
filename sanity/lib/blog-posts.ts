@@ -6,7 +6,10 @@ import {
 } from "@/lib/blog-posts";
 import { client } from "@/sanity/lib/client";
 import { urlForImage } from "@/sanity/lib/image";
-import { LATEST_BLOG_POSTS_QUERY } from "@/sanity/lib/queries";
+import {
+	ALL_BLOG_POSTS_QUERY,
+	LATEST_BLOG_POSTS_QUERY,
+} from "@/sanity/lib/queries";
 
 type SanityBlogPost = {
 	_id: string;
@@ -37,12 +40,14 @@ function toBlogPost(post: SanityBlogPost, index: number): BlogPost | null {
 		: fallbackImages[index % fallbackImages.length];
 
 	return {
+		authorName: post.authorName || undefined,
 		category: post.category || "Blog",
 		excerpt:
 			post.excerpt ||
 			"Read the latest Redtail perspective on telematics, fleet operations, and connected vehicle programs.",
 		href: "/resources/blog",
 		image,
+		imageAlt: post.title,
 		publishedAt: post.publishedAt || new Date().toISOString(),
 		readTime: post.readTime || "4 min read",
 		slug: post.slug || post._id,
@@ -61,5 +66,17 @@ export async function getLatestBlogPosts(limit = 4): Promise<BlogPost[]> {
 		return mappedPosts.length ? mappedPosts : getMockLatestBlogPosts(limit);
 	} catch {
 		return getMockLatestBlogPosts(limit);
+	}
+}
+
+export async function getAllBlogPosts(): Promise<BlogPost[]> {
+	try {
+		const posts = await client.fetch<SanityBlogPost[]>(ALL_BLOG_POSTS_QUERY);
+
+		return posts
+			.map((post, index) => toBlogPost(post, index))
+			.filter((post): post is BlogPost => Boolean(post));
+	} catch {
+		return [];
 	}
 }
