@@ -10,7 +10,6 @@ import {
 	SiAppstore,
 	SiFacebook,
 	SiGoogleplay,
-	SiInstagram,
 	SiX,
 } from "@icons-pack/react-simple-icons";
 
@@ -65,11 +64,8 @@ const mobileDownloads = [
 const socialLinks = [
 	{
 		label: "Facebook",
+		href: "https://www.facebook.com/redtailtele",
 		icon: <SiFacebook size={16} title="Facebook" />,
-	},
-	{
-		label: "Instagram",
-		icon: <SiInstagram size={16} title="Instagram" />,
 	},
 	{
 		label: "LinkedIn",
@@ -78,6 +74,7 @@ const socialLinks = [
 	},
 	{
 		label: "X",
+		href: "https://x.com/RedtailTele",
 		icon: <SiX size={16} title="X" />,
 	},
 ];

@@ -63,7 +63,6 @@ export const ALL_CASE_STUDIES_QUERY = defineQuery(`
 export const ALL_GUIDES_QUERY = defineQuery(`
   *[
     _type == "guide" &&
-    defined(seo.slug.current) &&
     defined(publishedAt) &&
     dateTime(publishedAt) <= dateTime(now())
   ]

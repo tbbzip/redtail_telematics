@@ -51,8 +51,9 @@ const guides = defineType({
 					name: "slug",
 					type: "slug",
 					title: "Slug",
+					description:
+						"Optional. Guide cards currently link directly to the uploaded PDF.",
 					options: { source: "title", maxLength: 96 },
-					validation: (Rule) => Rule.required(),
 				}),
 			],
 		}),

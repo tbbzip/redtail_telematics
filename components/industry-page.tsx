@@ -18,19 +18,19 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { type IndustryPageContent } from "@/lib/industry-pages";
+import {
+	type IndustryHeroContent,
+	type IndustryPageContent,
+} from "@/lib/industry-pages";
 import { cn } from "@/lib/utils";
 
 type IndustryPageProps = {
 	page: IndustryPageContent;
 };
 
-const dashboardRows = [
-	["Unit 248", "In motion", "18 min"],
-	["Unit 071", "Returned", "2 min"],
-	["Unit 520", "Geofence alert", "Now"],
-	["Unit 894", "Service due", "Today"],
-];
+type IndustryHeroPageProps = {
+	page: IndustryHeroContent;
+};
 
 function SectionIntro({
 	eyebrow,
@@ -75,74 +75,32 @@ function SectionIntro({
 	);
 }
 
-function HeroVisual({ page }: { page: IndustryPageContent }) {
+function HeroVisual({ page }: { page: IndustryHeroContent }) {
 	return (
 		<div
 			aria-label={page.hero.mediaLabel}
-			className="relative min-h-[30rem] overflow-hidden rounded-2xl border border-white/12 bg-white/8 shadow-[0_34px_120px_rgba(0,0,0,0.42)]"
+			className="group relative min-h-[24rem] overflow-hidden rounded-2xl border border-white/12 bg-white/8 shadow-[0_34px_120px_rgba(0,0,0,0.42)] sm:min-h-[30rem] lg:min-h-[35rem]"
 			role="img"
 		>
 			<Image
 				alt={page.hero.imageAlt}
-				className="object-cover opacity-22 mix-blend-screen"
+				className="object-cover transition duration-700 group-hover:scale-[1.025]"
 				fill
 				priority
 				sizes="(min-width: 1024px) 48vw, 100vw"
 				src={page.hero.imageSrc}
+				style={{ objectPosition: page.hero.imagePosition ?? "center" }}
 			/>
-			<div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(61,187,211,0.28),transparent_32%),linear-gradient(135deg,rgba(1,1,1,0.2),rgba(1,1,1,0.86))]" />
+			<div className="absolute inset-0 bg-[linear-gradient(115deg,rgba(1,1,1,0.48),rgba(1,1,1,0.06)_45%,rgba(1,1,1,0.56)),radial-gradient(circle_at_18%_18%,rgba(207,19,23,0.28),transparent_34%)]" />
+			<div className="absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-rb-black/82 to-transparent" />
 
-			<div className="absolute inset-x-5 top-5 rounded-xl border border-white/14 bg-white text-rb-black shadow-2xl sm:inset-x-8 sm:top-8">
-				<div className="flex h-10 items-center justify-between border-b border-rb-black/10 px-4">
-					<div className="flex items-center gap-2">
-						<span className="size-2.5 rounded-full bg-rb-red" />
-						<span className="size-2.5 rounded-full bg-rb-blue" />
-						<span className="size-2.5 rounded-full bg-rb-green" />
-					</div>
-					<Badge className="bg-rb-black text-white">Live fleet</Badge>
-				</div>
-				<div className="grid gap-0 lg:grid-cols-[1.05fr_0.95fr]">
-					<div className="relative min-h-[17rem] overflow-hidden bg-rb-light-blue">
-						<div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(1,1,1,0.08)_1px,transparent_1px),linear-gradient(rgba(1,1,1,0.08)_1px,transparent_1px)] bg-[size:36px_36px]" />
-						<div className="absolute top-1/2 left-1/2 size-32 -translate-x-1/2 -translate-y-1/2 rounded-full border border-rb-red/35" />
-						<div className="absolute top-[38%] left-[42%] size-4 rounded-full bg-rb-red shadow-[0_0_0_8px_rgba(207,19,23,0.16)]" />
-						<div className="absolute right-[20%] bottom-[28%] size-3 rounded-full bg-rb-blue shadow-[0_0_0_8px_rgba(61,187,211,0.16)]" />
-						<div className="absolute bottom-5 left-5 rounded-lg border border-rb-black/10 bg-white/88 p-3 shadow-lg backdrop-blur">
-							<p className="text-xs font-semibold text-rb-black">
-								Branch geofence
-							</p>
-							<p className="mt-1 text-xs text-rb-black/58">
-								2 vehicles entering / 1 exception
-							</p>
-						</div>
-					</div>
-					<div className="flex flex-col gap-3 p-4">
-						{dashboardRows.map(([vehicle, status, time], index) => (
-							<div
-								className="flex items-center justify-between gap-3 rounded-lg border border-rb-black/10 bg-white p-3"
-								key={vehicle}
-							>
-								<div className="flex items-center gap-3">
-									<span
-										className={cn(
-											"size-2.5 rounded-full",
-											index === 2
-												? "bg-rb-red"
-												: index === 3
-													? "bg-rb-orange"
-													: "bg-rb-green"
-										)}
-									/>
-									<div>
-										<p className="text-sm font-semibold">{vehicle}</p>
-										<p className="text-xs text-rb-black/54">{status}</p>
-									</div>
-								</div>
-								<span className="text-xs text-rb-black/48">{time}</span>
-							</div>
-						))}
-					</div>
-				</div>
+			<div className="absolute top-5 left-5 rounded-lg border border-white/12 bg-rb-black/48 px-4 py-3 text-white shadow-2xl backdrop-blur-md sm:top-6 sm:left-6">
+				<p className="text-xs font-semibold tracking-[0.22em] text-white/58 uppercase">
+					Industry fleet
+				</p>
+				<p className="mt-1 text-sm font-semibold">
+					Connected by Redtail telematics
+				</p>
 			</div>
 
 			<div className="absolute right-5 bottom-5 left-5 grid gap-3 sm:grid-cols-3">
@@ -159,7 +117,7 @@ function HeroVisual({ page }: { page: IndustryPageContent }) {
 	);
 }
 
-function IndustryHero({ page }: IndustryPageProps) {
+function IndustryHero({ page }: IndustryHeroPageProps) {
 	return (
 		<section className="relative overflow-hidden bg-rb-black px-4 pt-28 pb-14 text-white sm:px-6 sm:pt-32 sm:pb-18 lg:px-8">
 			<div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_18%,rgba(207,19,23,0.22),transparent_28%),radial-gradient(circle_at_88%_12%,rgba(61,187,211,0.2),transparent_30%)]" />
@@ -266,46 +224,86 @@ function OutcomesSection({ page }: IndustryPageProps) {
 function SolutionsSection({ page }: IndustryPageProps) {
 	return (
 		<section className="border-b border-rb-black/10 bg-white px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
-			<div className="mx-auto max-w-7xl">
-				<SectionIntro
-					description="The core capabilities rental operators need are grouped into clear, scan-friendly cards so the page feels useful rather than copy-heavy."
-					eyebrow="Solutions"
-					title="Our Solutions for Car Rental Industry"
-				/>
-				<div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+			<div className="mx-auto max-w-[88rem] rounded-[1.35rem] border border-rb-black/10 bg-[#fdfcfb] px-5 py-12 shadow-[0_18px_70px_rgba(1,1,1,0.055)] sm:px-8 sm:py-16 lg:px-10 lg:py-20">
+				<div className="mx-auto max-w-4xl text-center">
+					<p className="text-xs font-semibold tracking-[0.26em] text-rb-red uppercase">
+						Solutions
+					</p>
+					<h2 className="mt-4 text-[2.35rem] leading-[1.02] font-semibold tracking-[-0.03em] text-rb-black sm:text-5xl lg:text-6xl">
+						Our Solutions for Car Rental Industry
+					</h2>
+					<p className="mx-auto mt-5 max-w-3xl text-base leading-7 text-rb-black/58 sm:text-lg sm:leading-8">
+						The core capabilities rental operators need are grouped into
+						clear, scan-friendly cards so the page feels useful rather than
+						copy-heavy.
+					</p>
+				</div>
+
+				<div className="mt-12 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:mt-16 lg:grid-cols-3 lg:gap-x-10 lg:gap-y-14">
 					{page.solutions.map((solution, index) => (
-						<Card
+						<article
 							className={cn(
-								"rounded-xl border-rb-black/10 bg-white py-0 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-rb-red/30 hover:shadow-xl",
-								index < 3 && "bg-linear-to-b from-rb-peach/45 to-white"
+								"group relative rounded-2xl border border-transparent p-5 transition duration-300 hover:-translate-y-1 hover:border-rb-black/10 hover:bg-white hover:shadow-[0_18px_55px_rgba(1,1,1,0.08)]",
+								index < 3 && "lg:-mt-2"
 							)}
 							key={solution.title}
 						>
-							<CardHeader className="px-6 pt-6">
-								<div className="flex items-start justify-between gap-4">
-									<div
-										className={cn(
-											"flex size-12 items-center justify-center rounded-lg text-white",
-											index < 3 ? "bg-rb-red" : "bg-rb-black"
-										)}
-									>
-										<HugeIcon icon={solution.icon} size={22} />
-									</div>
-									<Badge variant="outline">
-										{String(index + 1).padStart(2, "0")}
-									</Badge>
-								</div>
-								<CardTitle className="text-xl leading-tight font-semibold text-rb-black">
+							<div
+								className={cn(
+									"flex size-14 items-center justify-center rounded-xl border bg-white shadow-[0_10px_28px_rgba(1,1,1,0.08)] transition duration-300 group-hover:scale-105 group-hover:border-rb-red/24 group-hover:text-rb-red",
+									index % 3 === 0 && "border-rb-red/18 text-rb-red",
+									index % 3 === 1 && "border-rb-black/10 text-rb-black",
+									index % 3 === 2 && "border-rb-blue/20 text-rb-blue"
+								)}
+							>
+								<HugeIcon icon={solution.icon} size={24} />
+							</div>
+							<div className="mt-7 flex items-start justify-between gap-4">
+								<h3 className="text-2xl leading-tight font-semibold tracking-[-0.015em] text-rb-black">
 									{solution.title}
-								</CardTitle>
-							</CardHeader>
-							<CardContent className="px-6 pb-6">
-								<CardDescription className="text-sm leading-6 text-rb-black/60">
-									{solution.description}
-								</CardDescription>
-							</CardContent>
-						</Card>
+								</h3>
+								<span className="shrink-0 text-xs font-semibold tracking-[0.18em] text-rb-black/24">
+									{String(index + 1).padStart(2, "0")}
+								</span>
+							</div>
+							<p className="mt-4 text-base leading-7 text-rb-black/58">
+								{solution.description}
+							</p>
+							<Link
+								className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-rb-red transition hover:gap-3 hover:text-rb-black"
+								href="/platform-and-apps"
+							>
+								Learn more
+								<HugeIcon icon={ArrowRight01Icon} size={17} />
+							</Link>
+						</article>
 					))}
+				</div>
+
+				<div className="mt-12 rounded-2xl border border-rb-black/10 bg-white p-5 sm:p-6 lg:mt-16">
+					<div className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+						<div>
+							<p className="text-xs font-semibold tracking-[0.22em] text-rb-red uppercase">
+								Operational fit
+							</p>
+							<p className="mt-2 text-2xl leading-tight font-semibold text-rb-black">
+								Turn rental vehicle data into branch-ready decisions
+							</p>
+						</div>
+						<div className="grid gap-3 sm:grid-cols-3">
+							{["Locate", "Protect", "Resolve"].map((item) => (
+								<div
+									className="rounded-xl border border-rb-black/10 bg-[#fcfbf9] px-4 py-3"
+									key={item}
+								>
+									<p className="text-sm font-semibold text-rb-black">{item}</p>
+									<p className="mt-1 text-xs leading-5 text-rb-black/52">
+										Faster answers for daily rental operations
+									</p>
+								</div>
+							))}
+						</div>
+					</div>
 				</div>
 			</div>
 		</section>
@@ -518,6 +516,14 @@ export function IndustryPage({ page }: IndustryPageProps) {
 			<PlatformFitSection />
 			<IndustryFaqSection page={page} />
 			<IndustryCta page={page} />
+		</main>
+	);
+}
+
+export function IndustryHeroOnlyPage({ page }: IndustryHeroPageProps) {
+	return (
+		<main className="bg-white">
+			<IndustryHero page={page} />
 		</main>
 	);
 }

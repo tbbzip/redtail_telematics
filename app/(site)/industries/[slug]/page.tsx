@@ -2,14 +2,17 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { MarketingPage } from "@/app/_components/marketing-page";
-import { IndustryPage as IndustryLandingPage } from "@/components/industry-page";
+import {
+	IndustryHeroOnlyPage,
+	IndustryPage as IndustryLandingPage,
+} from "@/components/industry-page";
 import {
 	getRouteEntriesByPrefix,
 	getRouteEntry,
 	primaryCtaLink,
 	secondaryCtaLink,
 } from "@/components/nav-links";
-import { getIndustryPage } from "@/lib/industry-pages";
+import { getIndustryHeroPage, getIndustryPage } from "@/lib/industry-pages";
 
 export function generateStaticParams() {
 	return getRouteEntriesByPrefix("/industries/").map((entry) => ({
@@ -23,7 +26,7 @@ export async function generateMetadata({
 	params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
 	const { slug } = await params;
-	const page = getIndustryPage(slug);
+	const page = getIndustryHeroPage(slug);
 
 	if (page) {
 		return {
@@ -77,6 +80,7 @@ export default async function IndustryPage({
 	const { slug } = await params;
 	const entry = getRouteEntry(`/industries/${slug}`);
 	const page = getIndustryPage(slug);
+	const heroPage = getIndustryHeroPage(slug);
 
 	if (!entry) {
 		notFound();
@@ -84,6 +88,10 @@ export default async function IndustryPage({
 
 	if (page) {
 		return <IndustryLandingPage page={page} />;
+	}
+
+	if (heroPage) {
+		return <IndustryHeroOnlyPage page={heroPage} />;
 	}
 
 	return (

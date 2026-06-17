@@ -44,7 +44,7 @@ export type IndustryLogo = {
 	height: number;
 };
 
-export type IndustryPageContent = {
+export type IndustryHeroContent = {
 	slug: string;
 	metadata: {
 		title: string;
@@ -68,7 +68,11 @@ export type IndustryPageContent = {
 		mediaLabel: string;
 		imageSrc: string;
 		imageAlt: string;
+		imagePosition?: string;
 	};
+};
+
+export type IndustryPageContent = IndustryHeroContent & {
 	logos: IndustryLogo[];
 	outcomes: IndustryOutcome[];
 	solutions: IndustrySolution[];
@@ -106,8 +110,9 @@ const carRentalPage: IndustryPageContent = {
 			"Crash and claims insight",
 		],
 		mediaLabel: "Car rental fleet management video",
-		imageSrc: "/navigation/featured-industries.png",
-		imageAlt: "Car rental fleet management dashboard placeholder",
+		imageSrc: "/industries/hero-rental.webp",
+		imageAlt: "Rows of rental vehicles ready for dispatch",
+		imagePosition: "center",
 	},
 	logos: [
 		{ src: "/clients/ford.svg", alt: "Ford", width: 118, height: 36 },
@@ -276,8 +281,165 @@ const carRentalPage: IndustryPageContent = {
 	],
 };
 
+function createIndustryHeroPage({
+	slug,
+	label,
+	title,
+	description,
+	imageSrc,
+	imageAlt,
+	chips,
+	imagePosition = "center",
+}: {
+	slug: string;
+	label: string;
+	title: string;
+	description: string;
+	imageSrc: string;
+	imageAlt: string;
+	chips: string[];
+	imagePosition?: string;
+}): IndustryHeroContent {
+	return {
+		slug,
+		metadata: {
+			title: `${label} Industry Solutions | Redtail Telematics`,
+			description,
+			openGraphTitle: `${label} Industry Solutions | Redtail Telematics`,
+			openGraphDescription: description,
+			twitterTitle: `${label} Industry Solutions | Redtail Telematics`,
+			twitterDescription: description,
+			canonical: `https://www.redtailtelematics.com/industries/${slug}`,
+		},
+		hero: {
+			eyebrow: `Industries / ${label}`,
+			title,
+			description,
+			primaryCta: "Start Your Free Trial",
+			primaryCtaHref: "/get-started",
+			secondaryCta: "Talk to our team",
+			secondaryCtaHref: "/contact-us",
+			supportingText: "No credit card required",
+			chips,
+			mediaLabel: `${label} fleet telematics hero image`,
+			imageSrc,
+			imageAlt,
+			imagePosition,
+		},
+	};
+}
+
+const industryHeroPages = [
+	carRentalPage,
+	createIndustryHeroPage({
+		slug: "construction",
+		label: "Construction",
+		title: "Telematics Solutions for Construction Fleets by Redtail",
+		description:
+			"Customised for the Construction Environment: Maximize Equipment Uptime, Enhance Job Site Security, and Optimize Fleet Performance",
+		imageSrc: "/industries/hero-construction.webp",
+		imageAlt: "Construction truck being loaded by an excavator",
+		chips: ["Asset visibility", "Jobsite alerts", "Equipment utilization"],
+		imagePosition: "center",
+	}),
+	createIndustryHeroPage({
+		slug: "education",
+		label: "Education",
+		title: "Education Fleet Solutions by Redtail Telematics",
+		description:
+			"Enhance Safety, Improve Efficiency, and Ensure Accountability for School and Campus Fleets",
+		imageSrc: "/industries/hero-education.webp",
+		imageAlt: "School buses lined up for student transportation",
+		chips: ["Route visibility", "Student transport", "Driver safety"],
+		imagePosition: "center",
+	}),
+	createIndustryHeroPage({
+		slug: "emergency-vehicles",
+		label: "Emergency Vehicles",
+		title: "Emergency Vehicles Fleet Solutions by Redtail Telematics",
+		description:
+			"Enhance Officer Safety, Improve Response Times, and Maintain Secure Fleet Operations",
+		imageSrc: "/industries/hero-emergency.webp",
+		imageAlt: "Ambulances lined up outside a response facility",
+		chips: ["Response visibility", "Fleet readiness", "Incident context"],
+		imagePosition: "center",
+	}),
+	createIndustryHeroPage({
+		slug: "field-services",
+		label: "Field Services",
+		title: "Field Service Fleet Solutions by Redtail Telematics",
+		description:
+			"Enhance Efficiency, Ensure Safety, and Boost Productivity for Your Field Service Fleet",
+		imageSrc: "/industries/hero-field.webp",
+		imageAlt: "Service trucks staged for field operations",
+		chips: ["Crew visibility", "Route context", "Service uptime"],
+		imagePosition: "center",
+	}),
+	createIndustryHeroPage({
+		slug: "food-and-beverage",
+		label: "Food & Beverage",
+		title: "Food & Beverage Fleet Solutions by Redtail Telematics",
+		description: "Maintain Quality, Ensure Compliance, and Optimize Delivery Efficiency",
+		imageSrc: "/industries/hero-food.webp",
+		imageAlt: "Delivery trucks moving along a roadway",
+		chips: ["Delivery visibility", "Route performance", "Fleet reliability"],
+		imagePosition: "center",
+	}),
+	createIndustryHeroPage({
+		slug: "government",
+		label: "Government",
+		title: "Government Fleet Solutions by Redtail Telematics",
+		description:
+			"Enhance Efficiency, Ensure Compliance, and Promote Sustainability in Public Fleet Operations",
+		imageSrc: "/navigation/featured-industries.png",
+		imageAlt: "Redtail telematics industry solutions overview",
+		chips: ["Public fleet visibility", "Compliance support", "Operational efficiency"],
+		imagePosition: "center",
+	}),
+	createIndustryHeroPage({
+		slug: "transportation-and-logistics",
+		label: "Logistics",
+		title: "Transportation & Logistics Fleet Solutions by Redtail Telematics",
+		description:
+			"Maximize Fleet Efficiency, Ensure Timely Deliveries, and Reduce Operational Costs with Our Advanced Telematics Solutions",
+		imageSrc: "/industries/hero-logistics.webp",
+		imageAlt: "Logistics trucks traveling on a highway",
+		chips: ["Live ETAs", "Route visibility", "Driver performance"],
+		imagePosition: "center",
+	}),
+	createIndustryHeroPage({
+		slug: "passenger-transit",
+		label: "Passenger Transit",
+		title: "Passenger Transit Fleet Solutions by Redtail Telematics",
+		description:
+			"Improve Passenger Safety, Enhance Efficiency, and Ensure Reliable Service with Our Transit Solutions",
+		imageSrc: "/industries/hero-passenger.webp",
+		imageAlt: "Passenger bus being cleaned and prepared for service",
+		chips: ["Service reliability", "Vehicle health", "Route operations"],
+		imagePosition: "center",
+	}),
+	createIndustryHeroPage({
+		slug: "utilities",
+		label: "Utilities",
+		title: "Utilities Fleet Solutions by Redtail Telematics",
+		description:
+			"Enhance Operational Efficiency, Ensure Safety, and Maximize Uptime for Your Utility Fleet",
+		imageSrc: "/industries/hero-utility.webp",
+		imageAlt: "Utility cart used for site operations",
+		chips: ["Asset tracking", "Crew visibility", "Field response"],
+		imagePosition: "center",
+	}),
+];
+
 const industryPages = new Map([[carRentalPage.slug, carRentalPage]]);
+const industryHeroPageMap = new Map(
+	industryHeroPages.map((page) => [page.slug, page])
+);
 
 export function getIndustryPage(slug: string) {
 	return industryPages.get(slug);
+}
+
+export function getIndustryHeroPage(slug: string) {
+	return industryHeroPageMap.get(slug);
 }
