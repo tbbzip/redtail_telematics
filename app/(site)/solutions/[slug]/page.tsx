@@ -17,6 +17,7 @@ import {
 	getRouteEntriesByPrefix,
 	getRouteEntry,
 } from "@/components/nav-links";
+import { defaultSocialImage } from "@/lib/site-metadata";
 import { notFound } from "next/navigation";
 
 const solutionDescriptions: Record<string, string> = {
@@ -60,8 +61,13 @@ export async function generateMetadata({
 		title,
 		description,
 		alternates: { canonical },
-		openGraph: { title, description, url: canonical },
-		twitter: { title, description },
+		openGraph: {
+			title,
+			description,
+			images: [defaultSocialImage],
+			url: canonical,
+		},
+		twitter: { title, description, images: [defaultSocialImage] },
 	};
 }
 

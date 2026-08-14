@@ -6,6 +6,7 @@ import { LatestBlogSection } from "@/components/latest-blog-section";
 import { LogosSection } from "@/components/logos-section";
 import { PlatformFeatures } from "@/components/platform-features";
 import { TestimonialsSection } from "@/components/testimonials-section";
+import { defaultSocialImage } from "@/lib/site-metadata";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -17,6 +18,7 @@ export const metadata: Metadata = {
 		title: "Connected Vehicle Intelligence | Redtail Telematics",
 		description:
 			"Connected vehicle technology and telematics programs for fleets, insurers, resellers, and mobility partners.",
+		images: [defaultSocialImage],
 		url: "/",
 	},
 };

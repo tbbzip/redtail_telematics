@@ -1,5 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
+import { defaultSocialImageAlt } from "../../lib/site-metadata";
 
 async function completeFooterForm(page: Page) {
 	const form = page.locator("footer form");
@@ -48,6 +49,60 @@ test("homepage renders cleanly and clears automated accessibility checks", async
 
 	expect(accessibility.violations).toEqual([]);
 	expect(consoleErrors).toEqual([]);
+});
+
+test("brand icons and social sharing image are published with the expected metadata", async ({
+	page,
+	request,
+}) => {
+	await page.goto("/");
+
+	const faviconHref = await page
+		.locator('link[rel="icon"][type="image/x-icon"]')
+		.getAttribute("href");
+	const svgIconHref = await page
+		.locator('link[rel="icon"][type="image/svg+xml"]')
+		.getAttribute("href");
+	const appleIconHref = await page
+		.locator('link[rel="apple-touch-icon"]')
+		.getAttribute("href");
+
+	for (const [href, contentType] of [
+		[faviconHref, "image/x-icon"],
+		[svgIconHref, "image/svg+xml"],
+		[appleIconHref, "image/png"],
+	] as const) {
+		expect(href).toBeTruthy();
+		const response = await request.get(href as string);
+		expect(response.status()).toBe(200);
+		expect(response.headers()["content-type"]).toContain(contentType);
+	}
+
+	const openGraphImage = page.locator('meta[property="og:image"]');
+	await expect(openGraphImage).toHaveAttribute(
+		"content",
+		"https://www.redtailtelematics.com/opengraph-image",
+	);
+	await expect(page.locator('meta[property="og:image:alt"]')).toHaveAttribute(
+		"content",
+		defaultSocialImageAlt,
+	);
+	await expect(page.locator('meta[name="twitter:image"]')).toHaveAttribute(
+		"content",
+		"https://www.redtailtelematics.com/opengraph-image",
+	);
+
+	const socialImageResponse = await request.get("/opengraph-image");
+	expect(socialImageResponse.status()).toBe(200);
+	expect(socialImageResponse.headers()["content-type"]).toContain("image/png");
+
+	const socialImageDimensions = await page.evaluate(async () => {
+		const image = new Image();
+		image.src = "/opengraph-image";
+		await image.decode();
+		return { height: image.naturalHeight, width: image.naturalWidth };
+	});
+	expect(socialImageDimensions).toEqual({ height: 630, width: 1200 });
 });
 
 test("get-started supports native radio keys and shows success only after 202", async ({

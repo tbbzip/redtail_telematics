@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import { Geist_Mono, Merriweather } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import {
+	defaultSocialImage,
+	defaultSocialImageAlt,
+} from "@/lib/site-metadata";
 
 const merriweather = Merriweather({
   subsets: ["latin"],
@@ -27,12 +31,17 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     siteName: "Redtail Telematics",
-    images: [{ url: "/opengraph-image", width: 1200, height: 630 }],
+    images: [defaultSocialImage],
   },
   twitter: {
     card: "summary_large_image",
     site: "@RedtailTele",
-    images: ["/opengraph-image"],
+    images: [
+      {
+        url: defaultSocialImage.url,
+        alt: defaultSocialImageAlt,
+      },
+    ],
   },
   robots: {
     index: true,
