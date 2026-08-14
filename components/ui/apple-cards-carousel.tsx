@@ -5,6 +5,7 @@ import {
 	useCallback,
 	useContext,
 	useEffect,
+	useId,
 	useRef,
 	useState,
 } from "react";
@@ -273,6 +274,9 @@ export function Card({
 }) {
 	const [open, setOpen] = useState(false);
 	const containerRef = useRef<HTMLDivElement>(null);
+	const closeButtonRef = useRef<HTMLButtonElement>(null);
+	const triggerRef = useRef<HTMLButtonElement>(null);
+	const titleId = useId();
 	const { onCardClose } = useContext(CarouselContext);
 
 	const handleClose = useCallback(() => {
@@ -287,22 +291,76 @@ export function Card({
 	useOutsideClick(containerRef, handleClose);
 
 	useEffect(() => {
+		if (!open) {
+			return;
+		}
+
 		const originalOverflow = document.body.style.overflow;
+		const siteRoot = document.getElementById("site-root");
+		const siteRootWasInert = siteRoot?.hasAttribute("inert") ?? false;
+		const previouslyFocused = document.activeElement;
+		const focusableSelector = [
+			"a[href]",
+			"button:not([disabled])",
+			"input:not([disabled])",
+			"select:not([disabled])",
+			"textarea:not([disabled])",
+			"[tabindex]:not([tabindex='-1'])",
+		].join(",");
+
+		document.body.style.overflow = "hidden";
+		siteRoot?.setAttribute("inert", "");
+
+		function getFocusableElements() {
+			return Array.from(
+				containerRef.current?.querySelectorAll<HTMLElement>(focusableSelector) ?? [],
+			).filter((element) => element.getClientRects().length > 0);
+		}
 
 		function onKeyDown(event: KeyboardEvent) {
 			if (event.key === "Escape") {
+				event.preventDefault();
 				handleClose();
+				return;
+			}
+
+			if (event.key !== "Tab") {
+				return;
+			}
+
+			const focusableElements = getFocusableElements();
+			const first = focusableElements[0];
+			const last = focusableElements.at(-1);
+
+			if (!first || !last) {
+				event.preventDefault();
+				return;
+			}
+
+			if (event.shiftKey && document.activeElement === first) {
+				event.preventDefault();
+				last.focus();
+			} else if (!event.shiftKey && document.activeElement === last) {
+				event.preventDefault();
+				first.focus();
 			}
 		}
 
-		if (open) {
-			document.body.style.overflow = "hidden";
-			window.addEventListener("keydown", onKeyDown);
-		}
+		const focusFrame = requestAnimationFrame(() => closeButtonRef.current?.focus());
+		document.addEventListener("keydown", onKeyDown);
 
 		return () => {
+			cancelAnimationFrame(focusFrame);
 			document.body.style.overflow = originalOverflow;
-			window.removeEventListener("keydown", onKeyDown);
+			document.removeEventListener("keydown", onKeyDown);
+
+			if (!siteRootWasInert) {
+				siteRoot?.removeAttribute("inert");
+			}
+
+			if (previouslyFocused instanceof HTMLElement) {
+				previouslyFocused.focus();
+			}
 		};
 	}, [open, handleClose]);
 
@@ -311,24 +369,29 @@ export function Card({
 			{typeof document !== "undefined"
 				? createPortal(
 						<AnimatePresence>
-							{open ? (
-								<div className="fixed inset-0 z-50 overflow-y-auto bg-neutral-950/5 px-2 py-3 sm:px-0 sm:py-0">
-									<motion.div
+								{open ? (
+									<div className="fixed inset-0 z-50 overflow-y-auto bg-neutral-950/5 px-2 py-3 sm:px-0 sm:py-0">
+										<motion.div
+											aria-hidden="true"
 										animate={{ opacity: 1 }}
 										className="fixed inset-0 size-full bg-black/70 backdrop-blur-xl"
 										exit={{ opacity: 0 }}
 										initial={{ opacity: 0 }}
 										onClick={handleClose}
 									/>
-									<motion.div
-										className="relative z-[60] mx-auto w-full max-w-5xl overflow-hidden rounded-xl border border-white/10 bg-[#f7f5f2] font-sans shadow-[0_30px_90px_rgba(0,0,0,0.5)] sm:my-10 sm:w-[calc(100%-2rem)] sm:rounded-2xl"
+										<motion.div
+											aria-labelledby={titleId}
+											aria-modal="true"
+											className="relative z-[60] mx-auto w-full max-w-5xl overflow-hidden rounded-xl border border-white/10 bg-[#f7f5f2] font-sans shadow-[0_30px_90px_rgba(0,0,0,0.5)] sm:my-10 sm:w-[calc(100%-2rem)] sm:rounded-2xl"
 										layoutId={layout ? `card-${card.title}` : undefined}
-										ref={containerRef}
-									>
+											ref={containerRef}
+											role="dialog"
+										>
 										<button
 											aria-label="Close"
 											className="absolute top-3 right-3 z-10 flex size-9 items-center justify-center rounded-lg bg-white text-rb-black shadow-sm transition hover:bg-rb-red hover:text-white sm:top-4 sm:right-4"
-											onClick={handleClose}
+												onClick={handleClose}
+												ref={closeButtonRef}
 											type="button"
 										>
 											<HugeIcon className="size-5" icon={Cancel01Icon} size={20} />
@@ -355,12 +418,13 @@ export function Card({
 													/>
 													{card.category}
 												</motion.p>
-												<motion.p
-													className="mt-4 max-w-3xl text-2xl leading-tight font-semibold text-white sm:text-3xl md:text-5xl"
+													<motion.h2
+														className="mt-4 max-w-3xl text-2xl leading-tight font-semibold text-white sm:text-3xl md:text-5xl"
+														id={titleId}
 													layoutId={layout ? `title-${card.title}` : undefined}
 												>
 													{card.title}
-												</motion.p>
+													</motion.h2>
 												{card.summary ? (
 													<p className="mt-3 line-clamp-3 max-w-2xl text-sm leading-6 text-white/78 sm:line-clamp-none md:text-base">
 														{card.summary}
@@ -411,10 +475,11 @@ export function Card({
 					)
 				: null}
 
-			<motion.button
+				<motion.button
 				className="group relative flex h-[28rem] w-[82vw] max-w-[20rem] flex-col items-start justify-end overflow-hidden rounded-[1.25rem] border border-black/10 bg-neutral-900 shadow-[0_22px_70px_rgba(15,23,42,0.24)] sm:w-[20rem] md:h-[32rem] md:w-[22rem]"
 				layoutId={layout ? `card-${card.title}` : undefined}
-				onClick={handleOpen}
+					onClick={handleOpen}
+					ref={triggerRef}
 				transition={{ duration: 0.25, ease: "easeOut" }}
 				type="button"
 				whileHover={{ y: -6 }}

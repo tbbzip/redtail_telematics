@@ -59,6 +59,9 @@ const resourceConfigs = {
 		eyebrow: "Resources",
 		paginationLabel: "Case studies",
 		searchPlaceholder: "Search by customer story, category, or topic",
+		sourceEmptyDescription:
+			"New customer stories will appear here when they are published.",
+		sourceEmptyTitle: "No case studies are currently published",
 		title: "Case Studies",
 	},
 	guides: {
@@ -69,6 +72,9 @@ const resourceConfigs = {
 		eyebrow: "Resources",
 		paginationLabel: "Guides",
 		searchPlaceholder: "Search by guide title, topic, or description",
+		sourceEmptyDescription:
+			"New downloadable guides will appear here when they are published.",
+		sourceEmptyTitle: "No guides are currently published",
 		title: "Guides",
 	},
 	events: {
@@ -80,6 +86,9 @@ const resourceConfigs = {
 		eyebrow: "Resources",
 		paginationLabel: "Events",
 		searchPlaceholder: "Search by event, type, location, or topic",
+		sourceEmptyDescription:
+			"Upcoming and recently published Redtail events will appear here.",
+		sourceEmptyTitle: "No events are currently published",
 		title: "Events",
 	},
 } satisfies Record<string, ResourceIndexConfig>;
@@ -111,7 +120,7 @@ export async function generateMetadata({
 				locale: "en_US",
 				images: [
 					{
-						url: "https://www.redtailtelematics.com/og-image.webp",
+						url: "https://www.redtailtelematics.com/opengraph-image",
 					},
 				],
 				type: "website",
@@ -121,7 +130,7 @@ export async function generateMetadata({
 				site: "@RedtailTele",
 				title: metadata.title as string,
 				description: metadata.description as string,
-				images: ["https://www.redtailtelematics.com/og-image.webp"],
+				images: ["https://www.redtailtelematics.com/opengraph-image"],
 			},
 		};
 	}

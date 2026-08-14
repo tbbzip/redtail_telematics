@@ -15,8 +15,29 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Redtail",
-  description: "Connected vehicle intelligence for fleets, insurers, and OEM programs.",
+  metadataBase: new URL("https://www.redtailtelematics.com"),
+  applicationName: "Redtail Telematics",
+  title: "Redtail Telematics",
+  description:
+    "Connected vehicle intelligence for fleets, insurers, and OEM programs.",
+  category: "Telematics",
+  creator: "Redtail Telematics",
+  publisher: "Redtail Telematics",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    siteName: "Redtail Telematics",
+    images: [{ url: "/opengraph-image", width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "@RedtailTele",
+    images: ["/opengraph-image"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({

@@ -1,14 +1,12 @@
-import {
-	BookIcon,
-	CalendarIcon,
-	CaseIcon,
-	ClockIcon,
-	DocumentTextIcon,
-	ImageIcon,
-	TagIcon,
-	UserIcon,
-	WarningOutlineIcon,
-} from "@sanity/icons";
+import { BookIcon } from "@sanity/icons/Book";
+import { CalendarIcon } from "@sanity/icons/Calendar";
+import { CaseIcon } from "@sanity/icons/Case";
+import { ClockIcon } from "@sanity/icons/Clock";
+import { DocumentTextIcon } from "@sanity/icons/DocumentText";
+import { ImageIcon } from "@sanity/icons/Image";
+import { TagIcon } from "@sanity/icons/Tag";
+import { UserIcon } from "@sanity/icons/User";
+import { WarningOutlineIcon } from "@sanity/icons/WarningOutline";
 import type { StructureResolver } from "sanity/structure";
 
 import { apiVersion } from "./env";

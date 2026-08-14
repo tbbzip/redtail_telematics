@@ -563,10 +563,6 @@ export function ResourceDetailPage({ detail }: { detail: ResourceDetail }) {
 							<HugeIcon icon={Home01Icon} size={22} />
 						</Link>
 						<HugeIcon icon={ArrowRight01Icon} size={18} />
-						<Link className="transition hover:text-rb-red" href="/resources/blog">
-							Resources
-						</Link>
-						<HugeIcon icon={ArrowRight01Icon} size={18} />
 						<Link
 							className="text-rb-black transition hover:text-rb-red"
 							href={detail.listingHref}

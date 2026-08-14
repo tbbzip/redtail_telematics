@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { OurTechnologyPageSections } from "@/components/our-technology-page";
 
 export const metadata: Metadata = {
-	title: "Our Technology",
+	title: "Our Technology | Redtail Telematics",
 	description:
 		"Redtail Telematics leverages over 100 experts in IoT and communications technology across the UK, US, and Malaysia to deliver unparalleled telematics solutions.",
 	keywords: [
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
 		type: "website",
 		images: [
 			{
-				url: "https://www.redtailtelematics.com/og-image.webp",
+				url: "https://www.redtailtelematics.com/opengraph-image",
 				alt: "Our Technology | Redtail Telematics",
 				width: 1200,
 				height: 630,
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
 		title: "Our Technology | Redtail Telematics",
 		description:
 			"Explore the advanced technology and expert teams behind Redtail Telematics' innovative telematics solutions.",
-		images: ["https://www.redtailtelematics.com/og-image.webp"],
+		images: ["https://www.redtailtelematics.com/opengraph-image"],
 	},
 };
 

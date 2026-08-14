@@ -35,7 +35,9 @@ export default defineConfig({
 		structureTool({
 			structure,
 		}),
-		visionTool({ defaultApiVersion: apiVersion }),
+		...(process.env.NODE_ENV === "development"
+			? [visionTool({ defaultApiVersion: apiVersion })]
+			: []),
 	],
 	projectId,
 	schema: {

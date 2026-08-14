@@ -76,7 +76,7 @@ function CompactPost({ post }: { post: BlogPost }) {
 			</div>
 
 			<article className="flex min-w-0 flex-col justify-center border-b border-black/10 pb-7 sm:pb-0">
-				<p className="text-xs font-semibold tracking-[0.22em] text-rb-black/48 uppercase">
+					<p className="text-xs font-semibold tracking-[0.22em] text-rb-black/65 uppercase">
 					{post.category}
 				</p>
 				<h3 className="mt-3 text-xl font-semibold leading-tight text-rb-black transition-colors group-hover:text-rb-red sm:text-2xl">
@@ -85,7 +85,7 @@ function CompactPost({ post }: { post: BlogPost }) {
 				<p className="mt-3 line-clamp-2 text-sm leading-6 text-rb-black/58">
 					{post.excerpt}
 				</p>
-				<p className="mt-4 text-xs font-medium text-rb-black/44">
+					<p className="mt-4 text-xs font-medium text-rb-black/65">
 					{formatPostDate(post.publishedAt)} · {post.readTime}
 				</p>
 			</article>
@@ -119,7 +119,7 @@ export async function LatestBlogSection() {
 						className="inline-flex h-14 w-fit items-center justify-center gap-2 rounded-full border border-rb-black/80 px-7 text-sm font-semibold text-rb-black transition hover:-translate-y-0.5 hover:border-rb-red hover:text-rb-red focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rb-red/35"
 						href="/resources/blog"
 					>
-						View all resources
+						View all blog posts
 						<HugeIcon className="size-4" icon={ArrowRight01Icon} size={16} />
 					</Link>
 				</header>

@@ -1,8 +1,8 @@
+import Image from "next/image";
 import Link from "next/link";
 import {
 	ArrowRight01Icon,
 	Briefcase01Icon,
-	Building02Icon,
 	CheckmarkCircle02Icon,
 	Idea01Icon,
 	Mail01Icon,
@@ -20,7 +20,8 @@ import {
 } from "@/components/ui/card";
 import { type JobOpening } from "@/lib/jobs";
 
-const cvEmailHref = "mailto:sales@redtailtelematics.com";
+const cvEmailHref =
+	"mailto:sales@redtailtelematics.com?subject=Speculative%20career%20application";
 
 const reasons = [
 	"Be part of a dynamic team pushing the boundaries of engineering.",
@@ -30,33 +31,55 @@ const reasons = [
 	"Join a company that values work-life balance and employee well-being.",
 ];
 
-function CareersPlaceholderImage({
+function getJobApplication(job: JobOpening) {
+	if (job.applicationUrl) {
+		return {
+			external: true,
+			href: job.applicationUrl,
+			label: "View role and apply",
+		};
+	}
+
+	const email = job.applicationEmail || "sales@redtailtelematics.com";
+	const subject = encodeURIComponent(`Career application: ${job.title}`);
+
+	return {
+		external: false,
+		href: `mailto:${email}?subject=${subject}`,
+		label: "Email about this role",
+	};
+}
+
+function CareersImage({
 	alt,
 	className = "",
+	label,
+	src,
 }: {
 	alt: string;
 	className?: string;
+	label: string;
+	src: string;
 }) {
 	return (
-		<div
-			aria-label={alt}
+		<figure
 			className={`relative overflow-hidden rounded-2xl border border-black/10 bg-[#f7f6f4] ${className}`}
-			role="img"
 		>
-			<div className="absolute inset-0 opacity-70 [background-image:linear-gradient(120deg,rgba(1,1,1,0.08)_1px,transparent_1px),linear-gradient(30deg,rgba(207,19,23,0.11)_1px,transparent_1px)] [background-size:34px_34px,52px_52px]" />
-			<div className="absolute inset-6 rounded-2xl border border-black/10 bg-white/72" />
-			<div className="absolute inset-0 flex items-center justify-center">
-				<div className="flex size-24 items-center justify-center rounded-2xl bg-rb-black text-white shadow-[0_18px_50px_rgba(1,1,1,0.18)]">
-					<HugeIcon icon={Building02Icon} size={38} />
-				</div>
-			</div>
-			<div className="absolute right-5 bottom-5 left-5 rounded-xl border border-black/10 bg-white/82 px-4 py-3 backdrop-blur-md">
+			<Image
+				alt={alt}
+				className="object-cover"
+				fill
+				sizes="(min-width: 1024px) 52vw, 100vw"
+				src={src}
+			/>
+			<div className="absolute inset-0 bg-linear-to-t from-rb-black/60 via-transparent to-transparent" />
+			<figcaption className="absolute right-5 bottom-5 left-5 rounded-xl border border-white/14 bg-rb-black/52 px-4 py-3 text-white backdrop-blur-md">
 				<p className="text-xs font-semibold tracking-[0.18em] text-rb-red uppercase">
 					Redtail careers
 				</p>
-				<p className="mt-1 text-sm font-semibold text-rb-black">{alt}</p>
-			</div>
-		</div>
+				<p className="mt-1 text-sm font-semibold">{label}</p>
+			</figcaption>
+		</figure>
 	);
 }
 
@@ -92,9 +115,11 @@ export function CareersHero() {
 					</p>
 				</div>
 
-				<CareersPlaceholderImage
-					alt="Join Redtail Telematics"
+				<CareersImage
+					alt="Exterior of the Great Chesterford office used by Redtail Telematics"
 					className="min-h-[28rem] border-white/14 bg-white/[0.055] shadow-[0_34px_120px_rgba(0,0,0,0.34)]"
+					label="Great Chesterford workplace"
+					src="/careers-building.jpg"
 				/>
 			</div>
 		</section>
@@ -142,9 +167,11 @@ export function WhyJoinRedtailSection() {
 	return (
 		<section className="border-b border-black/10 bg-white px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
 			<div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-14">
-				<CareersPlaceholderImage
-					alt="Why Join Redtail Telematics"
+				<CareersImage
+					alt="Redtail Telematics headquarters at the Plextek Building"
 					className="min-h-[24rem]"
+					label="Redtail Telematics headquarters"
+					src="/about/redtail_telematics_hq.jpg"
 				/>
 
 				<div>
@@ -197,6 +224,7 @@ export function CurrentVacanciesSection({ jobs }: { jobs: JobOpening[] }) {
 							const details = [job.department, job.location]
 								.filter(Boolean)
 								.join(" - ");
+							const application = getJobApplication(job);
 
 							return (
 								<Card
@@ -228,10 +256,14 @@ export function CurrentVacanciesSection({ jobs }: { jobs: JobOpening[] }) {
 									</CardHeader>
 									<CardContent className="px-6 pb-6 sm:px-7 sm:pb-7">
 										<Button asChild variant="outline">
-											<Link href={cvEmailHref}>
-												Email Us Your CV
-												<HugeIcon data-icon="inline-end" icon={ArrowRight01Icon} />
-											</Link>
+										<a
+											href={application.href}
+											rel={application.external ? "noreferrer" : undefined}
+											target={application.external ? "_blank" : undefined}
+										>
+											{application.label}
+											<HugeIcon data-icon="inline-end" icon={ArrowRight01Icon} />
+										</a>
 										</Button>
 									</CardContent>
 								</Card>

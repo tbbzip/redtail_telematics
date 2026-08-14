@@ -1,4 +1,4 @@
-import { MarketingPage } from "@/app/_components/marketing-page";
+import type { Metadata } from "next";
 import { DevicesPageSections } from "@/components/devices-page";
 import { FleetManagementFaqSection } from "@/components/fleet-management-faq";
 import { FleetManagementHero } from "@/components/fleet-management-hero";
@@ -16,15 +16,53 @@ import { WhiteLabelTestimonialsSection } from "@/components/white-label-testimon
 import {
 	getRouteEntriesByPrefix,
 	getRouteEntry,
-	primaryCtaLink,
-	secondaryCtaLink,
 } from "@/components/nav-links";
 import { notFound } from "next/navigation";
+
+const solutionDescriptions: Record<string, string> = {
+	"usage-based-insurance":
+		"Telematics data and connected vehicle technology for usage-based insurance programs, driver insight, and policyholder engagement.",
+	"fleet-management":
+		"Fleet visibility, vehicle tracking, maintenance insight, alerts, and connected workflows from Redtail Telematics.",
+	"reseller-program":
+		"A partner-ready telematics platform, devices, apps, and operational support for resellers building recurring customer programs.",
+	"white-label":
+		"Launch a branded telematics experience with configurable web and mobile applications, devices, data, and program support.",
+	devices:
+		"Explore Redtail telematics devices, technical specifications, installation options, and connected vehicle capabilities.",
+};
 
 export function generateStaticParams() {
 	return getRouteEntriesByPrefix("/solutions/").map((entry) => ({
 		slug: entry.href.split("/").at(-1) ?? "",
 	}));
+}
+
+export async function generateMetadata({
+	params,
+}: {
+	params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+	const { slug } = await params;
+	const entry = getRouteEntry(`/solutions/${slug}`);
+
+	if (!entry) {
+		return {};
+	}
+
+	const title = `${entry.label} | Redtail Telematics`;
+	const description =
+		solutionDescriptions[slug] ||
+		`Explore Redtail Telematics ${entry.label.toLowerCase()} capabilities and connected vehicle workflows.`;
+	const canonical = `/solutions/${slug}`;
+
+	return {
+		title,
+		description,
+		alternates: { canonical },
+		openGraph: { title, description, url: canonical },
+		twitter: { title, description },
+	};
 }
 
 export default async function SolutionPage({
@@ -88,13 +126,5 @@ export default async function SolutionPage({
 		);
 	}
 
-	return (
-		<MarketingPage
-			description={`Use this page to build out the ${entry.label} story with sector-specific benefits, platform workflows, and proof points.`}
-			eyebrow={entry.section}
-			primaryCta={primaryCtaLink}
-			secondaryCta={secondaryCtaLink}
-			title={entry.label}
-		/>
-	);
+	notFound();
 }

@@ -83,7 +83,7 @@ export type IndustryPageContent = IndustryHeroContent & {
 const carRentalPage: IndustryPageContent = {
 	slug: "car-rental",
 	metadata: {
-		title: "Car Rental Industry Solutions",
+		title: "Car Rental Industry Solutions | Redtail Telematics",
 		description:
 			"Streamline your car rental operations with Redtail Telematics' industry-specific solutions. Benefit from real-time vehicle tracking, efficient fleet management, and enhanced driver safety tailored to the unique needs of the car rental sector.",
 		openGraphTitle: "Car Rental Industry Solutions | Redtail Telematics",
@@ -99,11 +99,11 @@ const carRentalPage: IndustryPageContent = {
 		title: "Car Rental Fleets Telematic Solutions By Redtail",
 		description:
 			"Maximize Fleet Efficiency, Reduce Costs, and Enhance Customer Experience",
-		primaryCta: "Start Your Free Trial",
+		primaryCta: "Get Started",
 		primaryCtaHref: "/get-started",
 		secondaryCta: "Talk to our team",
 		secondaryCtaHref: "/contact-us",
-		supportingText: "No credit card required",
+		supportingText: "Tell us about your fleet",
 		chips: [
 			"Real-time vehicle location",
 			"Driver behavior alerts",
@@ -145,25 +145,25 @@ const carRentalPage: IndustryPageContent = {
 		{
 			title: "Driver Behavior Monitoring",
 			description:
-				"Enhance the safety of your rental fleet by monitoring renter driving behavior. Track key metrics like speed, harsh braking, and rapid acceleration to ensure that vehicles are driven responsibly. Receive alerts for unsafe driving to prevent potential damage or accidents.",
+				"Review available driving signals such as speed, harsh braking, and rapid acceleration. Configurable alerts can help operations teams identify events that warrant follow-up.",
 			icon: CarSignalIcon,
 		},
 		{
 			title: "GPS Vehicle Tracking",
 			description:
-				"Keep track of your rental vehicles with GPS tracking. Know the exact location of each vehicle at all times, ensuring timely returns and preventing unauthorized use. Improve customer service by providing accurate vehicle availability information.",
+				"Review reported vehicle locations and recent movement to support branch visibility, return workflows, and investigation of unexpected use.",
 			icon: GpsSignal01Icon,
 		},
 		{
 			title: "Crash Reconstruction",
 			description:
-				"Accurately analyze collisions involving your rental vehicles with comprehensive crash data. Reconstruct accidents using detailed information on speed, braking, and impact points, helping to resolve claims and reduce liability risks.",
+				"Use available speed, braking, impact, and trip data to support incident review and claims workflows. Recorded data complements, but does not replace, a formal investigation.",
 			icon: FileChartColumnIcon,
 		},
 		{
 			title: "Automated Maintenance Scheduling",
 			description:
-				"Extend the life of your rental fleet with automated maintenance scheduling. Track vehicle health and schedule maintenance based on usage, ensuring that vehicles are well-maintained and minimizing unexpected downtime.",
+				"Use available mileage, diagnostic, and usage data to support maintenance reminders. Service decisions remain subject to manufacturer guidance and qualified inspection.",
 			icon: Wrench01Icon,
 		},
 		{
@@ -175,25 +175,25 @@ const carRentalPage: IndustryPageContent = {
 		{
 			title: "Stolen Vehicle Tracking",
 			description:
-				"Safeguard your rental fleet from theft with tracking and alerts for unauthorized movement. Improve the chances of recovering stolen vehicles quickly and efficiently, reducing potential losses.",
+				"Use location reporting and unexpected-movement alerts to support a theft-response workflow. Availability of data and recovery outcomes depend on the incident, device, network, and authorities.",
 			icon: ShieldKeyIcon,
 		},
 		{
-			title: "Insurance Premium Reduction",
+			title: "Insurance and Claims Context",
 			description:
-				"Reduce your insurance costs by demonstrating enhanced vehicle security and driver monitoring. Telematics data can help lower premiums by showing insurers that your fleet is equipped with GPS tracking and driver behavior monitoring.",
+				"Share relevant vehicle, trip, and incident records with authorised claims or insurance teams. Coverage, eligibility, and premium decisions remain with the insurer.",
 			icon: ChartAnalysisIcon,
 		},
 		{
-			title: "Tax Benefit",
+			title: "Operational Reporting",
 			description:
-				"Utilize Section 179 deductions to offset GPS tracking investments, saving your business up to 35%. Take advantage of this tax-saving opportunity to make your fleet management solutions even more cost-effective.",
+				"Bring vehicle activity, exceptions, maintenance inputs, and device records into reports that can be reviewed by the appropriate operational teams.",
 			icon: FileChartColumnIcon,
 		},
 		{
 			title: "High-Speed Alerts",
 			description:
-				"Receive instant alerts when a rental vehicle exceeds safe speed limits. High-speed alerts help protect your fleet by encouraging renters to drive responsibly, reducing the risk of accidents and minimizing wear and tear on your vehicles.",
+				"Configure speed-event alerts to surface activity for operational review. Alert timing depends on the device, connectivity, and configured reporting behavior.",
 			icon: BellDotIcon,
 		},
 	],
@@ -231,52 +231,52 @@ const carRentalPage: IndustryPageContent = {
 		{
 			question: "What is telematics and how does it benefit my car rental business?",
 			answer:
-				"Telematics refers to the use of GPS and onboard diagnostics to monitor vehicle location, speed, driving behavior, and more. For a car rental business, telematics provides real-time insights into fleet performance, vehicle health, and driver behavior, allowing you to optimize vehicle usage, reduce maintenance costs, and enhance customer safety.",
+				"Telematics combines vehicle devices, connectivity, and software to report data such as location, mileage, driving events, and supported diagnostics. Rental teams can use that information as an input to fleet availability, maintenance, incident, and vehicle-use workflows.",
 		},
 		{
 			question: "How can telematics help reduce my operational costs?",
 			answer:
-				"Telematics can help reduce costs by providing real-time data on vehicle health and driving habits, which helps identify issues early and reduce wear and tear. It also allows you to ensure proper vehicle usage, and prevent unauthorized vehicle use, all contributing to lower operational expenses.",
+				"Telematics can help teams identify unusual use, review mileage and supported diagnostics, and plan operational follow-up. Actual cost outcomes depend on fleet practices, implementation, and the actions taken from the data.",
 		},
 		{
 			question: "How do I set up telematics devices in my rental fleet?",
 			answer:
-				"To set up telematics devices in your rental fleet, you need to purchase compatible GPS tracking devices. Install the devices in your vehicles by following the provided instructions. Once installed, use the telematics platform or app to activate and monitor each vehicle in your fleet.",
+				"Device choice and installation depend on the vehicle, required data, and deployment model. Redtail can confirm compatibility and whether professional-fit or self-fit hardware is appropriate before activation in the platform.",
 		},
 		{
 			question: "Can telematics improve my fleet's security?",
 			answer:
-				"Yes, telematics can significantly improve fleet security. With real-time tracking, you can monitor the location of your vehicles at all times, receive alerts for unauthorized use, and recover stolen vehicles more quickly. Geofencing can also be used to define areas where vehicles are allowed, triggering alerts if they exit the defined zones.",
+				"Telematics can add reported location, unexpected-movement alerts, and geofence events to an existing fleet-security process. It does not prevent theft or guarantee recovery, and results depend on device, network, operational response, and law-enforcement factors.",
 		},
 		{
 			question: "How does telematics enhance the customer experience for car rentals?",
 			answer:
-				"Telematics enhances the customer experience by ensuring vehicles are well-maintained and safe. You can also offer customers added features such as GPS navigation, roadside assistance, and real-time updates on vehicle condition. Additionally, telematics can streamline the check-in and check-out process by ensuring vehicle status is up to date, making rentals quicker and more efficient.",
+				"Vehicle status, mileage, location, and supported diagnostic data can give branch teams more context for availability, returns, and service follow-up. The customer experience depends on how each rental operator integrates that data into its processes.",
 		},
 		{
 			question: "What type of data can I track with telematics?",
 			answer:
-				"Telematics allows you to track a wide range of data, including real-time vehicle location, mileage, driving behavior (speeding, harsh braking, etc.), and vehicle health diagnostics. This data is invaluable for managing your rental fleet efficiently and ensuring your vehicles are in optimal condition.",
+				"Depending on the selected device, vehicle, connectivity, and integration, available data may include reported location, mileage, speed events, harsh braking, acceleration, trip history, and supported vehicle diagnostics. Compatibility should be confirmed for the proposed deployment.",
 		},
 		{
 			question: "Can telematics help reduce insurance premiums for my rental fleet?",
 			answer:
-				"Yes, many insurance providers offer discounts for fleets that utilize telematics, as it promotes safer driving and reduces risk. By monitoring driver behavior and providing data on vehicle usage, you can demonstrate that your fleet is well-managed, potentially leading to lower insurance premiums.",
+				"Telematics can provide driving, vehicle-use, and incident context that an insurer may choose to review. It does not guarantee eligibility, a discount, or a premium reduction; those decisions remain entirely with the insurer.",
 		},
 		{
 			question: "How do I access telematics data for my rental vehicles?",
 			answer:
-				"Accessing telematics data is simple. You can log into the telematics platform via a web dashboard or mobile app. From there, you can view real-time data on vehicle location, performance, and driver behavior, as well as access reports for analysis and decision-making.",
+				"Authorised users can access the views included in their deployment through the configured web portal or mobile app. Available location, vehicle, behavior, and report data depends on the device and service configuration.",
 		},
 		{
 			question: "How can telematics help with maintenance scheduling?",
 			answer:
-				"Telematics provides real-time data on vehicle health, including engine diagnostics, mileage, and usage patterns. With this information, you can schedule maintenance proactively, preventing breakdowns and reducing downtime, ensuring that your vehicles are always ready for rental.",
+				"Available mileage, engine-hour, diagnostic, and usage data can support maintenance reminders and planning. It does not replace manufacturer schedules, inspections, technician judgement, or required maintenance records.",
 		},
 		{
 			question: "What kind of customer support is available for telematics setup and maintenance?",
 			answer:
-				"Our customer support team is available to assist you with the setup, maintenance, and troubleshooting of your telematics devices. Support is provided from Monday to Friday, 9:00 AM to 6:00 PM, and for urgent issues, you can contact us via email or phone for prompt assistance.",
+				"Setup, maintenance, and troubleshooting responsibilities and response arrangements are defined for each deployment. Contact Redtail to confirm the support scope and escalation route proposed for your programme.",
 		},
 	],
 };
@@ -315,11 +315,11 @@ function createIndustryHeroPage({
 			eyebrow: `Industries / ${label}`,
 			title,
 			description,
-			primaryCta: "Start Your Free Trial",
+			primaryCta: "Get Started",
 			primaryCtaHref: "/get-started",
 			secondaryCta: "Talk to our team",
 			secondaryCtaHref: "/contact-us",
-			supportingText: "No credit card required",
+			supportingText: "Tell us about your fleet",
 			chips,
 			mediaLabel: `${label} fleet telematics hero image`,
 			imageSrc,

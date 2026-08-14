@@ -40,7 +40,7 @@ export const metadata: Metadata = {
 		locale: "en_US",
 		images: [
 			{
-				url: "https://www.redtailtelematics.com/og-image.webp",
+				url: "https://www.redtailtelematics.com/opengraph-image",
 			},
 		],
 		type: "website",
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
 		title: "About Us | Redtail Telematics",
 		description:
 			"Get to know Redtail Telematics, your trusted partner in fleet management and telematics solutions. Explore our mission, values, and dedication to driving fleet efficiency, safety, and sustainability through cutting-edge technology.",
-		images: ["https://www.redtailtelematics.com/og-image.webp"],
+		images: ["https://www.redtailtelematics.com/opengraph-image"],
 	},
 	referrer: "origin-when-cross-origin",
 	creator: "Redtail Telematics",

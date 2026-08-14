@@ -6,6 +6,22 @@ import { LatestBlogSection } from "@/components/latest-blog-section";
 import { LogosSection } from "@/components/logos-section";
 import { PlatformFeatures } from "@/components/platform-features";
 import { TestimonialsSection } from "@/components/testimonials-section";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+	title: "Connected Vehicle Intelligence | Redtail Telematics",
+	description:
+		"Redtail Telematics connects vehicle, driver, and operational data for fleets, insurers, resellers, and connected mobility programs.",
+	alternates: { canonical: "/" },
+	openGraph: {
+		title: "Connected Vehicle Intelligence | Redtail Telematics",
+		description:
+			"Connected vehicle technology and telematics programs for fleets, insurers, resellers, and mobility partners.",
+		url: "/",
+	},
+};
+
+export const revalidate = 60;
 
 export default function Home() {
 	return (

@@ -1,10 +1,8 @@
-import {
-	BookIcon,
-	CaseIcon,
-	CheckmarkCircleIcon,
-	ClockIcon,
-	WarningOutlineIcon,
-} from "@sanity/icons";
+import { BookIcon } from "@sanity/icons/Book";
+import { CaseIcon } from "@sanity/icons/Case";
+import { CheckmarkCircleIcon } from "@sanity/icons/CheckmarkCircle";
+import { ClockIcon } from "@sanity/icons/Clock";
+import { WarningOutlineIcon } from "@sanity/icons/WarningOutline";
 import type { DocumentBadgeComponent, SanityDocument } from "sanity";
 
 type PostDocument = SanityDocument & {

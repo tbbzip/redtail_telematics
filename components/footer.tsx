@@ -50,7 +50,7 @@ const mobileDownloads = [
 	{
 		prefix: "Download on the",
 		label: "App Store",
-		href: "https://apps.apple.com/app/redtail-fleet-app",
+		href: "https://apps.apple.com/app/id1375435783",
 		icon: <SiAppstore size={24} title="App Store" />,
 	},
 	{
@@ -233,7 +233,7 @@ export function Footer() {
 						className="grid gap-10 border-b border-white/10 pb-14 sm:pb-16 lg:grid-cols-[1fr_28rem] lg:items-start lg:gap-20 lg:pb-20"
 					>
 						<div className="max-w-2xl">
-							<p className="text-xs font-semibold tracking-[0.28em] text-rb-red uppercase">
+							<p className="text-xs font-semibold tracking-[0.28em] text-[#ff5f63] uppercase">
 								Connect with Redtail
 							</p>
 							<h2
@@ -457,6 +457,7 @@ export function Footer() {
 							<div
 								aria-label="Certifications and recognitions"
 								className="flex flex-wrap items-center gap-x-6 gap-y-4"
+								role="group"
 							>
 								{certificationBadges.map((badge) => (
 									<CertificationBadgeCard badge={badge} key={badge.src} />
@@ -478,7 +479,7 @@ export function Footer() {
 								))}
 							</nav>
 						</div>
-						<p className="mt-6 text-sm text-white/40">
+							<p className="mt-6 text-sm text-white/58">
 							&copy; {new Date().getFullYear()} Redtail Telematics. All rights
 							reserved.
 						</p>

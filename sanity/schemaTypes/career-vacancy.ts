@@ -1,4 +1,4 @@
-import { CaseIcon } from "@sanity/icons";
+import { CaseIcon } from "@sanity/icons/Case";
 import { defineField, defineType } from "sanity";
 
 const careerVacancy = defineType({
@@ -57,6 +57,23 @@ const careerVacancy = defineType({
 			rows: 4,
 			description: "A short description shown on the Careers page card.",
 			validation: (Rule) => Rule.required().max(360),
+		}),
+		defineField({
+			name: "applicationUrl",
+			title: "Application URL",
+			type: "url",
+			description:
+				"Optional external role or application page. HTTPS is required.",
+			validation: (Rule) =>
+				Rule.uri({ allowRelative: false, scheme: ["https"] }),
+		}),
+		defineField({
+			name: "applicationEmail",
+			title: "Application Email",
+			type: "string",
+			description:
+				"Optional role-specific recruiting mailbox. Used when no application URL is provided.",
+			validation: (Rule) => Rule.email().max(254),
 		}),
 	],
 	preview: {

@@ -299,6 +299,8 @@ function FeatureVisual({
 									cx="148"
 									cy="68"
 									fill="#cf1317"
+									initial={{ opacity: 0.2, r: 16 }}
+									r="16"
 									transition={{
 										duration: 2.7,
 										ease: "easeInOut",

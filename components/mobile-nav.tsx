@@ -150,6 +150,7 @@ export function MobileNav({
 	const [expandedSection, setExpandedSection] = React.useState<string | null>(
 		activeSection
 	);
+	const menuRef = React.useRef<HTMLDivElement>(null);
 
 	const handleClose = React.useCallback(() => setOpen(false), []);
 
@@ -170,17 +171,77 @@ export function MobileNav({
 	React.useEffect(() => {
 		if (!open) return;
 
-		const originalOverflow = document.body.style.overflow;
-		document.body.style.overflow = "hidden";
+		const siteRoot = document.getElementById("site-root");
+		const siteRootWasInert = siteRoot?.hasAttribute("inert") ?? false;
+		const previouslyFocused = document.activeElement;
+		const focusableSelector = [
+			"a[href]",
+			"button:not([disabled])",
+			"input:not([disabled])",
+			"select:not([disabled])",
+			"textarea:not([disabled])",
+			"[tabindex]:not([tabindex='-1'])",
+		].join(",");
+
+		siteRoot?.setAttribute("inert", "");
+
+		function getFocusableElements() {
+			return Array.from(
+				menuRef.current?.querySelectorAll<HTMLElement>(focusableSelector) ?? [],
+			).filter((element) => element.getClientRects().length > 0);
+		}
+
+		function onKeyDown(event: KeyboardEvent) {
+			if (event.key === "Escape") {
+				event.preventDefault();
+				handleClose();
+				return;
+			}
+
+			if (event.key !== "Tab") {
+				return;
+			}
+
+			const focusableElements = getFocusableElements();
+			const first = focusableElements[0];
+			const last = focusableElements.at(-1);
+
+			if (!first || !last) {
+				event.preventDefault();
+				return;
+			}
+
+			if (event.shiftKey && document.activeElement === first) {
+				event.preventDefault();
+				last.focus();
+			} else if (!event.shiftKey && document.activeElement === last) {
+				event.preventDefault();
+				first.focus();
+			}
+		}
+
+		const focusFrame = requestAnimationFrame(() => {
+			getFocusableElements()[0]?.focus();
+		});
+		document.addEventListener("keydown", onKeyDown);
 
 		return () => {
-			document.body.style.overflow = originalOverflow;
+			cancelAnimationFrame(focusFrame);
+			document.removeEventListener("keydown", onKeyDown);
+
+			if (!siteRootWasInert) {
+				siteRoot?.removeAttribute("inert");
+			}
+
+			if (previouslyFocused instanceof HTMLElement) {
+				previouslyFocused.focus();
+			}
 		};
-	}, [open]);
+	}, [handleClose, open]);
 
 	return (
 		<div className="lg:hidden">
-			<Button
+				<Button
 				aria-controls="mobile-menu"
 				aria-expanded={open}
 				aria-label="Toggle menu"
@@ -191,7 +252,7 @@ export function MobileNav({
 						!open &&
 						"border-white/20 bg-white/8 text-white hover:border-white/34 hover:bg-white/14 hover:text-white"
 				)}
-				onClick={() => setOpen(!open)}
+					onClick={() => setOpen(!open)}
 				size="icon"
 				variant="outline"
 			>
@@ -214,18 +275,35 @@ export function MobileNav({
 			</Button>
 			{open && (
 				<Portal className="top-14 z-[45] bg-[#fcfbf9]">
-					<div
-						className="flex h-full min-h-0 w-full flex-col overflow-hidden bg-[#fcfbf9] data-[slot=open]:animate-in data-[slot=open]:fade-in-0 data-[slot=open]:slide-in-from-top-2 data-[slot=open]:duration-200"
+						<div
+							aria-labelledby="mobile-menu-heading"
+							aria-modal="true"
+							className="flex h-full min-h-0 w-full flex-col overflow-hidden bg-[#fcfbf9] data-[slot=open]:animate-in data-[slot=open]:fade-in-0 data-[slot=open]:slide-in-from-top-2 data-[slot=open]:duration-200"
 						data-slot={open ? "open" : "closed"}
-						id="mobile-menu"
-					>
-						<div className="flex-1 overflow-y-auto px-5 pt-4 pb-8">
-							<div className="mx-auto w-full max-w-md">
-								<div className="border-b border-black/10 pb-5">
-									<p className="text-[11px] font-semibold tracking-[0.24em] text-rb-red uppercase">
-										Redtail navigation
-									</p>
-									<p className="mt-2 max-w-xs text-sm leading-6 text-rb-black/58">
+							id="mobile-menu"
+							ref={menuRef}
+							role="dialog"
+						>
+							<div className="flex h-14 shrink-0 items-center justify-between border-b border-black/10 px-5">
+								<p
+									className="text-[11px] font-semibold tracking-[0.24em] text-rb-red uppercase"
+									id="mobile-menu-heading"
+								>
+									Redtail navigation
+								</p>
+								<Button
+									aria-label="Close menu"
+									onClick={handleClose}
+									size="icon"
+									variant="outline"
+								>
+									<HugeIcon icon={Cancel01Icon} />
+								</Button>
+							</div>
+							<div className="flex-1 overflow-y-auto px-5 pt-4 pb-8">
+								<div className="mx-auto w-full max-w-md">
+									<div className="border-b border-black/10 pb-5">
+									<p className="max-w-xs text-sm leading-6 text-rb-black/58">
 										Find telematics solutions, industries, resources, and
 										company information.
 									</p>
@@ -241,10 +319,10 @@ export function MobileNav({
 
 										return (
 											<div key={section.id}>
-												<button
-													aria-controls={`mobile-section-${section.id}`}
-													aria-expanded={expanded}
-													className={cn(
+											<button
+												aria-controls={`mobile-section-${section.id}`}
+												aria-expanded={expanded}
+												className={cn(
 														"flex w-full items-center justify-between py-4 text-left text-base font-semibold transition-colors",
 														sectionActive
 															? "text-rb-red"

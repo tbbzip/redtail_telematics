@@ -120,6 +120,8 @@ export const RESOURCE_POST_DETAIL_QUERY = defineQuery(`
     _id,
     title,
     "description": coalesce(seo.excerpt, seo.metaDescription),
+    "metaTitle": seo.metaTitle,
+    "metaDescription": seo.metaDescription,
     "slug": seo.slug.current,
     "image": coalesce(seo.metaImage, blogImage),
     publishedAt,
@@ -149,6 +151,8 @@ export const EVENT_DETAIL_QUERY = defineQuery(`
     _id,
     title,
     "descriptionText": seo.excerpt,
+    "metaTitle": seo.metaTitle,
+    "metaDescription": seo.metaDescription,
     "slug": seo.slug.current,
     "image": coalesce(seo.metaImage, eventImage),
     "publishedAt": startDate,
@@ -169,6 +173,8 @@ export const ACTIVE_CAREER_VACANCIES_QUERY = defineQuery(`
     department,
     location,
     type,
-    summary
+		summary,
+		applicationUrl,
+		applicationEmail
   }
 `);

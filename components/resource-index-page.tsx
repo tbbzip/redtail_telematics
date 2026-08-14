@@ -308,6 +308,15 @@ export function ResourceIndexPageSections({
 		startIndex,
 		startIndex + ITEMS_PER_PAGE,
 	);
+	const emptyState = items.length
+		? {
+				emptyDescription: config.emptyDescription,
+				emptyTitle: config.emptyTitle,
+			}
+		: {
+				emptyDescription: config.sourceEmptyDescription,
+				emptyTitle: config.sourceEmptyTitle,
+			};
 
 	function updateCategory(category: string) {
 		setActiveCategory(category);
@@ -336,6 +345,7 @@ export function ResourceIndexPageSections({
 					</p>
 				</header>
 
+				{items.length ? (
 				<div className="mt-10 rounded-[1.35rem] border border-black/10 bg-white p-2 shadow-[0_18px_50px_rgba(1,1,1,0.06)]">
 					<div className="grid gap-2 lg:grid-cols-[minmax(13rem,17rem)_1fr] lg:items-center">
 						<label className="relative">
@@ -374,8 +384,9 @@ export function ResourceIndexPageSections({
 						</label>
 					</div>
 				</div>
+				) : null}
 
-				<div className="mt-8">
+				<div className={items.length ? "mt-8" : "mt-10"}>
 					{paginatedItems.length ? (
 						<div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
 							{paginatedItems.map((item) => (
@@ -383,7 +394,7 @@ export function ResourceIndexPageSections({
 							))}
 						</div>
 					) : (
-						<EmptyState config={config} />
+						<EmptyState config={emptyState} />
 					)}
 				</div>
 

@@ -1,8 +1,9 @@
+import Image from "next/image";
 import Link from "next/link";
 import {
 	ArrowRight01Icon,
 	Briefcase01Icon,
-	Building02Icon,
+	CheckmarkCircle02Icon,
 	Idea01Icon,
 	Mail01Icon,
 } from "@hugeicons/core-free-icons";
@@ -35,32 +36,66 @@ const growthParagraphs = [
 	"Whatever your role, we believe in giving everyone considerable independence to develop and grow at their own pace, with support on hand to progress learning and careers - whether it's through in-house training or formal learning courses.",
 ];
 
-function PlaceholderVisual({
-	label,
+function OfficeVisual({
+	alt,
 	className = "",
+	label,
+	src,
 }: {
+	alt: string;
 	label: string;
 	className?: string;
+	src: string;
 }) {
 	return (
-		<div
-			aria-label={label}
+		<figure
 			className={`relative overflow-hidden rounded-2xl border border-black/10 bg-[#f7f6f4] ${className}`}
-			role="img"
 		>
-			<div className="absolute inset-0 opacity-70 [background-image:linear-gradient(120deg,rgba(1,1,1,0.08)_1px,transparent_1px),linear-gradient(30deg,rgba(207,19,23,0.11)_1px,transparent_1px)] [background-size:34px_34px,52px_52px]" />
-			<div className="absolute inset-6 rounded-2xl border border-black/10 bg-white/72" />
-			<div className="absolute inset-0 flex items-center justify-center">
-				<div className="flex size-24 items-center justify-center rounded-2xl bg-rb-black text-white shadow-[0_18px_50px_rgba(1,1,1,0.18)]">
-					<HugeIcon icon={Building02Icon} size={38} />
-				</div>
-			</div>
-			<div className="absolute right-5 bottom-5 left-5 rounded-xl border border-black/10 bg-white/82 px-4 py-3 backdrop-blur-md">
+			<Image
+				alt={alt}
+				className="object-cover"
+				fill
+				sizes="(min-width: 1024px) 52vw, 100vw"
+				src={src}
+			/>
+			<div className="absolute inset-0 bg-linear-to-t from-rb-black/62 via-transparent to-transparent" />
+			<figcaption className="absolute right-5 bottom-5 left-5 rounded-xl border border-white/14 bg-rb-black/52 px-4 py-3 text-white backdrop-blur-md">
 				<p className="text-xs font-semibold tracking-[0.18em] text-rb-red uppercase">
 					Life at Redtail
 				</p>
-				<p className="mt-1 text-sm font-semibold text-rb-black">{label}</p>
-			</div>
+				<p className="mt-1 text-sm font-semibold">{label}</p>
+			</figcaption>
+		</figure>
+	);
+}
+
+function GrowthPrinciples() {
+	const principles = [
+		"Independence to develop and test ideas",
+		"Learning across projects and disciplines",
+		"Support through internal and formal training",
+	];
+
+	return (
+		<div className="rounded-2xl bg-rb-black p-6 text-white shadow-[0_24px_80px_rgba(1,1,1,0.18)] sm:p-8">
+			<p className="text-xs font-semibold tracking-[0.22em] text-rb-blue uppercase">
+				Development principles
+			</p>
+			<ul className="mt-6 grid gap-4">
+				{principles.map((principle) => (
+					<li
+						className="flex items-start gap-3 rounded-xl border border-white/12 bg-white/7 p-4"
+						key={principle}
+					>
+						<HugeIcon
+							className="mt-0.5 shrink-0 text-rb-blue"
+							icon={CheckmarkCircle02Icon}
+							size={20}
+						/>
+						<span className="leading-7 text-white/76">{principle}</span>
+					</li>
+				))}
+			</ul>
 		</div>
 	);
 }
@@ -124,9 +159,11 @@ export function LifeAtRedtailHero() {
 					</p>
 				</div>
 
-				<PlaceholderVisual
+				<OfficeVisual
+					alt="Exterior of the Great Chesterford office used by Redtail Telematics"
 					className="min-h-[28rem] border-white/14 bg-white/[0.055] shadow-[0_34px_120px_rgba(0,0,0,0.34)]"
-					label="Engineering culture"
+					label="Great Chesterford workplace"
+					src="/careers-building.jpg"
 				/>
 			</div>
 		</section>
@@ -171,7 +208,12 @@ export function CultureAndGrowthSection() {
 		<section className="bg-white px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
 			<div className="mx-auto grid max-w-7xl gap-14">
 				<div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:gap-14">
-					<PlaceholderVisual label="Life and culture" className="min-h-[24rem]" />
+					<OfficeVisual
+						alt="Redtail Telematics headquarters at the Plextek Building"
+						className="min-h-[24rem]"
+						label="Redtail Telematics headquarters"
+						src="/about/redtail_telematics_hq.jpg"
+					/>
 					<SectionCopy
 						eyebrow="Life & Culture"
 						paragraphs={cultureParagraphs}
@@ -185,10 +227,9 @@ export function CultureAndGrowthSection() {
 						paragraphs={growthParagraphs}
 						title="Support for the next stage of your work"
 					/>
-					<PlaceholderVisual
-						label="Development and growth"
-						className="min-h-[24rem] lg:order-last"
-					/>
+					<div className="lg:order-last">
+						<GrowthPrinciples />
+					</div>
 				</div>
 			</div>
 		</section>

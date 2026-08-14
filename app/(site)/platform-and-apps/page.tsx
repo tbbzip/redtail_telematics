@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { PlatformAndAppsPageSections } from "@/components/platform-and-apps-page";
 
 export const metadata: Metadata = {
-	title: "Platform and Apps",
+	title: "Platform and Apps | Redtail Telematics",
 	description:
 		"Discover Redtail Telematics' innovative platform and applications designed to drive vehicle intelligence. Tailored to your data needs, our solutions offer real-time tracking, geofencing, asset management, and comprehensive reporting to enhance fleet efficiency and security.",
 	keywords: [
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
 		locale: "en_US",
 		images: [
 			{
-				url: "https://www.redtailtelematics.com/og-image.webp",
+				url: "https://www.redtailtelematics.com/opengraph-image",
 			},
 		],
 		type: "website",
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
 		title: "Platform and Apps | Redtail Telematics",
 		description:
 			"Unlock vehicle intelligence with Redtail Telematics' innovative platform and apps. From real-time tracking and geofencing to asset management and custom reporting, our solutions are designed to meet your fleet's unique data needs.",
-		images: ["https://www.redtailtelematics.com/og-image.webp"],
+		images: ["https://www.redtailtelematics.com/opengraph-image"],
 	},
 	referrer: "origin-when-cross-origin",
 	creator: "Redtail Telematics",

@@ -329,7 +329,7 @@ function HeroTrustedStrip() {
 						Trusted across fleets worldwide
 					</p>
 					<p className="mt-2 text-[11px] font-semibold tracking-[0.18em] text-rb-red uppercase">
-						5B+ MILES TRACKED - OEM-GRADE TELEMATICS
+						30B+ MILES TRACKED - OEM-GRADE TELEMATICS
 					</p>
 				</div>
 				<div className="mask-[linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] overflow-hidden">
@@ -958,11 +958,16 @@ function InstallerAppPreview() {
 	);
 }
 
-function StoreButtons() {
+type StoreButtonsProps = {
+	appStoreHref: string;
+	googlePlayHref: string;
+};
+
+function StoreButtons({ appStoreHref, googlePlayHref }: StoreButtonsProps) {
 	return (
 		<div className="mt-6 flex flex-col gap-3 sm:flex-row">
 			<Button asChild className="w-full sm:w-auto" size="lg">
-				<a href="https://apps.apple.com/app/redtail-fleet-app">
+				<a href={appStoreHref}>
 					<HugeIcon data-icon="inline-start" icon={AppStoreIcon} />
 					App Store
 				</a>
@@ -973,7 +978,7 @@ function StoreButtons() {
 				size="lg"
 				variant="outline"
 			>
-				<a href="https://play.google.com/store/apps/details?id=com.redtailtelematics.rtfleet">
+				<a href={googlePlayHref}>
 					<HugeIcon data-icon="inline-start" icon={PlayStoreIcon} />
 					Google Play
 				</a>
@@ -984,7 +989,10 @@ function StoreButtons() {
 
 export function MobileAppsSection() {
 	return (
-		<section className="border-b border-black/10 bg-white px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
+		<section
+			className="border-b border-black/10 bg-white px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24"
+			id="mobile-apps"
+		>
 			<div className="mx-auto max-w-7xl">
 				<header className="grid gap-6 lg:grid-cols-[0.78fr_1fr] lg:items-end">
 					<div>
@@ -1040,7 +1048,10 @@ export function MobileAppsSection() {
 										</div>
 									))}
 								</div>
-								<StoreButtons />
+								<StoreButtons
+									appStoreHref="https://apps.apple.com/app/id1375435783"
+									googlePlayHref="https://play.google.com/store/apps/details?id=com.redtailtelematics.rtfleet"
+								/>
 							</div>
 						</CardContent>
 					</Card>
@@ -1080,7 +1091,10 @@ export function MobileAppsSection() {
 										</div>
 									))}
 								</div>
-								<StoreButtons />
+								<StoreButtons
+									appStoreHref="https://apps.apple.com/app/id1439172050"
+									googlePlayHref="https://play.google.com/store/apps/details?id=com.redtailtelematics.rtcheck"
+								/>
 							</div>
 						</CardContent>
 					</Card>

@@ -18,8 +18,9 @@ export async function generateStaticParams() {
 		const slugs = await getPostDetailSlugs("blogArticle");
 
 		return slugs.map((slug) => ({ slug }));
-	} catch {
-		return [];
+	} catch (error) {
+		console.error("[Sanity] Failed to generate blog detail routes.");
+		throw error;
 	}
 }
 
@@ -34,21 +35,23 @@ export async function generateMetadata({
 	}
 
 	const canonical = `https://www.redtailtelematics.com${detail.canonicalPath}`;
+	const metadataDescription = detail.metaDescription || detail.description;
+	const metadataTitle = detail.metaTitle || detail.title;
 
 	return {
-		title: `${detail.title} | Redtail Telematics`,
-		description: detail.description,
+		title: detail.metaTitle || `${detail.title} | Redtail Telematics`,
+		description: metadataDescription,
 		alternates: {
 			canonical,
 		},
 		openGraph: {
-			title: detail.title,
-			description: detail.description,
+			title: metadataTitle,
+			description: metadataDescription,
 			url: canonical,
 			locale: "en_US",
 			images: [
 				{
-					url: detail.image || "https://www.redtailtelematics.com/og-image.webp",
+					url: detail.image || "https://www.redtailtelematics.com/opengraph-image",
 				},
 			],
 			type: "article",
@@ -58,9 +61,9 @@ export async function generateMetadata({
 		twitter: {
 			card: "summary_large_image",
 			site: "@RedtailTele",
-			title: detail.title,
-			description: detail.description,
-			images: [detail.image || "https://www.redtailtelematics.com/og-image.webp"],
+			title: metadataTitle,
+			description: metadataDescription,
+			images: [detail.image || "https://www.redtailtelematics.com/opengraph-image"],
 		},
 	};
 }

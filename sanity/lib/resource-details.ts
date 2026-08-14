@@ -26,6 +26,8 @@ type SanityPostDetail = {
 	content?: PortableNode[] | null;
 	description?: string | null;
 	image?: SanityImageSource | null;
+	metaDescription?: string | null;
+	metaTitle?: string | null;
 	publishedAt?: string | null;
 	slug?: string | null;
 	title?: string | null;
@@ -39,6 +41,8 @@ type SanityEventDetail = {
 	endDate?: string | null;
 	image?: SanityImageSource | null;
 	location?: string | null;
+	metaDescription?: string | null;
+	metaTitle?: string | null;
 	organizer?: string | null;
 	publishedAt?: string | null;
 	registrationUrl?: string | null;
@@ -118,7 +122,7 @@ function toPostDetail(
 	post: SanityPostDetail | null,
 	postType: PostResourceType,
 ): ResourceDetail | null {
-	if (!post?.title || !post.slug) {
+	if (!post?.title || !post.slug || !post.content?.length) {
 		return null;
 	}
 
@@ -137,6 +141,8 @@ function toPostDetail(
 			"Read Redtail insight on telematics, connected vehicles, and operational intelligence.",
 		image: getImageUrl(post.image),
 		imageAlt: post.title,
+		metaDescription: post.metaDescription || undefined,
+		metaTitle: post.metaTitle || undefined,
 		publishedAt: post.publishedAt || new Date().toISOString(),
 		readTime: calculateReadTime(content),
 		slug: post.slug,
@@ -145,7 +151,7 @@ function toPostDetail(
 }
 
 function toEventDetail(event: SanityEventDetail | null): ResourceDetail | null {
-	if (!event?.title || !event.slug) {
+	if (!event?.title || !event.slug || !event.content?.length) {
 		return null;
 	}
 
@@ -169,6 +175,8 @@ function toEventDetail(event: SanityEventDetail | null): ResourceDetail | null {
 		imageAlt: event.title,
 		listingHref: "/resources/events",
 		listingLabel: "Events",
+		metaDescription: event.metaDescription || undefined,
+		metaTitle: event.metaTitle || undefined,
 		publishedAt: event.publishedAt || new Date().toISOString(),
 		resourceLabel: "Event",
 		slug: event.slug,

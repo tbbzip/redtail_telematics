@@ -354,8 +354,8 @@ export function FleetManagementHero() {
 
 					<div className="mt-8 flex flex-col gap-3 sm:flex-row">
 						<Button asChild className="w-full sm:w-auto" size="lg">
-							<Link href="/contact-us">
-								Start Your Free Trial
+							<Link href="/get-started">
+								Get Started
 								<HugeIcon data-icon="inline-end" icon={ArrowRight01Icon} />
 							</Link>
 						</Button>
@@ -373,20 +373,20 @@ export function FleetManagementHero() {
 					</div>
 
 					<p className="mt-3 text-sm font-medium text-white/56">
-						No credit card required
+						Tell us about your fleet
 					</p>
 
 					<div className="mt-6 flex flex-wrap gap-2">
 						<Link
 							className="inline-flex h-9 items-center gap-2 rounded-md border border-white/16 bg-white/8 px-3 text-xs font-semibold text-white/78 transition hover:border-white/32 hover:bg-white/13 hover:text-white"
-							href="/contact-us#demo"
+							href="/contact-us#footer-demo-heading"
 						>
 							<HugeIcon icon={Calendar03Icon} size={15} />
 							Schedule a Demo
 						</Link>
 						<Link
 							className="inline-flex h-9 items-center gap-2 rounded-md border border-white/16 bg-white/8 px-3 text-xs font-semibold text-white/78 transition hover:border-white/32 hover:bg-white/13 hover:text-white"
-							href="/platform-and-apps"
+							href="/platform-and-apps#mobile-apps"
 						>
 							<HugeIcon icon={SmartPhone01Icon} size={15} />
 							Download RT Fleet App

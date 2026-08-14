@@ -1,11 +1,8 @@
 import type { Metadata } from "next";
-import { MarketingPage } from "@/app/_components/marketing-page";
 import { LifeAtRedtailPageSections } from "@/components/life-at-redtail-page";
 import {
 	getRouteEntriesByPrefix,
 	getRouteEntry,
-	primaryCtaLink,
-	secondaryCtaLink,
 } from "@/components/nav-links";
 import { notFound } from "next/navigation";
 
@@ -45,7 +42,7 @@ export async function generateMetadata({
 				locale: "en_US",
 				images: [
 					{
-						url: "https://www.redtailtelematics.com/og-image.webp",
+						url: "https://www.redtailtelematics.com/opengraph-image",
 					},
 				],
 				type: "website",
@@ -56,7 +53,7 @@ export async function generateMetadata({
 				title: "Life at Redtail | Redtail Telematics",
 				description:
 					"Explore Redtail's engineering culture, professional development, wellbeing, and team life.",
-				images: ["https://www.redtailtelematics.com/og-image.webp"],
+				images: ["https://www.redtailtelematics.com/opengraph-image"],
 			},
 		};
 	}
@@ -85,13 +82,5 @@ export default async function CareersDetailPage({
 		);
 	}
 
-	return (
-		<MarketingPage
-			description={`Use this page to expand on ${entry.label.toLowerCase()} and support recruiting content with voice, culture, and open-role context.`}
-			eyebrow={entry.section}
-			primaryCta={primaryCtaLink}
-			secondaryCta={secondaryCtaLink}
-			title={entry.label}
-		/>
-	);
+	notFound();
 }

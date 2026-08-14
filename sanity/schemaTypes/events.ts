@@ -1,4 +1,4 @@
-import { CalendarIcon } from "@sanity/icons";
+import { CalendarIcon } from "@sanity/icons/Calendar";
 import { defineArrayMember, defineField, defineType } from "sanity";
 
 const events = defineType({
@@ -13,10 +13,12 @@ const events = defineType({
 			title: "Event Title",
 			description: "Enter the event name. This should be catchy and descriptive.",
 			validation: (Rule) =>
-				Rule.required()
-					.min(10)
-					.max(80)
-					.warning("Title should be between 10 and 80 characters"),
+				[
+					Rule.required(),
+					Rule.min(10)
+						.max(80)
+						.warning("Title should be between 10 and 80 characters"),
+				],
 		}),
 		defineField({
 			name: "eventType",
@@ -32,22 +34,21 @@ const events = defineType({
 				],
 				layout: "radio",
 			},
-			validation: (Rule) =>
-				Rule.required().warning("An event type must be selected"),
+			validation: (Rule) => Rule.required(),
 		}),
 		defineField({
 			name: "location",
 			type: "string",
 			title: "Location",
 			description: 'Enter the event location, venue, city, or "Online".',
-			validation: (Rule) => Rule.required().warning("Location is required"),
+			validation: (Rule) => Rule.required(),
 		}),
 		defineField({
 			name: "startDate",
 			type: "datetime",
 			title: "Start Date & Time",
 			description: "Select the start date and time for the event.",
-			validation: (Rule) => Rule.required().warning("Start date is required"),
+			validation: (Rule) => Rule.required(),
 		}),
 		defineField({
 			name: "endDate",
@@ -80,10 +81,7 @@ const events = defineType({
 				defineArrayMember({ type: "image" }),
 			],
 			description: "Detailed information about the event.",
-			validation: (Rule) =>
-				Rule.required()
-					.min(1)
-					.warning("Event description should not be empty"),
+			validation: (Rule) => Rule.required().min(1),
 		}),
 		defineField({
 			name: "registrationUrl",

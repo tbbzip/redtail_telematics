@@ -20,5 +20,7 @@ export type ResourceIndexConfig = {
 	eyebrow: string;
 	paginationLabel: string;
 	searchPlaceholder: string;
+	sourceEmptyDescription: string;
+	sourceEmptyTitle: string;
 	title: string;
 };

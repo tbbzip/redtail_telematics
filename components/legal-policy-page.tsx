@@ -25,6 +25,7 @@ type LegalPolicyPageProps = {
 	description: string;
 	sections: LegalSection[];
 	currentPath: string;
+	lastUpdated?: string;
 };
 
 const legalLinks = [
@@ -47,6 +48,7 @@ export function LegalPolicyPage({
 	description,
 	sections,
 	currentPath,
+	lastUpdated,
 }: LegalPolicyPageProps) {
 	return (
 		<main className="bg-white">
@@ -66,6 +68,11 @@ export function LegalPolicyPage({
 							<p className="mt-5 max-w-3xl text-base leading-7 text-rb-black/68 sm:text-lg sm:leading-8">
 								{description}
 							</p>
+							{lastUpdated ? (
+								<p className="mt-3 text-sm text-rb-black/54">
+									Last updated: <time dateTime={lastUpdated}>{lastUpdated}</time>
+								</p>
+							) : null}
 						</div>
 						<div className="flex flex-wrap gap-2 lg:justify-end">
 							{legalLinks.map((link) => (

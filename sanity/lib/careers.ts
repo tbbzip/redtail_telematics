@@ -6,12 +6,27 @@ import { ACTIVE_CAREER_VACANCIES_QUERY } from "@/sanity/lib/queries";
 
 type SanityCareerVacancy = {
 	_id: string;
+	applicationEmail?: string | null;
+	applicationUrl?: string | null;
 	department?: string | null;
 	location?: string | null;
 	summary?: string | null;
 	title?: string | null;
 	type?: string | null;
 };
+
+function validApplicationUrl(value?: string | null) {
+	if (!value) {
+		return undefined;
+	}
+
+	try {
+		const url = new URL(value);
+		return url.protocol === "https:" ? url.toString() : undefined;
+	} catch {
+		return undefined;
+	}
+}
 
 function normalizeVacancy(vacancy: SanityCareerVacancy): JobOpening | null {
 	if (!vacancy.title || !vacancy.summary) {
@@ -23,6 +38,13 @@ function normalizeVacancy(vacancy: SanityCareerVacancy): JobOpening | null {
 		summary: vacancy.summary,
 		title: vacancy.title,
 	};
+	const applicationUrl = validApplicationUrl(vacancy.applicationUrl);
+
+	if (applicationUrl) {
+		job.applicationUrl = applicationUrl;
+	} else if (vacancy.applicationEmail?.trim()) {
+		job.applicationEmail = vacancy.applicationEmail.trim().toLowerCase();
+	}
 
 	if (vacancy.department) {
 		job.department = vacancy.department;
@@ -48,7 +70,10 @@ export const getActiveCareerVacancies = cache(async (): Promise<JobOpening[]> =>
 		return vacancies
 			.map((vacancy) => normalizeVacancy(vacancy))
 			.filter((vacancy): vacancy is JobOpening => Boolean(vacancy));
-	} catch {
-		return [];
+	} catch (error) {
+		console.error(
+			"[Sanity] Failed to fetch active career vacancies.",
+		);
+		throw error;
 	}
 });

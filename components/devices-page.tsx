@@ -12,10 +12,8 @@ import {
 	CpuSettingsIcon,
 	DeliveryTruck01Icon,
 	DeviceAccessIcon,
-	Download01Icon,
 	ElectricTower01Icon,
 	Factory01Icon,
-	FileDownloadIcon,
 	Route03Icon,
 	SchoolBusIcon,
 	ShieldKeyIcon,
@@ -300,18 +298,21 @@ const specRows = [
 	},
 ];
 
-const results = [
+const commonUses = [
 	{
-		name: "Global Logistics Client",
-		quote: "30 % maintenance savings across a 2,500-vehicle fleet.",
+		name: "Fleet operations",
+		description:
+			"Vehicle and device data can support maintenance planning, utilization reviews, and operational reporting.",
 	},
 	{
-		name: "Leading Insurtech Partner",
-		quote: "50 % faster claim resolution using HD driver data.",
+		name: "Insurance workflows",
+		description:
+			"High-definition event data can add context for incident review and claims workflows.",
 	},
 	{
-		name: "UK Construction Group",
-		quote: "Downtime cut by 28 % on heavy-plant equipment.",
+		name: "Plant and equipment",
+		description:
+			"Location, movement, and device-health signals can support equipment oversight across active sites.",
 	},
 ];
 
@@ -448,7 +449,7 @@ export function DeviceHeroSection() {
 					</p>
 
 					<p className="mt-5 text-sm font-semibold tracking-[0.18em] text-white/54 uppercase">
-						5 million+ devices deployed worldwide
+						6 million+ devices deployed worldwide
 					</p>
 
 					<div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -465,8 +466,8 @@ export function DeviceHeroSection() {
 							variant="outline"
 						>
 							<Link href="#technical-specs">
-								<HugeIcon data-icon="inline-start" icon={Download01Icon} />
-								Download Datasheet
+								View Technical Specs
+								<HugeIcon data-icon="inline-end" icon={ArrowRight01Icon} />
 							</Link>
 						</Button>
 					</div>
@@ -823,8 +824,8 @@ export function SpecsSnapshotSection() {
 					<div className="flex flex-col gap-3 sm:flex-row lg:justify-self-end">
 						<Button asChild className="w-full sm:w-auto" size="lg">
 							<Link href="/contact-us">
-								Download Full Spec Sheet
-								<HugeIcon data-icon="inline-end" icon={FileDownloadIcon} />
+								Request Full Spec Sheet
+								<HugeIcon data-icon="inline-end" icon={ArrowRight01Icon} />
 							</Link>
 						</Button>
 						<Button
@@ -843,20 +844,22 @@ export function SpecsSnapshotSection() {
 				</div>
 
 				<div className="mt-12 grid gap-4 lg:grid-cols-3">
-					{results.map((result) => (
+					{commonUses.map((use) => (
 						<Card
 							className="border-black/10 bg-white py-0 shadow-[0_18px_50px_rgba(1,1,1,0.06)] ring-0"
-							key={result.name}
+							key={use.name}
 						>
 							<CardHeader className="px-6 pt-6">
-								<Badge className="w-fit bg-rb-black text-white">Results</Badge>
+								<Badge className="w-fit bg-rb-black text-white">
+									Common use
+								</Badge>
 								<CardTitle className="mt-4 text-xl font-semibold text-rb-black">
-									{result.name}
+									{use.name}
 								</CardTitle>
 							</CardHeader>
 							<CardContent className="px-6 pb-6">
 								<p className="text-lg leading-8 text-rb-black/64">
-									&quot;{result.quote}&quot;
+									{use.description}
 								</p>
 							</CardContent>
 						</Card>

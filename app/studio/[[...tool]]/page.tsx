@@ -4,6 +4,12 @@ import { Studio } from "./studio";
 
 export const metadata: Metadata = {
 	title: "Redtail Studio",
+	robots: {
+		follow: false,
+		index: false,
+		noarchive: true,
+		nosnippet: true,
+	},
 };
 
 export const viewport: Viewport = {

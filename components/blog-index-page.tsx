@@ -13,6 +13,9 @@ export function BlogIndexPageSections({ posts }: { posts: BlogPost[] }) {
 				eyebrow: "Resources",
 				paginationLabel: "Blog",
 				searchPlaceholder: "Search by title, category, author, or topic",
+				sourceEmptyDescription:
+					"New Redtail articles will appear here when they are published.",
+				sourceEmptyTitle: "No articles are currently published",
 				title: "Blog",
 			}}
 			items={posts.map((post) => ({

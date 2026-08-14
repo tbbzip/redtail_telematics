@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 		locale: "en_US",
 		images: [
 			{
-				url: "https://www.redtailtelematics.com/og-image.webp",
+				url: "https://www.redtailtelematics.com/opengraph-image",
 			},
 		],
 		type: "website",
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
 		title: "Privacy Policy | Redtail Telematics",
 		description:
 			"Read how Redtail Telematics collects, uses, protects, and manages personal data through this website.",
-		images: ["https://www.redtailtelematics.com/og-image.webp"],
+		images: ["https://www.redtailtelematics.com/opengraph-image"],
 	},
 };
 
@@ -68,14 +68,24 @@ const sections: LegalSection[] = [
 				</p>
 				<p>
 					We may collect, use, store, and transfer different kinds of
-					personal data about you when you contact us directly through the
-					contact page or publicly available sources, such as LinkedIn or
-					websites.
+					personal data about you when you contact us through this website,
+					including the Get Started and Schedule a Demo forms, or through
+					publicly available sources, such as LinkedIn or websites.
 				</p>
 				<p>
-					As appropriate, you may be asked to enter your name, email, phone
-					number or company&apos;s name. You may, however, visit our site
-					anonymously.
+					As appropriate, you may be asked to enter your name, work email,
+					phone number, company name, fleet size, or industry. When you submit
+					a form, we also process the page path, the origin of an external
+					referring website, and standard UTM campaign fields when present.
+					We do not include arbitrary query parameters or the full referring
+					page URL in the lead record. You may otherwise visit our site
+					without submitting this information.
+				</p>
+				<p>
+					We also process limited technical request information to validate
+					the form, prevent abuse, rate-limit repeated requests, trace delivery
+					failures, and forward an accepted request to the approved lead
+					management provider.
 				</p>
 				<p>
 					This website is not intended for children, and we do not knowingly
@@ -267,10 +277,8 @@ const sections: LegalSection[] = [
 				<address className="rounded-lg border border-rb-black/10 bg-white p-5">
 					<strong>Redtail Telematics Corporation</strong>
 					<br />
-					Registration Number US: 77813584
-					<br />
-					Cabrillo Plaza 3990 Old Town Avenue Bldg B, Suite 104 San Diego,
-					California 92110 USA
+					1420 Kettner Boulevard, Suite 100, San Diego, California 92101,
+					USA
 					<br />
 					Local: <a href="tel:+16195469061">+1 619-546-9061</a>
 					<br />
@@ -279,7 +287,7 @@ const sections: LegalSection[] = [
 				<address className="rounded-lg border border-rb-black/10 bg-white p-5">
 					<strong>Redtail Telematics Limited</strong>
 					<br />
-					Registration Number UK: 010894475
+					Registration Number UK: 07407204
 					<br />
 					Plextek Building, London Road, Great Chesterford Essex, CB10 1NY
 					UK
@@ -300,7 +308,8 @@ export default function PrivacyPolicyPage() {
 	return (
 		<LegalPolicyPage
 			currentPath="/privacy-policy"
-			description="This Privacy Policy sets out how Redtail collects, uses, and protects your personal data through your use of this website, including any data you may provide when you register with us or sign up to our newsletter."
+			description="This Privacy Policy sets out how Redtail collects, uses, and protects personal data submitted through this website, including requests for information or a demonstration."
+			lastUpdated="2026-08-12"
 			sections={sections}
 			title="Privacy Policy"
 		/>

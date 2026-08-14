@@ -266,22 +266,24 @@ export function DesktopNav({ overlay = false }: { overlay?: boolean }) {
 					</NavigationMenuContent>
 				</NavigationMenuItem>
 
-				<NavigationMenuLink asChild className="px-1">
-					<Link
-						className={cn(
-							"relative inline-flex h-9 items-center px-3 py-2 text-[15px] font-medium text-foreground/72 transition-colors hover:text-rb-red focus-visible:text-rb-red focus-visible:outline-none after:absolute after:right-3 after:bottom-1 after:left-3 after:h-px after:origin-left after:scale-x-0 after:bg-rb-red/70 after:transition-transform after:duration-200 hover:after:scale-x-100 focus-visible:after:scale-x-100",
-							overlay &&
-								"text-white/92 hover:text-white focus-visible:text-white after:bg-white/75",
-							platformActive &&
-								(overlay
-									? "text-white after:scale-x-100"
-									: "text-rb-red after:scale-x-100")
-						)}
-						href={topLevelLink.href}
-					>
-						{topLevelLink.label}
-					</Link>
-				</NavigationMenuLink>
+				<NavigationMenuItem>
+					<NavigationMenuLink asChild className="px-1">
+						<Link
+							className={cn(
+								"relative inline-flex h-9 items-center px-3 py-2 text-[15px] font-medium text-foreground/72 transition-colors hover:text-rb-red focus-visible:text-rb-red focus-visible:outline-none after:absolute after:right-3 after:bottom-1 after:left-3 after:h-px after:origin-left after:scale-x-0 after:bg-rb-red/70 after:transition-transform after:duration-200 hover:after:scale-x-100 focus-visible:after:scale-x-100",
+								overlay &&
+									"text-white/92 hover:text-white focus-visible:text-white after:bg-white/75",
+								platformActive &&
+									(overlay
+										? "text-white after:scale-x-100"
+										: "text-rb-red after:scale-x-100")
+							)}
+							href={topLevelLink.href}
+						>
+							{topLevelLink.label}
+						</Link>
+					</NavigationMenuLink>
+				</NavigationMenuItem>
 
 				<NavigationMenuItem>
 					<NavigationMenuTrigger

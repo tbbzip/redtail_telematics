@@ -51,6 +51,8 @@ export type ResourceDetail = {
 	imageAlt?: string;
 	listingHref: string;
 	listingLabel: string;
+	metaDescription?: string;
+	metaTitle?: string;
 	publishedAt: string;
 	readTime?: string;
 	resourceLabel: string;

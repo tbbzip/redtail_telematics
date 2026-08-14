@@ -90,7 +90,7 @@ function toCaseStudyItem(
 	item: SanityCaseStudy,
 	index: number,
 ): ResourceIndexItem | null {
-	if (!item.title) {
+	if (!item.title || !item.slug || !item.publishedAt) {
 		return null;
 	}
 
@@ -100,33 +100,33 @@ function toCaseStudyItem(
 			item.excerpt ||
 			"See how Redtail telematics helps organizations improve visibility, reliability, and operational confidence.",
 		actionLabel: "Read story",
-		href: `/resources/case-studies/${item.slug || item._id}`,
+		href: `/resources/case-studies/${item.slug}`,
 		image: getImageUrl(item.mainImage, index, caseStudyFallbackImages),
 		imageAlt: item.title,
-		publishedAt: item.publishedAt || new Date().toISOString(),
+		publishedAt: item.publishedAt,
 		secondaryMeta: item.authorName || "Customer story",
 		secondaryMetaIcon: item.authorName ? "author" : "story",
-		slug: item.slug || item._id,
+		slug: item.slug,
 		title: item.title,
 	};
 }
 
 function toGuideItem(item: SanityGuide, index: number): ResourceIndexItem | null {
-	if (!item.title) {
+	if (!item.title || !item.pdfUrl || !item.publishedAt) {
 		return null;
 	}
 
 	return {
-		actionLabel: item.pdfUrl ? "Download PDF" : undefined,
+		actionLabel: "Download PDF",
 		category: "Guide",
 		excerpt:
 			item.description ||
 			"Download a practical Redtail guide for telematics planning, deployment, and operational improvement.",
-		href: item.pdfUrl || undefined,
+		href: item.pdfUrl,
 		image: getImageUrl(item.mainImage, index, guideFallbackImages),
 		imageAlt: item.title,
 		imageFit: item.mainImage ? "cover" : "contain",
-		publishedAt: item.publishedAt || new Date().toISOString(),
+		publishedAt: item.publishedAt,
 		secondaryMeta: "PDF guide",
 		secondaryMetaIcon: "file",
 		slug: item.slug || item._id,
@@ -135,7 +135,7 @@ function toGuideItem(item: SanityGuide, index: number): ResourceIndexItem | null
 }
 
 function toEventItem(item: SanityEvent, index: number): ResourceIndexItem | null {
-	if (!item.title) {
+	if (!item.title || !item.slug || !item.publishedAt) {
 		return null;
 	}
 
@@ -145,13 +145,13 @@ function toEventItem(item: SanityEvent, index: number): ResourceIndexItem | null
 			item.excerpt ||
 			"Join Redtail for telematics conversations, product insight, and practical guidance for connected fleet programs.",
 		actionLabel: "View event",
-		href: `/resources/events/${item.slug || item._id}`,
+		href: `/resources/events/${item.slug}`,
 		image: getImageUrl(item.mainImage, index, eventFallbackImages),
 		imageAlt: item.title,
-		publishedAt: item.publishedAt || new Date().toISOString(),
+		publishedAt: item.publishedAt,
 		secondaryMeta: item.location || item.organizer || "Redtail event",
 		secondaryMetaIcon: item.location ? "location" : "author",
-		slug: item.slug || item._id,
+		slug: item.slug,
 		title: item.title,
 	};
 }
@@ -180,8 +180,9 @@ export async function getAllCaseStudies(): Promise<ResourceIndexItem[]> {
 		return items
 			.map((item, index) => toCaseStudyItem(item, index))
 			.filter((item): item is ResourceIndexItem => Boolean(item));
-	} catch {
-		return [];
+	} catch (error) {
+		console.error("[Sanity] Failed to fetch the case-study index.");
+		throw error;
 	}
 }
 
@@ -192,8 +193,9 @@ export async function getAllGuides(): Promise<ResourceIndexItem[]> {
 		return items
 			.map((item, index) => toGuideItem(item, index))
 			.filter((item): item is ResourceIndexItem => Boolean(item));
-	} catch {
-		return [];
+	} catch (error) {
+		console.error("[Sanity] Failed to fetch the guide index.");
+		throw error;
 	}
 }
 
@@ -205,7 +207,8 @@ export async function getAllEvents(): Promise<ResourceIndexItem[]> {
 			.filter((item): item is ResourceIndexItem => Boolean(item));
 
 		return sortEvents(mappedItems);
-	} catch {
-		return [];
+	} catch (error) {
+		console.error("[Sanity] Failed to fetch the event index.");
+		throw error;
 	}
 }

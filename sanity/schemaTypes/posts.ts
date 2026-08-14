@@ -1,4 +1,4 @@
-import { BookIcon } from "@sanity/icons";
+import { BookIcon } from "@sanity/icons/Book";
 import { defineArrayMember, defineField, defineType } from "sanity";
 
 const postTypeLabels: Record<string, string> = {
@@ -56,10 +56,12 @@ const posts = defineType({
 			title: "Title",
 			description: "Catchy and descriptive titles work best.",
 			validation: (Rule) =>
-				Rule.required()
-					.min(10)
-					.max(80)
-					.warning("Title should be between 10 and 80 characters"),
+				[
+					Rule.required(),
+					Rule.min(10)
+						.max(80)
+						.warning("Title should be between 10 and 80 characters"),
+				],
 		}),
 		defineField({
 			name: "postType",
@@ -73,8 +75,7 @@ const posts = defineType({
 				],
 				layout: "radio",
 			},
-			validation: (Rule) =>
-				Rule.required().warning("A post type must be selected"),
+			validation: (Rule) => Rule.required(),
 		}),
 		defineField({
 			name: "category",
@@ -82,8 +83,7 @@ const posts = defineType({
 			title: "Category",
 			description: "Select a category for this post.",
 			to: [{ type: "category" }],
-			validation: (Rule) =>
-				Rule.required().warning("A category must be selected"),
+			validation: (Rule) => Rule.required(),
 		}),
 		defineField({
 			name: "blogImage",
@@ -120,8 +120,7 @@ const posts = defineType({
 			],
 			description:
 				"Main content of the blog post. Add text, images, or other media.",
-			validation: (Rule) =>
-				Rule.required().min(1).warning("Content should not be empty"),
+			validation: (Rule) => Rule.required().min(1),
 		}),
 		defineField({
 			name: "seo",

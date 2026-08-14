@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { MarketingPage } from "@/app/_components/marketing-page";
 import {
 	IndustryHeroOnlyPage,
 	IndustryPage as IndustryLandingPage,
@@ -9,8 +8,6 @@ import {
 import {
 	getRouteEntriesByPrefix,
 	getRouteEntry,
-	primaryCtaLink,
-	secondaryCtaLink,
 } from "@/components/nav-links";
 import { getIndustryHeroPage, getIndustryPage } from "@/lib/industry-pages";
 
@@ -42,7 +39,7 @@ export async function generateMetadata({
 				locale: "en_US",
 				images: [
 					{
-						url: "https://www.redtailtelematics.com/og-image.webp",
+						url: "https://www.redtailtelematics.com/opengraph-image",
 					},
 				],
 				type: "website",
@@ -52,7 +49,7 @@ export async function generateMetadata({
 				site: "@RedtailTele",
 				title: page.metadata.twitterTitle,
 				description: page.metadata.twitterDescription,
-				images: ["https://www.redtailtelematics.com/og-image.webp"],
+				images: ["https://www.redtailtelematics.com/opengraph-image"],
 			},
 		};
 	}
@@ -94,13 +91,5 @@ export default async function IndustryPage({
 		return <IndustryHeroOnlyPage page={heroPage} />;
 	}
 
-	return (
-		<MarketingPage
-			description={`Use this page to tailor Redtail's messaging, capabilities, and ROI stories to ${entry.label.toLowerCase()} buyers and operators.`}
-			eyebrow={entry.section}
-			primaryCta={primaryCtaLink}
-			secondaryCta={secondaryCtaLink}
-			title={entry.label}
-		/>
-	);
+	notFound();
 }

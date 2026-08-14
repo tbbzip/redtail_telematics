@@ -208,7 +208,7 @@ export const platformMatchers = [topLevelLink.href] as const;
 
 export const secondaryCtaLink = {
   label: "Login",
-  href: "/login",
+  href: "https://redtailportal.com/",
 };
 
 export const primaryCtaLink = {

@@ -1,27 +1,37 @@
 # Redtail Website
 
-Marketing site rebuild for Redtail, built with Next.js App Router, React, Tailwind CSS, and shadcn/ui primitives.
+Redtail Telematics' public marketing and Sanity CMS site, built with Next.js App Router, React, Tailwind CSS, and an embedded Sanity Studio.
 
 ## Local development
 
+Use the Node version in `.nvmrc`, copy `.env.example` to `.env.local`, then run:
+
 ```bash
+npm ci
 npm run dev
 ```
 
-Open `http://localhost:3000`.
+Open `http://localhost:3000`. The Studio is available at `/studio`.
 
 ## Main areas
 
-- Global layout and header live in `app/layout.tsx` and `components/header.tsx`.
-- Navigation data lives in `components/nav-links.tsx`.
-- Marketing routes are implemented in `app/`.
+- Marketing routes: `app/(site)/`
+- Lead intake endpoint: `app/api/leads/route.ts`
+- Non-sensitive deployment readiness: `app/api/health/route.ts`
+- Shared lead validation and delivery: `lib/leads/`
+- Navigation and reusable sections: `components/`
+- Sanity configuration, schemas, and queries: `sanity/`
 
 ## Quality checks
 
+The complete local gate matches CI:
+
 ```bash
-npm run lint
+npm run check
 npm run build
+npx playwright install chromium
+npm run test:e2e
+npm audit --omit=dev
 ```
 
-
-Minimalist line icon, clean vector style, consistent stroke weight (2.2px), rounded corners, modern UI icon, black color, no fill (outline only), icon should fill most of the canvas with strong presence, minimal padding, centered composition, perfectly aligned, designed on a 24x24 grid, balanced margins on all sides, no tiny details, no excessive whitespace, no shadows, no gradients, no textures, flat vector, no 3D, no realism, transparent background, SVG vector, editable in Adobe Illustrator
+See `docs/production-readiness.md` for deployment variables, lead-delivery requirements, security controls, and the launch checklist.

@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 		locale: "en_US",
 		images: [
 			{
-				url: "https://www.redtailtelematics.com/og-image.webp",
+				url: "https://www.redtailtelematics.com/opengraph-image",
 			},
 		],
 		type: "website",
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
 		title: "Get Started | Redtail Telematics",
 		description:
 			"Start a Redtail Telematics conversation with a focused contact flow.",
-		images: ["https://www.redtailtelematics.com/og-image.webp"],
+		images: ["https://www.redtailtelematics.com/opengraph-image"],
 	},
 };
 

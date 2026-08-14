@@ -42,7 +42,7 @@ export const metadata: Metadata = {
 		locale: "en_US",
 		images: [
 			{
-				url: "https://www.redtailtelematics.com/og-image.webp",
+				url: "https://www.redtailtelematics.com/opengraph-image",
 			},
 		],
 		type: "website",
@@ -52,8 +52,8 @@ export const metadata: Metadata = {
 		site: "@RedtailTele",
 		title: "Careers at Redtail Telematics | Join Our Team",
 		description:
-			"Looking to make an impact in the telematics industry? Redtail Telematics offers exciting career opportunities, a supportive work environment, and avenues for professional growth. Apply today and be part of our innovative team.",
-		images: ["https://www.redtailtelematics.com/og-image.webp"],
+			"Learn about Redtail Telematics' engineering culture, professional development, and currently published career opportunities.",
+		images: ["https://www.redtailtelematics.com/opengraph-image"],
 	},
 	referrer: "origin-when-cross-origin",
 	creator: "Redtail Telematics",

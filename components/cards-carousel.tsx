@@ -63,8 +63,8 @@ function FleetContent() {
 					high-impact events in near real-time on laptop, tablet, or mobile.
 				</li>
 				<li>
-					<strong>Save Money:</strong> Efficiencies in driver and vehicle
-					performance will deliver savings inside three months.
+					<strong>Review Efficiency:</strong> Driver and vehicle data can help
+					teams identify opportunities and measure operational changes.
 				</li>
 			</ul>
 
@@ -149,8 +149,8 @@ function ResellersContent() {
 					necessary data wherever they are.
 				</li>
 				<li>
-					<strong>Save Money:</strong> Efficiencies in driver and vehicle
-					performance will deliver savings inside three months.
+					<strong>Review Efficiency:</strong> Driver and vehicle data can help
+					teams identify opportunities and measure operational changes.
 				</li>
 			</ul>
 
@@ -326,9 +326,9 @@ function InsuranceContent() {
 					acceleration, making processing of claims easier and reducing fraud.
 				</li>
 				<li>
-					<strong>Valuable Data:</strong> Our driver feedback informs risk and
-					premium; our crash portal informs claims efficiency and veracity; our
-					telematics deliver ROI to your business.
+					<strong>Valuable Data:</strong> Driver feedback can add context for
+					risk review, while crash data can support claims investigation and
+					workflow decisions.
 				</li>
 			</ul>
 

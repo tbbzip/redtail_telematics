@@ -175,7 +175,7 @@ export function TestimonialsSection() {
 									<p className="text-2xl font-semibold text-rb-black sm:text-3xl">
 										{stat.value}
 									</p>
-									<p className="mt-2 text-xs text-rb-black/52 sm:text-sm">
+									<p className="mt-2 text-xs text-rb-black/65 sm:text-sm">
 										{stat.label}
 									</p>
 								</div>
@@ -200,7 +200,7 @@ export function TestimonialsSection() {
 									className="border-rb-black bg-rb-black text-white hover:border-rb-red hover:bg-rb-red"
 									size="lg"
 								>
-									<Link href="/platform-and-apps">
+									<Link href="/get-started">
 										Get Started
 										<span className="flex size-5 items-center justify-center rounded-md bg-white text-rb-black">
 											<HugeIcon

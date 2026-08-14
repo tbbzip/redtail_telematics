@@ -5,47 +5,16 @@ import {
 	type LegalSection,
 } from "@/components/legal-policy-page";
 
+const description =
+	"This policy describes the current cookie and browser-storage behavior of the Redtail Telematics website.";
+
 export const metadata: Metadata = {
 	title: "Cookie Policy | Redtail Telematics",
-	description:
-		"Read how Redtail Telematics uses cookies to support website functionality, preferences, and site improvement.",
+	description,
 	alternates: {
 		canonical: "https://www.redtailtelematics.com/cookie-policy",
 	},
 };
-
-const cookieRows = [
-	[
-		"cookielawinfo-checkbox-analytics",
-		"11 months",
-		"This cookie is set by the GDPR Cookie Consent plugin. The cookie is used to store the user consent for the cookies in the category Analytics.",
-	],
-	[
-		"cookielawinfo-checkbox-functional",
-		"11 months",
-		"This cookie is set by the GDPR Cookie Consent plugin to record the user consent for the cookies in the category Functional.",
-	],
-	[
-		"cookielawinfo-checkbox-necessary",
-		"11 months",
-		"This cookie is set by the GDPR Cookie Consent plugin. The cookie is used to store the user consent for the cookies in the category Necessary.",
-	],
-	[
-		"cookielawinfo-checkbox-others",
-		"11 months",
-		"This cookie is set by the GDPR Cookie Consent plugin. The cookie is used to store the user consent for the cookies in the category Other.",
-	],
-	[
-		"cookielawinfo-checkbox-performance",
-		"11 months",
-		"This cookie is set by the GDPR Cookie Consent plugin. The cookie is used to store the user consent for the cookies in the category Performance.",
-	],
-	[
-		"viewed_cookie_policy",
-		"11 months",
-		"The cookie is set by the GDPR Cookie Consent plugin and is used to store whether or not user has consented to the use of cookies. It does not store any personal data.",
-	],
-];
 
 const sections: LegalSection[] = [
 	{
@@ -55,80 +24,46 @@ const sections: LegalSection[] = [
 			<>
 				<p>
 					Cookies are small files that a site or its service provider
-						transfers to your computer&apos;s hard drive through your web browser.
+					transfers to your device through your web browser.
 				</p>
 				<p>
-					Redtail Telematics uses cookies to understand and save your
-					preferences for future visits, keep track of advertisements, and
-					compile aggregate data about site traffic and site interaction.
+					The version of this website represented by this policy does not set
+					advertising, analytics, preference, or consent cookies. The lead
+					forms also do not use cookies or persistent browser storage for
+					campaign attribution.
 				</p>
 			</>
 		),
 	},
 	{
-		id: "consent",
-		title: "Consent to Receive Cookies",
-		children: (
-			<ul>
-				<li>
-					Strictly necessary cookies are required for the operation of our
-					website. These essential cookies are always enabled because our
-					website will not work properly without them.
-				</li>
-				<li>
-					Analytical or performance cookies allow us to recognise and count
-					the number of visitors and see how visitors move around our
-					website.
-				</li>
-				<li>
-					Functionality cookies are used to recognise you when you return to
-					our website, personalise our content, and remember your preferences.
-				</li>
-			</ul>
-		),
-	},
-	{
-		id: "cookie-table",
-		title: "Cookie Table",
+		id: "current-use",
+		title: "Current Cookie Use",
 		children: (
 			<>
 				<p>
-					Necessary cookies are absolutely essential for the website to
-					function properly. These cookies ensure basic functionalities and
-					security features of the website, anonymously.
+					No application cookie is intentionally created by the public
+					marketing pages, the Schedule a Demo form, or the Get Started form.
+					The embedded Sanity Studio at <code>/studio</code> is an administrative
+					tool for authorised editors and may use authentication storage supplied
+					by Sanity.
 				</p>
-				<div className="overflow-x-auto rounded-lg border border-rb-black/10">
-					<table className="min-w-[760px] text-left text-sm">
-						<thead className="bg-rb-black text-white">
-							<tr>
-								<th className="px-4 py-3 font-semibold">Cookie</th>
-								<th className="px-4 py-3 font-semibold">Duration</th>
-								<th className="px-4 py-3 font-semibold">Description</th>
-							</tr>
-						</thead>
-						<tbody className="divide-y divide-rb-black/10">
-							{cookieRows.map(([cookie, duration, detail]) => (
-								<tr key={cookie}>
-									<td className="px-4 py-3 font-mono text-xs text-rb-black">
-										{cookie}
-									</td>
-									<td className="px-4 py-3 text-rb-black/68">{duration}</td>
-									<td className="px-4 py-3 text-rb-black/68">{detail}</td>
-								</tr>
-							))}
-						</tbody>
-					</table>
-				</div>
+				<p>
+					Hosting and security infrastructure may process request metadata and
+					apply provider-managed abuse protections without creating an
+					application cookie. Browser extensions or unrelated third-party pages
+					may create storage outside Redtail&apos;s control.
+				</p>
 			</>
 		),
 	},
 	{
-		id: "third-party-cookies",
-		title: "Third-Party Cookies",
+		id: "future-changes",
+		title: "Future Changes",
 		children: (
 			<p>
-				We do not share the information collected by the cookies with any
-				third parties.
+				If Redtail adds optional analytics, advertising, or other non-essential
+				cookies, this policy and the site&apos;s consent controls must be updated
+				before those cookies are enabled.
 			</p>
 		),
 	},
@@ -161,14 +96,12 @@ const sections: LegalSection[] = [
 	},
 ];
 
-const description =
-	"Our website uses cookies to distinguish you from other users and improve your browsing experience.";
-
 export default function CookiePolicyPage() {
 	return (
 		<LegalPolicyPage
 			currentPath="/cookie-policy"
 			description={description}
+			lastUpdated="2026-08-12"
 			sections={sections}
 			title="Cookie Policy"
 		/>

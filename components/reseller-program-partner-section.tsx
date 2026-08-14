@@ -48,9 +48,9 @@ const resellerBenefits = [
 		toneClass: "from-rb-light-green/85",
 	},
 	{
-		title: "Save Money",
+		title: "Identify Opportunities",
 		description:
-			"Efficiencies in driver and vehicle performance will deliver savings inside three months.",
+			"Driver and vehicle data can help operators identify efficiency opportunities and measure changes over time.",
 		outcome: "Improve",
 		icon: MoneyBag02Icon,
 		toneClass: "from-rb-peach/60",

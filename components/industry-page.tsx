@@ -32,6 +32,27 @@ type IndustryHeroPageProps = {
 	page: IndustryHeroContent;
 };
 
+const sharedIndustryCapabilities = [
+	{
+		description:
+			"Review location, alerts, trip history, maintenance, and reporting capabilities for connected fleet operations.",
+		href: "/solutions/fleet-management",
+		title: "Fleet management",
+	},
+	{
+		description:
+			"Compare professional-fit and self-fit hardware options for different vehicles, assets, and deployment models.",
+		href: "/solutions/devices",
+		title: "Devices",
+	},
+	{
+		description:
+			"See how web portals and mobile apps bring device data, operational views, and installation workflows together.",
+		href: "/platform-and-apps",
+		title: "Platform and apps",
+	},
+] as const;
+
 function SectionIntro({
 	eyebrow,
 	title,
@@ -155,6 +176,118 @@ function IndustryHero({ page }: IndustryHeroPageProps) {
 				<HeroVisual page={page} />
 			</div>
 		</section>
+	);
+}
+
+function IndustryOverviewSections({ page }: IndustryHeroPageProps) {
+	return (
+		<>
+			<section className="border-b border-rb-black/10 bg-[#fcfbf9] px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
+				<div className="mx-auto max-w-7xl">
+					<SectionIntro
+						description="Start with the operating questions that matter to your team, then choose the devices, data, and workflows that fit your vehicles and assets."
+						eyebrow="Operational fit"
+						title="Connect industry priorities to the telematics stack"
+					/>
+
+					<div className="mt-10 grid gap-4 md:grid-cols-3">
+						{page.hero.chips.map((priority) => (
+							<div
+								className="flex items-start gap-3 rounded-xl border border-rb-black/10 bg-white p-5 shadow-sm"
+								key={priority}
+							>
+								<HugeIcon
+									className="mt-0.5 shrink-0 text-rb-red"
+									icon={CheckmarkCircle02Icon}
+									size={20}
+								/>
+								<div>
+									<p className="font-semibold text-rb-black">{priority}</p>
+									<p className="mt-2 text-sm leading-6 text-rb-black/58">
+										Discuss the required data, response workflow, and deployment
+										constraints with the Redtail team.
+									</p>
+								</div>
+							</div>
+						))}
+					</div>
+				</div>
+			</section>
+
+			<section className="bg-white px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
+				<div className="mx-auto max-w-7xl">
+					<div className="mx-auto max-w-3xl text-center">
+						<p className="text-xs font-semibold tracking-[0.26em] text-rb-red uppercase">
+							Explore Redtail
+						</p>
+						<h2 className="mt-4 text-[2.35rem] leading-tight font-semibold tracking-[-0.02em] text-rb-black sm:text-5xl">
+							Build from devices to daily operations
+						</h2>
+						<p className="mt-5 text-base leading-7 text-rb-black/62 sm:text-lg sm:leading-8">
+							Review the existing product areas, then contact Redtail to confirm
+							technical compatibility and the scope of a proposed deployment.
+						</p>
+					</div>
+
+					<div className="mt-10 grid gap-5 md:grid-cols-3">
+						{sharedIndustryCapabilities.map((capability) => (
+							<Card
+								className="border-rb-black/10 bg-[#fcfbf9] py-0 shadow-sm"
+								key={capability.href}
+							>
+								<CardHeader className="px-6 pt-6">
+									<CardTitle className="text-2xl text-rb-black">
+										{capability.title}
+									</CardTitle>
+									<CardDescription className="text-base leading-7 text-rb-black/60">
+										{capability.description}
+									</CardDescription>
+								</CardHeader>
+								<CardContent className="px-6 pb-6">
+									<Link
+										className="inline-flex items-center gap-2 text-sm font-semibold text-rb-red transition hover:gap-3 hover:text-rb-black"
+										href={capability.href}
+									>
+										Explore {capability.title.toLowerCase()}
+										<HugeIcon icon={ArrowRight01Icon} size={17} />
+									</Link>
+								</CardContent>
+							</Card>
+						))}
+					</div>
+				</div>
+			</section>
+
+			<section className="bg-[#fcfbf9] px-4 pb-16 sm:px-6 sm:pb-20 lg:px-8 lg:pb-24">
+				<div className="mx-auto max-w-7xl overflow-hidden rounded-2xl bg-rb-black px-6 py-10 text-center text-white sm:px-10 sm:py-14">
+					<p className="text-xs font-semibold tracking-[0.26em] text-rb-blue uppercase">
+						Next step
+					</p>
+					<h2 className="mx-auto mt-4 max-w-3xl text-3xl leading-tight font-semibold sm:text-5xl">
+						Confirm the right fit for your operation
+					</h2>
+					<p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-white/68">
+						Share your fleet, assets, operating priorities, and integration
+						requirements so the Redtail team can recommend an appropriate scope.
+					</p>
+					<div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+						<Button asChild size="lg">
+							<Link href={page.hero.primaryCtaHref}>{page.hero.primaryCta}</Link>
+						</Button>
+						<Button
+							asChild
+							className="border-white/30 bg-white/8 text-white hover:bg-white hover:text-rb-black"
+							size="lg"
+							variant="outline"
+						>
+							<Link href={page.hero.secondaryCtaHref}>
+								{page.hero.secondaryCta}
+							</Link>
+						</Button>
+					</div>
+				</div>
+			</section>
+		</>
 	);
 }
 
@@ -524,6 +657,7 @@ export function IndustryHeroOnlyPage({ page }: IndustryHeroPageProps) {
 	return (
 		<main className="bg-white">
 			<IndustryHero page={page} />
+			<IndustryOverviewSections page={page} />
 		</main>
 	);
 }
