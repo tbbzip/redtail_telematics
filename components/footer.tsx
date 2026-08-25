@@ -173,10 +173,6 @@ const officeLocations = [
 		label: "San Diego",
 		address: "1420 Kettner Blvd Suite 100, San Diego, CA 92101 USA",
 	},
-	{
-		label: "Las Vegas",
-		address: "2300 W Sahara Ave #800, Las Vegas, NV 89102 USA",
-	},
 ];
 
 function CertificationBadgeCard({ badge }: { badge: CertificationBadge }) {
@@ -295,7 +291,7 @@ export function Footer() {
 								<h3 className="text-sm font-semibold tracking-[0.2em] text-white/48 uppercase">
 									Locations
 								</h3>
-								<div className="mt-5 grid gap-4 lg:grid-cols-3">
+								<div className="mt-5 grid gap-4 lg:grid-cols-2">
 									{officeLocations.map((office) => (
 										<div
 											className="border-l border-rb-red/60 pl-4"

@@ -247,11 +247,11 @@ export function AboutStorySection() {
 				<div className="relative overflow-hidden rounded-2xl border border-black/10 bg-white p-2 shadow-[0_24px_70px_rgba(1,1,1,0.08)]">
 					<div className="relative aspect-[1.28] overflow-hidden rounded-xl bg-rb-black">
 						<Image
-							alt="Redtail telematics team and technology"
+							alt="King's College Chapel in Cambridge"
 							className="object-cover"
 							fill
 							sizes="(max-width: 1024px) 100vw, 560px"
-							src="/navigation/featured-company.png"
+							src="/about/kings-college-chapel-cambridge.png"
 						/>
 						<div className="absolute inset-0 bg-linear-to-t from-black/58 via-transparent to-transparent" />
 						<div className="absolute right-5 bottom-5 left-5 rounded-2xl border border-white/16 bg-rb-black/72 p-5 text-white backdrop-blur-md">

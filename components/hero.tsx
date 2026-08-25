@@ -8,7 +8,7 @@ export function HeroSection() {
 			eyebrow="Telematics Platform"
 			imageAlt="Redtail building exterior"
 			imageSrc="/careers-building.jpg"
-			primaryCta={{ href: "/contact-us", label: "Book a demo" }}
+			primaryCta={{ href: "#footer-demo-form", label: "Book a demo" }}
 			priority
 			secondaryCta={{ href: topLevelLink.href, label: "Explore the platform" }}
 			title="Complete telematics for fleets, insurers, and OEMs"

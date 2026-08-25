@@ -61,7 +61,7 @@ const contactCards = [
 		links: [
 			{
 				label: "Schedule a demo",
-				href: "#footer-demo-heading",
+				href: "#footer-demo-form",
 				primary: true,
 			},
 			{
@@ -107,7 +107,7 @@ const contactCards = [
 		links: [
 			{
 				label: "Talk to a specialist",
-				href: "#footer-demo-heading",
+				href: "#footer-demo-form",
 				primary: true,
 			},
 			{
@@ -144,7 +144,7 @@ const secondaryContacts = [
 		description:
 			"Not sure who to contact? Send us a note and we will route you to the right team.",
 		label: "Contact Redtail",
-		href: "#footer-demo-heading",
+		href: "#footer-demo-form",
 	},
 ];
 
@@ -374,7 +374,7 @@ export default function ContactUsPage() {
 						asChild
 						className="mt-8 border-white bg-white text-rb-black hover:border-white hover:bg-white/90 hover:text-rb-black"
 					>
-						<Link href="#footer-demo-heading">
+						<Link href="#footer-demo-form">
 							Go to contact form
 							<HugeIcon data-icon="inline-end" icon={ArrowRight01Icon} />
 						</Link>

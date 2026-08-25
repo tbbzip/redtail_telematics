@@ -379,7 +379,7 @@ export function FleetManagementHero() {
 					<div className="mt-6 flex flex-wrap gap-2">
 						<Link
 							className="inline-flex h-9 items-center gap-2 rounded-md border border-white/16 bg-white/8 px-3 text-xs font-semibold text-white/78 transition hover:border-white/32 hover:bg-white/13 hover:text-white"
-							href="/contact-us#footer-demo-heading"
+							href="/contact-us#footer-demo-form"
 						>
 							<HugeIcon icon={Calendar03Icon} size={15} />
 							Schedule a Demo
