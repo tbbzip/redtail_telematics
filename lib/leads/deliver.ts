@@ -9,8 +9,9 @@ import type { DeliverableLead } from "./schema";
 
 const DEFAULT_TIMEOUT_MS = 8_000;
 const DEFAULT_EMAIL_FROM_NAME = "Redtail Telematics Website";
+const EMAIL_LOGO_URL =
+	"https://www.redtailtelematics.com/logo-white-og.png";
 const SENDGRID_API_URL = new URL("https://api.sendgrid.com/v3/mail/send");
-const SENDGRID_SUBJECT = "How can I help you? - Redtail follow up";
 const PRODUCTION_EMAIL_RECIPIENTS = new Set([
 	"aldo@thebrandingbull.com",
 	"sales@redtailtelematics.com",
@@ -230,23 +231,116 @@ function normalizeEmailBodyValue(value: string) {
 		.trim();
 }
 
+function truncateText(value: string, maxLength: number) {
+	const characters = [...value];
+
+	if (characters.length <= maxLength) {
+		return value;
+	}
+
+	return `${characters.slice(0, maxLength - 1).join("").trimEnd()}…`;
+}
+
+function formatFleetSize(fleetSize: DeliverableLead["fleetSize"]) {
+	if (fleetSize === "1000+") {
+		return "1,000+ vehicles";
+	}
+
+	return `${fleetSize.replace("-", "–")} vehicles`;
+}
+
+function formatIndustry(industry: NonNullable<DeliverableLead["industry"]>) {
+	const labels: Record<NonNullable<DeliverableLead["industry"]>, string> = {
+		construction: "Construction",
+		"field-services": "Field services",
+		government: "Government",
+		insurance: "Insurance",
+		logistics: "Logistics",
+		other: "Other",
+	};
+
+	return labels[industry];
+}
+
+function formatLeadSource(source: DeliverableLead["source"]) {
+	return source === "get-started" ? "Get Started flow" : "Homepage demo form";
+}
+
+function formatTimestamp(value: string) {
+	const date = new Date(value);
+
+	if (Number.isNaN(date.getTime())) {
+		return value;
+	}
+
+	return `${new Intl.DateTimeFormat("en-GB", {
+		dateStyle: "medium",
+		timeStyle: "short",
+		timeZone: "UTC",
+	}).format(date)} UTC`;
+}
+
+type EmailRow = {
+	href?: string;
+	label: string;
+	value: string;
+};
+
+function createHtmlRows(rows: EmailRow[]) {
+	return rows
+		.map(({ href, label, value }) => {
+			const renderedValue = href
+				? `<a href="${escapeHtml(href)}" style="color:#a81218;text-decoration:underline;text-underline-offset:2px">${escapeHtml(value)}</a>`
+				: escapeHtml(value);
+
+			return `<tr><td style="width:34%;padding:11px 12px 11px 0;border-bottom:1px solid #e7e5e4;color:#6b7280;font-size:12px;font-weight:700;letter-spacing:.04em;line-height:1.45;text-transform:uppercase;vertical-align:top">${escapeHtml(label)}</td><td style="padding:11px 0;border-bottom:1px solid #e7e5e4;color:#111827;font-size:14px;font-weight:500;line-height:1.55;vertical-align:top;word-break:break-word">${renderedValue}</td></tr>`;
+		})
+		.join("");
+}
+
+function createHtmlSection(title: string, rows: EmailRow[]) {
+	if (rows.length === 0) {
+		return "";
+	}
+
+	return `<tr><td style="padding:0 32px 28px"><h2 style="margin:0 0 8px;color:#111827;font-size:16px;line-height:1.35">${escapeHtml(title)}</h2><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse">${createHtmlRows(rows)}</table></td></tr>`;
+}
+
+function createTextSection(title: string, rows: EmailRow[]) {
+	if (rows.length === 0) {
+		return "";
+	}
+
+	return `${title.toUpperCase()}\n${rows
+		.map(({ label, value }) => `${label}: ${value}`)
+		.join("\n")}`;
+}
+
 function createEmailContent(envelope: LeadEnvelope) {
 	const { attribution, ...lead } = envelope.lead;
-	const rows: Array<[string, string]> = [
-		["Request ID", envelope.requestId],
-		["Submitted", envelope.submittedAt],
-		["Form", lead.source],
-		["First name", lead.firstName],
-		["Last name", lead.lastName],
-		["Company", lead.company],
-		["Company email", lead.email],
-		["Phone", lead.phone],
-		["Fleet size", lead.fleetSize],
+	const fullName = normalizeEmailBodyValue(
+		`${lead.firstName} ${lead.lastName}`,
+	);
+	const company = normalizeEmailBodyValue(lead.company);
+	const email = normalizeEmailBodyValue(lead.email);
+	const phone = normalizeEmailBodyValue(lead.phone);
+	const fleetSize = formatFleetSize(lead.fleetSize);
+	const source = formatLeadSource(lead.source);
+	const industry = lead.industry ? formatIndustry(lead.industry) : undefined;
+	const submitted = formatTimestamp(envelope.submittedAt);
+	const subject = `New Redtail lead: ${truncateText(company, 64)} — ${fleetSize}`;
+	const preheader = `${fullName} from ${company} submitted the ${source} for ${fleetSize}.`;
+	const dialablePhone = `${phone.startsWith("+") ? "+" : ""}${phone.replace(/\D/g, "")}`;
+	const contactRows: EmailRow[] = [
+		{ label: "Name", value: fullName },
+		{ label: "Company", value: company },
+		{ href: `mailto:${email}`, label: "Company email", value: email },
+		{ href: `tel:${dialablePhone}`, label: "Phone", value: phone },
+		{ label: "Fleet size", value: fleetSize },
+		...(industry ? [{ label: "Industry", value: industry }] : []),
+		{ label: "Form", value: `${source} (${lead.source})` },
 	];
-
-	if (lead.industry) {
-		rows.push(["Industry", lead.industry]);
-	}
+	const attributionRows: EmailRow[] = [];
 
 	for (const [label, value] of [
 		["Landing path", attribution?.landingPath],
@@ -258,32 +352,47 @@ function createEmailContent(envelope: LeadEnvelope) {
 		["UTM content", attribution?.utmContent],
 	] as const) {
 		if (value) {
-			rows.push([label, value]);
+			attributionRows.push({
+				label,
+				value: normalizeEmailBodyValue(value),
+			});
 		}
 	}
 
-	rows.push(
-		["Consent captured", envelope.consent.capturedAt],
-		["Consent version", envelope.consent.noticeVersion],
-		["Consent notice", envelope.consent.noticeText],
-		["Privacy policy", envelope.consent.privacyPolicyUrl],
-	);
+	const auditRows: EmailRow[] = [
+		{ label: "Submitted", value: envelope.submittedAt },
+		{ label: "Request ID", value: envelope.requestId },
+		{ label: "Consent to contact", value: "Yes" },
+		{ label: "Consent captured", value: envelope.consent.capturedAt },
+		{ label: "Consent method", value: envelope.consent.method },
+		{ label: "Consent version", value: envelope.consent.noticeVersion },
+		{ label: "Consent notice", value: envelope.consent.noticeText },
+		{
+			href: envelope.consent.privacyPolicyUrl,
+			label: "Privacy policy",
+			value: envelope.consent.privacyPolicyUrl,
+		},
+	].map((row) => ({
+		...row,
+		value: normalizeEmailBodyValue(row.value),
+	}));
+	const text = [
+		[
+			"NEW REDTAIL WEBSITE LEAD",
+			`${fullName} from ${company} submitted the ${source}.`,
+			`Received: ${submitted}`,
+		].join("\n"),
+		["FOLLOW UP", `Email: ${email}`, `Phone: ${phone}`].join("\n"),
+		createTextSection("Lead details", contactRows),
+		createTextSection("Campaign attribution", attributionRows),
+		createTextSection("Consent and audit", auditRows),
+		"This is an automated notification from the Redtail Telematics website.",
+	]
+		.filter(Boolean)
+		.join("\n\n");
+	const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light only"><title>${escapeHtml(subject)}</title></head><body style="margin:0;padding:0;background-color:#f3f2ef;color:#111827;font-family:Arial,Helvetica,sans-serif;-webkit-text-size-adjust:100%"><div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;mso-hide:all">${escapeHtml(preheader)}</div><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;background-color:#f3f2ef"><tr><td align="center" style="padding:32px 12px"><table role="presentation" width="680" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:680px;border-collapse:separate;background-color:#ffffff;border:1px solid #e7e5e4;border-radius:16px;box-shadow:0 12px 36px rgba(17,24,39,.08);overflow:hidden"><tr><td style="height:6px;background-color:#cf1317;font-size:0;line-height:0">&nbsp;</td></tr><tr><td style="padding:28px 32px 30px;background-color:#010101"><img src="${EMAIL_LOGO_URL}" width="168" height="51" alt="Redtail Telematics" style="display:block;width:168px;height:auto;border:0"><p style="margin:26px 0 8px;color:#f87171;font-size:11px;font-weight:700;letter-spacing:.14em;line-height:1.4;text-transform:uppercase">New website lead</p><h1 style="margin:0;color:#ffffff;font-size:28px;line-height:1.2">${escapeHtml(fullName)} from ${escapeHtml(company)}</h1><p style="margin:12px 0 0;color:#d1d5db;font-size:15px;line-height:1.6">${escapeHtml(source)} &nbsp;&bull;&nbsp; ${escapeHtml(fleetSize)}${industry ? ` &nbsp;&bull;&nbsp; ${escapeHtml(industry)}` : ""}</p></td></tr><tr><td style="padding:28px 32px 20px"><p style="margin:0 0 18px;color:#374151;font-size:15px;line-height:1.65">A new enquiry is ready for follow-up. It was received <strong style="color:#111827">${escapeHtml(submitted)}</strong>.</p><table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td style="border-radius:8px;background-color:#cf1317"><a href="mailto:${escapeHtml(email)}" style="display:inline-block;padding:12px 18px;color:#ffffff;font-size:14px;font-weight:700;line-height:1;text-decoration:none">Email lead</a></td><td style="width:10px">&nbsp;</td><td style="border:1px solid #d6d3d1;border-radius:8px;background-color:#ffffff"><a href="tel:${escapeHtml(dialablePhone)}" style="display:inline-block;padding:11px 18px;color:#111827;font-size:14px;font-weight:700;line-height:1;text-decoration:none">Call lead</a></td></tr></table></td></tr>${createHtmlSection("Lead details", contactRows)}${createHtmlSection("Campaign attribution", attributionRows)}${createHtmlSection("Consent and audit", auditRows)}<tr><td style="padding:18px 32px;background-color:#f7f6f4;border-top:1px solid #e7e5e4"><p style="margin:0;color:#78716c;font-size:12px;line-height:1.55">Automated notification from the Redtail Telematics website. Request ID: ${escapeHtml(envelope.requestId)}</p></td></tr></table></td></tr></table></body></html>`;
 
-	const safeRows = rows.map(
-		([label, value]) => [label, normalizeEmailBodyValue(value)] as const,
-	);
-	const text = safeRows
-		.map(([label, value]) => `${label}: ${value}`)
-		.join("\n");
-	const htmlRows = safeRows
-		.map(
-			([label, value]) =>
-				`<tr><th align="left" style="padding:8px;border-bottom:1px solid #ddd;vertical-align:top">${escapeHtml(label)}</th><td style="padding:8px;border-bottom:1px solid #ddd">${escapeHtml(value)}</td></tr>`,
-		)
-		.join("");
-	const html = `<!doctype html><html><body style="font-family:Arial,sans-serif;color:#1f2937"><h1 style="font-size:22px">New Redtail website lead</h1><table style="border-collapse:collapse;width:100%;max-width:720px">${htmlRows}</table></body></html>`;
-
-	return { html, text };
+	return { html, subject, text };
 }
 
 async function deliverToWebhook(envelope: LeadEnvelope) {
@@ -330,13 +439,19 @@ async function deliverToSendGrid(envelope: LeadEnvelope) {
 				email: configuration.fromEmail,
 				name: configuration.fromName,
 			},
+			reply_to: {
+				email: envelope.lead.email,
+				name: normalizeEmailBodyValue(
+					`${envelope.lead.firstName} ${envelope.lead.lastName}`,
+				),
+			},
 			personalizations: configuration.recipients.map((email) => ({
 				custom_args: {
 					request_id: envelope.requestId,
 				},
 				to: [{ email }],
 			})),
-			subject: SENDGRID_SUBJECT,
+			subject: content.subject,
 		}),
 		cache: "no-store",
 		headers: {

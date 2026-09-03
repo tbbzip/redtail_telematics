@@ -14,7 +14,10 @@ const lead: DeliverableLead = {
 		landingPath: "/get-started",
 		referrerOrigin: "https://www.linkedin.com",
 		utmCampaign: "fleet-reset",
+		utmContent: "hero-cta",
+		utmMedium: "paid-social",
 		utmSource: "linkedin",
+		utmTerm: "fleet telematics",
 	},
 	company: "Acme Fleet",
 	consent: true,
@@ -105,6 +108,9 @@ describe("deliverLead", () => {
 		const plainText = payload.content.find(
 			(entry: { type: string }) => entry.type === "text/plain",
 		).value;
+		const html = payload.content.find(
+			(entry: { type: string }) => entry.type === "text/html",
+		).value;
 
 		expect(url.toString()).toBe("https://api.sendgrid.com/v3/mail/send");
 		expect(init).toMatchObject({ method: "POST", redirect: "error" });
@@ -115,9 +121,12 @@ describe("deliverLead", () => {
 				email: "no-reply@redtailtelematics.com",
 				name: "Redtail Telematics Website",
 			},
-			subject: "How can I help you? - Redtail follow up",
+			reply_to: {
+				email: "ops@example.com",
+				name: "Ada Lovelace",
+			},
+			subject: "New Redtail lead: Acme Fleet — 10–49 vehicles",
 		});
-		expect(payload).not.toHaveProperty("reply_to");
 		expect(payload.personalizations).toEqual([
 			{
 				custom_args: { request_id: requestId },
@@ -129,8 +138,46 @@ describe("deliverLead", () => {
 			},
 		]);
 		expect(plainText).toContain(`Request ID: ${requestId}`);
-		expect(plainText).toContain("Landing path: /get-started");
-		expect(plainText).toContain("Consent version: lead-contact-consent-v1");
+		for (const expectedValue of [
+			"Ada Lovelace",
+			"Acme Fleet",
+			"ops@example.com",
+			"+1 555 123 4567",
+			"10–49 vehicles",
+			"Logistics",
+			"Get Started flow (get-started)",
+			"/get-started",
+			"https://www.linkedin.com",
+			"linkedin",
+			"paid-social",
+			"fleet-reset",
+			"fleet telematics",
+			"hero-cta",
+			"Consent to contact",
+			"Yes",
+			"Consent method",
+			"form-submit",
+			"Consent version",
+			"lead-contact-consent-v1",
+			"By submitting this form, you agree to be contacted by Redtail Telematics",
+			"https://www.redtailtelematics.com/privacy-policy",
+		]) {
+			expect(plainText).toContain(expectedValue);
+			expect(html).toContain(expectedValue);
+		}
+		expect(plainText).toMatch(
+			/Submitted: \d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z/,
+		);
+		expect(plainText).toMatch(
+			/Consent captured: \d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z/,
+		);
+		expect(html).toContain(
+			'src="https://www.redtailtelematics.com/logo-white-og.png"',
+		);
+		expect(html).toContain('href="mailto:ops@example.com"');
+		expect(html).toContain('href="tel:+15551234567"');
+		expect(html).toContain("Campaign attribution");
+		expect(html).toContain("Consent and audit");
 		expect(String(init.body)).not.toContain(sendGridKey);
 		expect(String(init.body)).not.toContain("test-token");
 	});
@@ -161,8 +208,87 @@ describe("deliverLead", () => {
 		expect(html).toContain(
 			"&lt;script&gt;alert(&#39;x&#39;)&lt;/script&gt; &amp; Co",
 		);
-		expect(text).toContain("First name: Ada Bcc: victim@example.com");
+		expect(text).toContain(
+			"Name: Ada Bcc: victim@example.com Lovelace",
+		);
 		expect(text).not.toContain("\nBcc:");
+		expect(payload.subject).not.toMatch(/[\r\n]/);
+		expect(payload.reply_to).toEqual({
+			email: "ops@example.com",
+			name: "Ada Bcc: victim@example.com Lovelace",
+		});
+	});
+
+	it("keeps the dynamic subject concise for long company names", async () => {
+		configureSendGrid();
+		const fetchMock = vi.fn().mockResolvedValue(new Response(null, { status: 202 }));
+		vi.stubGlobal("fetch", fetchMock);
+
+		await deliverLead(
+			{
+				...lead,
+				company: "A".repeat(90),
+			},
+			requestId,
+		);
+
+		const { payload } = getSendGridPayload(fetchMock);
+
+		expect(payload.subject).toMatch(
+			/^New Redtail lead: A+… — 10–49 vehicles$/,
+		);
+		expect(payload.subject).not.toMatch(/[\r\n]/);
+		expect([...payload.subject].length).toBeLessThanOrEqual(110);
+	});
+
+	it("flattens attempted subject header injection before rendering", async () => {
+		configureSendGrid();
+		const fetchMock = vi.fn().mockResolvedValue(new Response(null, { status: 202 }));
+		vi.stubGlobal("fetch", fetchMock);
+
+		await deliverLead(
+			{
+				...lead,
+				company: "Acme\r\nBcc: victim@example.com",
+			},
+			requestId,
+		);
+
+		const { payload } = getSendGridPayload(fetchMock);
+
+		expect(payload.subject).toBe(
+			"New Redtail lead: Acme Bcc: victim@example.com — 10–49 vehicles",
+		);
+		expect(payload.subject).not.toMatch(/[\r\n]/);
+	});
+
+	it("omits the attribution section cleanly when no attribution was captured", async () => {
+		configureSendGrid();
+		const fetchMock = vi.fn().mockResolvedValue(new Response(null, { status: 202 }));
+		vi.stubGlobal("fetch", fetchMock);
+
+		await deliverLead(
+			{
+				...lead,
+				attribution: undefined,
+				industry: undefined,
+				source: "footer-demo",
+			},
+			requestId,
+		);
+
+		const { payload } = getSendGridPayload(fetchMock);
+		const html = payload.content.find(
+			(entry: { type: string }) => entry.type === "text/html",
+		).value;
+		const text = payload.content.find(
+			(entry: { type: string }) => entry.type === "text/plain",
+		).value;
+
+		expect(html).not.toContain("Campaign attribution");
+		expect(text).not.toContain("CAMPAIGN ATTRIBUTION");
+		expect(html).toContain("Homepage demo form (footer-demo)");
+		expect(html).not.toContain("Industry</td>");
 	});
 
 	it("uses only the explicitly selected provider when both are configured", async () => {
