@@ -103,6 +103,8 @@ type CertificationBadge = {
 	src: string;
 	alt: string;
 	label: string;
+	width: number;
+	height: number;
 	href?: string;
 };
 
@@ -111,28 +113,38 @@ const certificationBadges: CertificationBadge[] = [
 		src: "/certifications/nqa_iso9001.jpg",
 		alt: "ISO 9001 certification",
 		label: "ISO 9001",
+		width: 591,
+		height: 887,
 		href: "https://www.nqa.com/en-us/certification/standards/iso-9001",
 	},
 	{
 		src: "/certifications/nqa_iso27001.jpg",
 		alt: "ISO 27001 certification",
 		label: "ISO 27001",
+		width: 591,
+		height: 887,
 		href: "https://www.nqa.com/en-us/certification/standards/iso-27001",
 	},
 	{
 		src: "/certifications/award-badge.png",
 		alt: "Best Telematics Provider award",
 		label: "Best Telematics Provider",
+		width: 1250,
+		height: 1250,
 	},
 	{
 		src: "/certifications/st100-tech.svg",
 		alt: "The Sunday Times 100 Tech recognition",
 		label: "The Sunday Times 100 Tech",
+		width: 1258,
+		height: 1298,
 	},
 	{
 		src: "/certifications/kings-award-enterprise-2026.png",
 		alt: "The King's Awards for Enterprise 2026 recognition",
 		label: "The King's Awards for Enterprise 2026",
+		width: 559,
+		height: 559,
 	},
 ];
 
@@ -184,9 +196,10 @@ function CertificationBadgeCard({ badge }: { badge: CertificationBadge }) {
 			<Image
 				alt={badge.alt}
 				className="h-20 w-auto max-w-44 object-contain transition duration-300"
-				height={80}
+				height={badge.height}
+				sizes="80px"
 				src={badge.src}
-				width={176}
+				width={badge.width}
 			/>
 			<span className="sr-only">{badge.label}</span>
 		</>

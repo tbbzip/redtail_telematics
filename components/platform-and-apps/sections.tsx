@@ -147,6 +147,7 @@ function ProductCanvas({
 	mediaClassName,
 	imageClassName,
 	sizes = "(max-width: 1280px) 100vw, 1100px",
+	loading = "lazy",
 }: {
 	src: string;
 	alt: string;
@@ -155,6 +156,7 @@ function ProductCanvas({
 	mediaClassName?: string;
 	imageClassName?: string;
 	sizes?: string;
+	loading?: "eager" | "lazy";
 }) {
 	return (
 		<figure
@@ -168,6 +170,7 @@ function ProductCanvas({
 					alt={alt}
 					className={cn("object-contain", imageClassName)}
 					fill
+					loading={loading}
 					sizes={sizes}
 					src={src}
 				/>
@@ -243,7 +246,7 @@ function PlatformHero() {
 							alt="Redtail Journey Showcase displaying a mapped route with distance, duration, speed, idle time and event details"
 							className="object-cover object-left"
 							fill
-							priority
+							loading="eager"
 							sizes="(max-width: 1280px) 94vw, 1150px"
 							src="/platform-screenshots/journey-showcase.jpg"
 						/>
@@ -266,7 +269,7 @@ function PlatformIndex() {
 					{proofItems.map(([title, description]) => (
 						<div className="px-4 py-6 sm:px-6" key={title}>
 							<p className="text-sm font-semibold text-rb-black sm:text-base">{title}</p>
-							<p className="mt-1 text-xs leading-5 text-rb-black/52">{description}</p>
+							<p className="mt-1 text-xs leading-5 text-rb-black/60">{description}</p>
 						</div>
 					))}
 				</div>
@@ -359,6 +362,7 @@ function FleetAndJourneyStory() {
 					alt="Redtail journey view showing a mapped route and journey summary"
 					caption="Journey replay connects the map to the evidence behind each trip."
 					imageClassName="object-cover object-left sm:object-contain"
+					loading="eager"
 					mediaClassName="aspect-[1.2] sm:aspect-[2.26]"
 					sizes="(max-width: 1024px) 100vw, 760px"
 					src="/platform-screenshots/journey-showcase.jpg"
