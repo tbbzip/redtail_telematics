@@ -1,5 +1,8 @@
+import { GoogleTagManager } from "@next/third-parties/google";
+
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
+import { normalizeGoogleTagManagerId } from "@/lib/analytics";
 
 const organizationJsonLd = {
 	"@context": "https://schema.org",
@@ -19,6 +22,8 @@ export default function SiteLayout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+	const gtmId = normalizeGoogleTagManagerId(process.env.NEXT_PUBLIC_GTM_ID);
+
 	return (
 		<div
 			className="flex min-h-dvh flex-col bg-background text-foreground"
@@ -39,6 +44,7 @@ export default function SiteLayout({
 				{children}
 			</div>
 			<Footer />
+			{gtmId ? <GoogleTagManager gtmId={gtmId} /> : null}
 		</div>
 	);
 }

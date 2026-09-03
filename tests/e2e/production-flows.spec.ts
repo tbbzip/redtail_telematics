@@ -2,6 +2,33 @@ import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 import { defaultSocialImageAlt } from "../../lib/site-metadata";
 
+type LeadConversionEvent = {
+	event: string;
+	form_source: string;
+	transaction_id: string;
+};
+
+async function getLeadConversionEvents(page: Page) {
+	return page.evaluate(() => {
+		const dataLayer = (window as unknown as { dataLayer?: unknown[] }).dataLayer;
+
+		return (dataLayer ?? []).filter(
+			(entry): entry is LeadConversionEvent =>
+				typeof entry === "object" &&
+				entry !== null &&
+				"event" in entry &&
+				entry.event === "redtail_lead_submitted",
+		);
+	});
+}
+
+test.beforeEach(async ({ page }) => {
+	// Never execute a real container while CI exercises the production build.
+	await page.route("https://www.googletagmanager.com/gtm.js?**", (route) =>
+		route.fulfill({ body: "", contentType: "application/javascript" }),
+	);
+});
+
 async function completeFooterForm(page: Page) {
 	const form = page.locator("footer form");
 	await form.getByRole("textbox", { name: "First name" }).fill("Ada");
@@ -163,6 +190,15 @@ test("get-started supports native radio keys and shows success only after 202", 
 	expect(submittedLead?.submissionId).toMatch(
 		/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
 	);
+	const conversionEvents = await getLeadConversionEvents(page);
+	expect(conversionEvents).toEqual([
+		{
+			event: "redtail_lead_submitted",
+			form_source: "get-started",
+			transaction_id: submittedLead?.submissionId,
+		},
+	]);
+	expect(JSON.stringify(conversionEvents)).not.toContain("ops@example.com");
 });
 
 test("server validation focuses the first rejected field", async ({ page }) => {
@@ -204,6 +240,7 @@ test("server validation focuses the first rejected field", async ({ page }) => {
 		"aria-describedby",
 		await consentNotice.getAttribute("id") as string,
 	);
+	expect(await getLeadConversionEvents(page)).toEqual([]);
 });
 
 test("footer form sends bounded context, exposes field errors, and focuses the rejected control", async ({
@@ -249,13 +286,15 @@ test("footer form sends bounded context, exposes field errors, and focuses the r
 });
 
 test("footer form resets and announces success only after 202", async ({ page }) => {
-	await page.route("**/api/leads", (route) =>
-		route.fulfill({
-			body: JSON.stringify({ ok: true, requestId: crypto.randomUUID() }),
+	let submittedLead: Record<string, unknown> | undefined;
+	await page.route("**/api/leads", (route) => {
+		submittedLead = route.request().postDataJSON() as Record<string, unknown>;
+		return route.fulfill({
+			body: JSON.stringify({ ok: true, requestId: submittedLead.submissionId }),
 			contentType: "application/json",
 			status: 202,
-		}),
-	);
+		});
+	});
 
 	await page.goto("/");
 	const form = await completeFooterForm(page);
@@ -264,6 +303,61 @@ test("footer form resets and announces success only after 202", async ({ page })
 	await expect(form.getByRole("status")).toContainText("demo request was received");
 	await expect(form.getByRole("textbox", { name: "First name" })).toHaveValue("");
 	await expect(form.getByRole("combobox", { name: "Fleet size" })).toHaveValue("");
+	expect(await getLeadConversionEvents(page)).toEqual([
+		{
+			event: "redtail_lead_submitted",
+			form_source: "footer-demo",
+			transaction_id: submittedLead?.submissionId,
+		},
+	]);
+});
+
+test("honeypot acknowledgements never become conversions in either form", async ({
+	page,
+}) => {
+	const honeypotValues: string[] = [];
+	await page.route("**/api/leads", (route) => {
+		const submittedLead = route.request().postDataJSON() as Record<string, unknown>;
+		honeypotValues.push(String(submittedLead.website));
+		return route.fulfill({
+			body: JSON.stringify({ ok: true, requestId: submittedLead.submissionId }),
+			contentType: "application/json",
+			status: 202,
+		});
+	});
+
+	await page.goto("/get-started");
+	await page.getByRole("radio", { name: "Logistics" }).focus();
+	await page.keyboard.press("Space");
+	await page.getByRole("button", { name: "Next" }).click();
+	await page.getByRole("radio", { name: "10 - 49" }).focus();
+	await page.keyboard.press("Space");
+	await page.getByRole("button", { name: "Next" }).click();
+	await page.getByRole("textbox", { name: "First name" }).fill("Ada");
+	await page.getByRole("textbox", { name: "Last name" }).fill("Lovelace");
+	await page.getByRole("textbox", { name: "Phone number" }).fill("+1 555 123 4567");
+	await page.getByRole("textbox", { name: "Company email" }).fill("ops@example.com");
+	await page.getByRole("textbox", { name: "Company name" }).fill("Acme Fleet");
+	await page.locator('input[name="website"]').evaluate((input) => {
+		(input as HTMLInputElement).value = "automated-entry";
+	});
+	await page.getByRole("button", { name: "Submit" }).click();
+	await expect(
+		page.getByRole("heading", { name: "Thanks, we'll be in touch soon" }),
+	).toBeVisible();
+	expect(await getLeadConversionEvents(page)).toEqual([]);
+
+	await page.goto("/");
+	const footerForm = await completeFooterForm(page);
+	await footerForm.locator('input[name="website"]').evaluate((input) => {
+		(input as HTMLInputElement).value = "automated-entry";
+	});
+	await footerForm.getByRole("button", { name: "Schedule demo" }).click();
+	await expect(footerForm.getByRole("status")).toContainText(
+		"demo request was received",
+	);
+	expect(await getLeadConversionEvents(page)).toEqual([]);
+	expect(honeypotValues).toEqual(["automated-entry", "automated-entry"]);
 });
 
 test("footer form tells a pre-version browser to reload", async ({ page }) => {
@@ -287,6 +381,19 @@ test("public readiness, legal, industry, and careers routes match implemented be
 	page,
 	request,
 }) => {
+	const publicPage = await request.get("/");
+	const contentSecurityPolicy =
+		publicPage.headers()["content-security-policy"];
+	expect(contentSecurityPolicy).toContain("https://www.googletagmanager.com");
+	expect(contentSecurityPolicy).toContain("https://*.clarity.ms");
+	expect(contentSecurityPolicy).not.toContain("livechat");
+	expect(contentSecurityPolicy).not.toContain("openwidget");
+	expect(contentSecurityPolicy).toContain("media-src 'self' blob: data:");
+	expect(contentSecurityPolicy).not.toContain("'unsafe-eval'");
+
+	const studioPage = await request.get("/studio");
+	expect(studioPage.headers()["content-security-policy"]).toBeUndefined();
+
 	const health = await request.get("/api/health");
 	expect(health.status()).toBe(503);
 	expect(await health.json()).toEqual({ status: "not_ready" });
@@ -304,15 +411,19 @@ test("public readiness, legal, industry, and careers routes match implemented be
 	);
 
 	await page.goto("/privacy-policy");
-	await expect(page.getByText("Last updated: 2026-08-12")).toBeVisible();
+	await expect(page.getByText("Last updated: 2026-09-02")).toBeVisible();
 	await expect(page.getByText("Registration Number UK: 07407204")).toBeVisible();
 	await expect(page.getByText("010894475")).toHaveCount(0);
 	await expect(page.getByText(/standard UTM campaign fields/)).toBeVisible();
 
 	await page.goto("/cookie-policy");
 	await expect(
-		page.getByText(/does not set advertising, analytics, preference, or consent cookies/),
+		page.getByText(/Google Tag Manager to load site measurement technologies/),
 	).toBeVisible();
+	await expect(
+		page.getByText(/does not currently use a LiveChat widget/),
+	).toBeVisible();
+	await expect(page.getByText(/privacy choices banner/)).toHaveCount(0);
 	await expect(page.getByText(/cookielawinfo-checkbox/)).toHaveCount(0);
 	expect(await context.cookies()).toEqual([]);
 
@@ -322,6 +433,49 @@ test("public readiness, legal, industry, and careers routes match implemented be
 			name: "Exterior of the Great Chesterford office used by Redtail Telematics",
 		}),
 	).toBeVisible();
+});
+
+test("configured GTM loads without a consent banner on public routes", async ({
+	page,
+}) => {
+	await page.goto("/");
+	await expect(
+		page.getByRole("heading", { name: "Your privacy choices" }),
+	).toHaveCount(0);
+	await expect(page.getByRole("button", { name: "Privacy settings" })).toHaveCount(0);
+	await expect(
+		page.locator('script[src*="googletagmanager.com/gtm.js"]'),
+	).toHaveCount(1);
+	await expect(
+		page.locator('script[src*="googletagmanager.com/gtm.js"]'),
+	).toHaveAttribute("src", /[?&]id=GTM-TEST0000(?:&|$)/);
+	await expect(page.locator("#_next-gtm-init")).toHaveCount(1);
+	expect(
+		await page.evaluate(() => {
+			const dataLayer = (
+				window as unknown as {
+					dataLayer?: Array<{ event?: string }>;
+				}
+			).dataLayer;
+
+			return dataLayer?.some((entry) => entry.event === "gtm.js") ?? false;
+		}),
+	).toBe(true);
+
+	await page.goto("/get-started");
+	await expect(
+		page.getByRole("heading", { name: "Your privacy choices" }),
+	).toHaveCount(0);
+	await expect(
+		page.locator('script[src*="googletagmanager.com/gtm.js"]'),
+	).toHaveCount(1);
+});
+
+test("Sanity Studio does not mount the public GTM container", async ({ page }) => {
+	await page.goto("/studio", { waitUntil: "domcontentloaded" });
+	await expect(
+		page.locator('script[src*="googletagmanager.com/gtm.js"]'),
+	).toHaveCount(0);
 });
 
 test("mobile navigation traps focus, closes with Escape, and restores focus", async ({
@@ -385,12 +539,13 @@ test("solution card dialog restores its trigger and the footer form fails closed
 
 	expect(response.status()).toBe(503);
 	await expect(form.getByRole("alert")).toContainText("We couldn't send your request");
+	expect(await getLeadConversionEvents(page)).toEqual([]);
 });
 
 test.use({ contextOptions: { reducedMotion: "reduce" } });
 test("reduced-motion visitors receive one visible wrapping logo set", async ({ page }) => {
 	await page.goto("/");
-	expect(await page.locator("footer img[alt='T-Mobile']").count()).toBe(1);
+	await expect(page.locator("footer img[alt='T-Mobile']")).toHaveCount(1);
 	for (const label of ["T-Mobile", "Concirrus", "Jaguar", "LoJack", "Fujitsu", "Admiral"]) {
 		await expect(page.locator(`footer img[alt='${label}']`)).toBeVisible();
 	}

@@ -1,10 +1,15 @@
 "use client";
 
+import { sendGTMEvent } from "@next/third-parties/google";
 import { useEffect, useId, useRef, useState } from "react";
 import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 
 import { HugeIcon } from "@/components/huge-icon";
 import { LeadConsentNotice } from "@/components/lead-consent-notice";
+import {
+	getAcceptedLeadRequestId,
+	publishLeadConversion,
+} from "@/lib/analytics";
 import { captureLeadAttribution } from "@/lib/leads/attribution";
 import { LEAD_CONSENT_NOTICE_VERSION } from "@/lib/leads/consent";
 
@@ -75,6 +80,7 @@ export function FooterDemoForm() {
 
 		const form = event.currentTarget;
 		const formData = new FormData(form);
+		const honeypot = String(formData.get("website") || "");
 
 		setSubmissionError("");
 		setFieldErrors({});
@@ -82,6 +88,7 @@ export function FooterDemoForm() {
 
 		try {
 			submissionIdRef.current ||= crypto.randomUUID();
+			const submissionId = submissionIdRef.current;
 			const response = await fetch("/api/leads", {
 				body: JSON.stringify({
 					attribution: captureLeadAttribution(),
@@ -94,8 +101,8 @@ export function FooterDemoForm() {
 					lastName: formData.get("lastName"),
 					phone: formData.get("phone"),
 					source: "footer-demo",
-					submissionId: submissionIdRef.current,
-					website: formData.get("website"),
+					submissionId,
+					website: honeypot,
 				}),
 				headers: { "Content-Type": "application/json" },
 				method: "POST",
@@ -104,6 +111,8 @@ export function FooterDemoForm() {
 				| {
 						code?: string;
 						fields?: Record<string, string[]>;
+						ok?: boolean;
+						requestId?: string;
 				  }
 				| null;
 
@@ -128,9 +137,25 @@ export function FooterDemoForm() {
 				);
 			}
 
-			if (!response.ok) {
+			const acceptedRequestId = getAcceptedLeadRequestId({
+				result,
+				status: response.status,
+				submissionId,
+			});
+
+			if (!acceptedRequestId) {
 				throw new Error(
 					"We couldn't send your request. Please try again or email sales@redtailtelematics.com.",
+				);
+			}
+
+			if (honeypot === "") {
+				publishLeadConversion(
+					{
+						formSource: "footer-demo",
+						transactionId: acceptedRequestId,
+					},
+					sendGTMEvent,
 				);
 			}
 

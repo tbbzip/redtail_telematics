@@ -1,5 +1,6 @@
 import "server-only";
 
+import { normalizeGoogleTagManagerId } from "@/lib/analytics";
 import { assertLeadDeliveryConfiguration } from "@/lib/leads/deliver";
 
 function hasValue(name: string) {
@@ -44,6 +45,10 @@ export function getProductionReadiness() {
 			failures.push("cms");
 			break;
 		}
+	}
+
+	if (!normalizeGoogleTagManagerId(process.env.NEXT_PUBLIC_GTM_ID)) {
+		failures.push("analytics");
 	}
 
 	if ((process.env.LEAD_RATE_LIMIT_HASH_SECRET?.trim().length ?? 0) < 32) {

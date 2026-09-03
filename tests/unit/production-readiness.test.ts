@@ -10,6 +10,7 @@ function configureReadyEnvironment(provider: "sendgrid" | "webhook" = "webhook")
 	vi.stubEnv("NEXT_PUBLIC_SANITY_API_VERSION", "2026-04-01");
 	vi.stubEnv("NEXT_PUBLIC_SANITY_DATASET", "production");
 	vi.stubEnv("NEXT_PUBLIC_SANITY_PROJECT_ID", "bulruaoh");
+	vi.stubEnv("NEXT_PUBLIC_GTM_ID", "GTM-NJBD87XB");
 	vi.stubEnv("LEAD_RATE_LIMIT_HASH_SECRET", "x".repeat(32));
 	vi.stubEnv("LEAD_DELIVERY_PROVIDER", provider);
 
@@ -82,6 +83,22 @@ describe("production readiness", () => {
 		});
 	});
 
+	it("fails readiness when the production GTM container is absent or invalid", () => {
+		configureReadyEnvironment();
+		vi.stubEnv("NEXT_PUBLIC_GTM_ID", "");
+
+		expect(getProductionReadiness()).toEqual({
+			failures: ["analytics"],
+			ready: false,
+		});
+
+		vi.stubEnv("NEXT_PUBLIC_GTM_ID", "G-ABC123");
+		expect(getProductionReadiness()).toEqual({
+			failures: ["analytics"],
+			ready: false,
+		});
+	});
+
 	it("fails closed when Preview is configured with a production recipient", () => {
 		configureReadyEnvironment("sendgrid");
 		vi.stubEnv("VERCEL_ENV", "preview");
@@ -133,6 +150,7 @@ describe("production readiness", () => {
 		vi.stubEnv("NEXT_PUBLIC_SANITY_API_VERSION", "");
 		vi.stubEnv("NEXT_PUBLIC_SANITY_DATASET", "");
 		vi.stubEnv("NEXT_PUBLIC_SANITY_PROJECT_ID", "");
+		vi.stubEnv("NEXT_PUBLIC_GTM_ID", "");
 		vi.stubEnv("LEAD_RATE_LIMIT_HASH_SECRET", "short");
 		vi.stubEnv("LEAD_WEBHOOK_URL", "");
 		vi.stubEnv("LEAD_WEBHOOK_ALLOWED_HOSTS", "");
@@ -142,6 +160,7 @@ describe("production readiness", () => {
 		expect(readiness.failures).toEqual([
 			"site-url",
 			"cms",
+			"analytics",
 			"rate-limit-secret",
 			"lead-delivery",
 		]);

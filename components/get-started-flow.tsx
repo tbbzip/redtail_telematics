@@ -1,5 +1,6 @@
 "use client";
 
+import { sendGTMEvent } from "@next/third-parties/google";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
@@ -21,6 +22,10 @@ import { HugeIcon } from "@/components/huge-icon";
 import { LeadConsentNotice } from "@/components/lead-consent-notice";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+	getAcceptedLeadRequestId,
+	publishLeadConversion,
+} from "@/lib/analytics";
 import { captureLeadAttribution } from "@/lib/leads/attribution";
 import { LEAD_CONSENT_NOTICE_VERSION } from "@/lib/leads/consent";
 import { cn } from "@/lib/utils";
@@ -304,6 +309,7 @@ export function GetStartedFlow() {
 		}
 
 		const formData = new FormData(event.currentTarget);
+		const honeypot = String(formData.get("website") || "");
 
 		const nextErrors = validateContact(values);
 		setErrorsAndFocus(nextErrors);
@@ -317,6 +323,7 @@ export function GetStartedFlow() {
 
 		try {
 			submissionIdRef.current ||= crypto.randomUUID();
+			const submissionId = submissionIdRef.current;
 			const response = await fetch("/api/leads", {
 				body: JSON.stringify({
 					...values,
@@ -326,8 +333,8 @@ export function GetStartedFlow() {
 					fleetSize,
 					industry,
 					source: "get-started",
-					submissionId: submissionIdRef.current,
-					website: String(formData.get("website") || ""),
+					submissionId,
+					website: honeypot,
 				}),
 				headers: { "Content-Type": "application/json" },
 				method: "POST",
@@ -337,6 +344,8 @@ export function GetStartedFlow() {
 				| {
 						code?: string;
 						fields?: Partial<Record<keyof ContactValues, string[]>>;
+						ok?: boolean;
+						requestId?: string;
 				  }
 				| null;
 
@@ -362,9 +371,25 @@ export function GetStartedFlow() {
 				);
 			}
 
-			if (!response.ok) {
+			const acceptedRequestId = getAcceptedLeadRequestId({
+				result,
+				status: response.status,
+				submissionId,
+			});
+
+			if (!acceptedRequestId) {
 				throw new Error(
 					"We couldn't send your request. Please try again or email sales@redtailtelematics.com.",
+				);
+			}
+
+			if (honeypot === "") {
+				publishLeadConversion(
+					{
+						formSource: "get-started",
+						transactionId: acceptedRequestId,
+					},
+					sendGTMEvent,
 				);
 			}
 
@@ -381,7 +406,11 @@ export function GetStartedFlow() {
 	}
 
 	return (
-		<main className="min-h-dvh overflow-hidden bg-rb-black text-white">
+		<main
+			className="min-h-dvh overflow-hidden bg-rb-black text-white"
+			id="main-content"
+			tabIndex={-1}
+		>
 			<div className="absolute inset-0 bg-[linear-gradient(115deg,#010101_0%,#010101_46%,#101821_100%)]" />
 			<div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-rb-red/65 to-transparent" />
 
@@ -397,12 +426,14 @@ export function GetStartedFlow() {
 							width={160}
 						/>
 					</Link>
-					<Link
-						className="text-sm font-semibold text-white/62 transition hover:text-white"
-						href="/contact-us"
-					>
-						Get in touch
-					</Link>
+					<div className="flex items-center gap-4 sm:gap-6">
+						<Link
+							className="text-sm font-semibold text-white/62 transition hover:text-white"
+							href="/contact-us"
+						>
+							Get in touch
+						</Link>
+					</div>
 				</header>
 
 				<div className="grid flex-1 place-items-center py-12 sm:py-16">
