@@ -1,57 +1,54 @@
 import type { Metadata } from "next";
 
 import { PlatformAndAppsPageSections } from "@/components/platform-and-apps-page";
+import {
+	defaultSocialImage,
+	defaultSocialImageAlt,
+} from "@/lib/site-metadata";
 
 export const metadata: Metadata = {
-	title: "Platform and Apps | Redtail Telematics",
+	title: "Fleet Telematics Platform & Mobile Apps | Redtail",
 	description:
-		"Discover Redtail Telematics' innovative platform and applications designed to drive vehicle intelligence. Tailored to your data needs, our solutions offer real-time tracking, geofencing, asset management, and comprehensive reporting to enhance fleet efficiency and security.",
+		"Explore Redtail's fleet telematics platform for fleet status, journey replay, driving behaviour, alerts, device health, maintenance, reports, circuit session analysis, and focused mobile apps.",
 	keywords: [
-		"Vehicle Intelligence Platform",
-		"Telematics Applications",
-		"Real-Time Vehicle Tracking",
-		"Geofencing Solutions",
-		"Asset Management",
-		"Fleet Efficiency",
-		"Telematics Reporting",
-		"Redtail Telematics",
-		"Satellite View Tracking",
-		"Smart Map Overlays",
-		"Custom Reporting",
-		"Trip History Analysis",
-		"Driver Behavior Monitoring",
-		"Emergency Vehicle Tracking",
-		"Installer App",
+		"Fleet Telematics Platform",
+		"Fleet Tracking and Status",
+		"Journey Replay",
+		"Driving Behaviour Analysis",
+		"Fleet Alerts and Geofences",
+		"Fleet Maintenance Planning",
+		"Telematics Device Diagnostics",
+		"Fleet Report Templates",
+		"Circuit Lap Replay",
 		"Fleet Management App",
-		"ISO 9001 Certified",
-		"ISO 27001 Certified",
-		"Fleet Security",
-		"Telematics Integration",
-		"Fleet Analytics",
+		"Telematics Installer App",
+		"Redtail Telematics",
 	],
 	alternates: {
 		canonical: "https://www.redtailtelematics.com/platform-and-apps",
 	},
 	openGraph: {
-		title: "Platform and Apps | Redtail Telematics",
+		title: "Fleet Telematics Platform & Mobile Apps | Redtail",
 		description:
-			"Explore Redtail Telematics' cutting-edge platform and applications tailored to your data needs. Benefit from satellite view tracking, smart map overlays, geofencing, real-time vehicle tracking, asset management, and custom reporting to optimize your fleet operations.",
+			"See fleet status, journey replay, driving behaviour, alerts, device health, maintenance, reports, circuit session analysis, and Redtail's focused mobile apps.",
 		url: "https://www.redtailtelematics.com/platform-and-apps",
 		locale: "en_US",
-		images: [
-			{
-				url: "https://www.redtailtelematics.com/opengraph-image",
-			},
-		],
+		images: [defaultSocialImage],
+		siteName: "Redtail Telematics",
 		type: "website",
 	},
 	twitter: {
 		card: "summary_large_image",
 		site: "@RedtailTele",
-		title: "Platform and Apps | Redtail Telematics",
+		title: "Fleet Telematics Platform & Mobile Apps | Redtail",
 		description:
-			"Unlock vehicle intelligence with Redtail Telematics' innovative platform and apps. From real-time tracking and geofencing to asset management and custom reporting, our solutions are designed to meet your fleet's unique data needs.",
-		images: ["https://www.redtailtelematics.com/opengraph-image"],
+			"See fleet status, journey replay, driving behaviour, alerts, device health, maintenance, reports, circuit session analysis, and Redtail's focused mobile apps.",
+		images: [
+			{
+				alt: defaultSocialImageAlt,
+				url: defaultSocialImage.url,
+			},
+		],
 	},
 	referrer: "origin-when-cross-origin",
 	creator: "Redtail Telematics",
