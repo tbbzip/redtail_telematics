@@ -88,6 +88,12 @@ const sections: LegalSection[] = [
 					management provider.
 				</p>
 				<p>
+					Google Analytics, Google Ads, and Microsoft Clarity may process browser and device
+					information, pages viewed, site interactions, referring or campaign
+					information, network information, and online identifiers. The website
+					does not currently use a LiveChat widget.
+				</p>
+				<p>
 					This website is not intended for children, and we do not knowingly
 					collect data relating to children.
 				</p>
@@ -113,6 +119,10 @@ const sections: LegalSection[] = [
 						To send periodic emails: The email address you provide may be
 						used to send you information, respond to inquiries, and/or other
 						requests or questions.
+					</li>
+					<li>
+						To understand site use, improve the website, and measure campaign
+						effectiveness.
 					</li>
 					<li>To comply with a legal or regulatory obligation.</li>
 				</ul>
@@ -152,10 +162,16 @@ const sections: LegalSection[] = [
 		children: (
 			<>
 				<p>
-					Redtail Telematics does not sell, trade, or transfer your personally identifiable information to outside parties. However, it may share the information with trusted third parties who assist Redtail in operating its website, conducting its business, or servicing you, as long as they agree to keep this information confidential.
+					Redtail Telematics does not sell your personal data. It may share
+					information with trusted service providers that help Redtail operate
+					the website, conduct its business, deliver submitted inquiries, or
+					serve customers, subject to appropriate contractual obligations.
 				</p>
 				<p>
-					Redtail may also release your information when it believes it is appropriate to comply with the law, enforce its site policies, or protect its rights, property, or safety. Non-personally identifiable visitor information may be provided to other parties for marketing, advertising, or other uses.
+					These providers include Google for analytics and advertising
+					measurement and Microsoft for Clarity behaviour analytics.
+					Redtail may also disclose information where required by law or where
+					necessary to protect its rights, property, or safety.
 				</p>
 			</>
 		),
@@ -175,15 +191,24 @@ const sections: LegalSection[] = [
 					We use specific standard contractual terms approved for use in the UK which give the transferred personal data the same protection as it has in the UK, namely the International Data Transfer Agreement.
 				</p>
 				<p>To obtain a copy of these contractual safeguards, please contact us.</p>
+				<p>
+					Some website and communications service providers may process data
+					outside the UK. Where applicable, Redtail requires an approved transfer
+					mechanism or another lawful safeguard for those transfers.
+				</p>
 			</>
 		),
 	},
 	{
 		id: "california-compliance",
-		title: "California Online Privacy Protection Act Compliance",
+		title: "California Privacy",
 		children: (
 			<p>
-				Because Redtail values your privacy, it has taken the necessary precautions to be compliant with the California Online Privacy Protection Act. It therefore will not distribute your personal information to outside parties without your consent.
+				California residents may have additional rights under applicable
+				privacy law, including rights to request access to, correction of, or
+				deletion of certain personal information. To make a request, please
+				contact us using the details below. We may need to verify your identity
+				before completing a request.
 			</p>
 		),
 	},
@@ -192,10 +217,15 @@ const sections: LegalSection[] = [
 		title: "Your Consent",
 		children: (
 			<>
-				<p>By using our website, you consent to its website&apos;s privacy policy.</p>
+				<p>
+					Where Redtail relies on consent for a particular use of personal data,
+					you may withdraw that consent at any time by contacting us.
+				</p>
 				<ul>
 					<li>
-						Right to withdraw consent: We only process your personal data based on your consent and you have the right to withdraw your consent at any time without affecting the lawfulness of processing.
+						Right to withdraw consent: Where processing is based on your
+						consent, you may withdraw that consent at any time without affecting
+						the lawfulness of processing before withdrawal.
 					</li>
 					<li>
 						Right to restrict or object: You have the right to restrict or object to the processing of certain personal information.
@@ -309,7 +339,7 @@ export default function PrivacyPolicyPage() {
 		<LegalPolicyPage
 			currentPath="/privacy-policy"
 			description="This Privacy Policy sets out how Redtail collects, uses, and protects personal data submitted through this website, including requests for information or a demonstration."
-			lastUpdated="2026-08-12"
+			lastUpdated="2026-09-02"
 			sections={sections}
 			title="Privacy Policy"
 		/>

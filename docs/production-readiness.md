@@ -3,23 +3,19 @@
 This runbook covers the external configuration and launch proof that cannot be
 safely committed to the repository.
 
-## Verified migration state (2026-08-13)
+## Verified migration state (2026-09-03)
 
-The live domain and the rebuild currently belong to different Vercel projects:
+The established Vercel project `redtailtelematics` owns
+`www.redtailtelematics.com` and is now connected to this repository,
+`tbbzip/redtail_telematics`. Its latest Ready Production deployment was built
+from `main` commit `655ac33`; the current GTM and form-conversion branch changes
+are newer and therefore not live.
 
-- `redtailtelematics` owns `www.redtailtelematics.com` and is connected to the
-  legacy private repository `tbbzip/redtail_web`. Its current production build
-  uses Node.js 20 and the existing SendGrid/reCAPTCHA email flow.
-- `redtail-telematics` is connected to this repository,
-  `tbbzip/redtail_telematics`, but owns only the Vercel-generated domain. It has
-  no production lead-delivery environment variables or custom domain.
-
-The lower-risk migration is to keep the established `redtailtelematics`
-project, domains, and rollback history; connect it to this repository; select
-Node.js 22; add the environment contract below; deploy a Preview; and promote
-only after the acceptance checks pass. Moving the domains to the rebuild
-project is possible, but requires recreating and revalidating more external
-configuration.
+Keep this project, its domains, and its rollback history. The project setting,
+CI, and this repository now target Node.js 22 (`>=22.12 <23`). Before creating
+the launch Preview, separate Preview and Production environment values and
+resolve the SendGrid credential warning. Promote only after the acceptance
+checks below pass.
 
 Do not remove the legacy reCAPTCHA variables until the rollback window closes.
 The rebuilt form does not depend on them. The production `SENDGRID_API_KEY` is
@@ -34,6 +30,8 @@ Every environment requires:
 - `SITE_URL` with that environment's canonical HTTPS origin.
 - The three `NEXT_PUBLIC_SANITY_*` variables for the approved project and
   dataset.
+- `NEXT_PUBLIC_GTM_ID` set to the approved container for Production and a
+  separate non-production container for Preview. CI uses a non-live placeholder.
 - `LEAD_DELIVERY_PROVIDER` set explicitly to `sendgrid` or `webhook`.
 - `LEAD_RATE_LIMIT_HASH_SECRET` with at least 32 random characters.
 - `LEAD_DELIVERY_TIMEOUT_MS` if the default 8-second timeout is unsuitable.
@@ -146,6 +144,8 @@ Before launch:
       client-side; the sender domain is authenticated.
 - [ ] `/api/health` returns 200 in Production and 503 when a required value is
       removed in a disposable Preview test.
+- [ ] `NEXT_PUBLIC_GTM_ID` is the approved Production container and is absent or
+      replaced with a non-production container in every Preview and CI build.
 - [ ] A real canary receives `202`, appears in SendGrid Activity, and reaches both
       approved Production mailboxes with the correct consent metadata.
 - [ ] Duplicate-email risk and mailbox ownership/retention are accepted, or a
@@ -155,8 +155,12 @@ Before launch:
       correct owner.
 - [ ] Sanity member roles, dataset access, and CORS origins are reviewed.
 - [ ] Legal approves the privacy, cookie, terms, and consent language.
-- [ ] Cookie behavior matches the published policy before analytics or advertising
-      tags are introduced.
+- [ ] Cookie behavior matches the published policy, and legal approves an
+      appropriate UK/EEA consent mechanism before launch to those visitors.
+- [ ] Tag Assistant confirms the published GA/Ads/Clarity tags, the paused
+      LiveChat tag, and no CSP violations.
+- [ ] Form conversion tags use a stable post-`202` data-layer event rather than a
+      layout-dependent element-visibility selector, and never include lead PII.
 - [ ] Business owners approve claims, logos, testimonials, addresses, company
       registration details, recipients, and the login destination.
 - [ ] A clean checkout passes `npm ci`, `npm run check`, `npm run build`,

@@ -19,51 +19,70 @@ export const metadata: Metadata = {
 const sections: LegalSection[] = [
 	{
 		id: "about-cookies",
-		title: "About Cookies",
+		title: "About Cookies and Browser Storage",
 		children: (
 			<>
 				<p>
-					Cookies are small files that a site or its service provider
-					transfers to your device through your web browser.
+					Cookies and similar browser technologies allow a website or its
+					service providers to remember information or understand how the
+					site is used.
 				</p>
 				<p>
-					The version of this website represented by this policy does not set
-					advertising, analytics, preference, or consent cookies. The lead
-					forms also do not use cookies or persistent browser storage for
-					campaign attribution.
+					When configured for production, Redtail uses Google Tag Manager to
+					load site measurement technologies on the public marketing pages.
+					Those services may set or read cookies and similar identifiers.
 				</p>
 			</>
 		),
 	},
 	{
 		id: "current-use",
-		title: "Current Cookie Use",
+		title: "Technologies We Use",
 		children: (
 			<>
 				<p>
-					No application cookie is intentionally created by the public
-					marketing pages, the Schedule a Demo form, or the Get Started form.
-					The embedded Sanity Studio at <code>/studio</code> is an administrative
-					tool for authorised editors and may use authentication storage supplied
-					by Sanity.
+					The technologies currently configured through Google Tag Manager
+					include Google Analytics, Google Ads conversion measurement, and
+					Microsoft Clarity. The site does not currently use a LiveChat widget.
+					Those providers may set cookies or use similar storage and may process
+					technical and usage information such as browser and device details,
+					pages viewed, interactions, referring or campaign information, and
+					network information.
 				</p>
 				<p>
-					Hosting and security infrastructure may process request metadata and
-					apply provider-managed abuse protections without creating an
-					application cookie. Browser extensions or unrelated third-party pages
-					may create storage outside Redtail&apos;s control.
+					The Schedule a Demo and Get Started forms do not themselves write
+					campaign-attribution details to persistent browser storage. Google
+					Analytics and Google Ads technologies available on those pages may
+					use cookies or similar storage to attribute an inquiry to a campaign.
+					The embedded Sanity Studio at <code>/studio</code> is an
+					administrative tool for authorised editors and may use authentication
+					storage supplied by Sanity. Hosting and security providers may also
+					process request metadata to operate and protect the site.
 				</p>
 			</>
 		),
 	},
 	{
-		id: "future-changes",
-		title: "Future Changes",
+		id: "your-choices",
+		title: "Managing Cookies",
 		children: (
 			<p>
-				If Redtail adds optional analytics, advertising, or other non-essential
-				cookies, this policy and the site&apos;s consent controls must be updated
-				before those cookies are enabled.
+				You can block or delete cookies through your browser settings. Blocking
+				measurement technologies may reduce Redtail&apos;s ability to understand
+				website performance and attribute advertising-driven inquiries, but it
+				does not prevent you from submitting the Schedule a Demo or Get Started
+				forms.
+			</p>
+		),
+	},
+	{
+		id: "changes",
+		title: "Changes to This Policy",
+		children: (
+			<p>
+				Redtail may update the services or how they are configured.
+				We will update this page when those changes materially affect the
+				information described here.
 			</p>
 		),
 	},
@@ -101,7 +120,7 @@ export default function CookiePolicyPage() {
 		<LegalPolicyPage
 			currentPath="/cookie-policy"
 			description={description}
-			lastUpdated="2026-08-12"
+			lastUpdated="2026-09-02"
 			sections={sections}
 			title="Cookie Policy"
 		/>
