@@ -129,7 +129,7 @@ function ResourceCard({ item }: { item: ResourceIndexItem }) {
 			id={item.slug}
 		>
 			<CardHeader className="gap-5 px-6 pt-6 sm:px-7 sm:pt-7">
-				<div className="relative aspect-[1.48] overflow-hidden rounded-xl bg-rb-black">
+				<div className="relative aspect-[1.48] overflow-hidden rounded-xl bg-linear-to-br from-white via-rb-peach/30 to-rb-red/12">
 					<Image
 						alt={item.imageAlt || item.title}
 						className={cn(

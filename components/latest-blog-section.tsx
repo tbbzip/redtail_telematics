@@ -61,7 +61,7 @@ function FeaturedPost({ post }: { post: BlogPost }) {
 function CompactPost({ post }: { post: BlogPost }) {
 	return (
 		<Link className="group grid gap-5 sm:grid-cols-[13.5rem_1fr]" href={post.href}>
-			<div className="relative aspect-[1.75] overflow-hidden rounded-xl bg-rb-black ring-1 ring-black/8 sm:aspect-auto sm:min-h-36">
+			<div className="relative aspect-[1.75] overflow-hidden rounded-xl bg-linear-to-br from-white via-rb-peach/30 to-rb-red/12 ring-1 ring-black/8 sm:aspect-auto sm:min-h-36">
 				<Image
 					alt=""
 					className={cn(
