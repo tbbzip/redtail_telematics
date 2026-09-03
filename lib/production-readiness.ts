@@ -31,6 +31,12 @@ function hasValidSiteUrl() {
 
 export function getProductionReadiness() {
 	const failures: string[] = [];
+	const configuredGtmId = process.env.NEXT_PUBLIC_GTM_ID?.trim() || "";
+	const normalizedGtmId = normalizeGoogleTagManagerId(configuredGtmId);
+	const vercelEnvironment = process.env.VERCEL_ENV?.trim().toLowerCase();
+	const requiresGtm =
+		vercelEnvironment === "production" ||
+		(!vercelEnvironment && process.env.NODE_ENV === "production");
 
 	if (!hasValidSiteUrl()) {
 		failures.push("site-url");
@@ -47,7 +53,10 @@ export function getProductionReadiness() {
 		}
 	}
 
-	if (!normalizeGoogleTagManagerId(process.env.NEXT_PUBLIC_GTM_ID)) {
+	if (
+		(requiresGtm && !normalizedGtmId) ||
+		(configuredGtmId && !normalizedGtmId)
+	) {
 		failures.push("analytics");
 	}
 

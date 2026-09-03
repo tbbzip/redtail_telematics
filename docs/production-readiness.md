@@ -14,8 +14,10 @@ are newer and therefore not live.
 Keep this project, its domains, and its rollback history. The project setting,
 CI, and this repository now target Node.js 22 (`>=22.12 <23`). Before creating
 the launch Preview, separate Preview and Production environment values and
-resolve the SendGrid credential warning. Promote only after the acceptance
-checks below pass.
+resolve the SendGrid credential warning. After the acceptance checks pass,
+merge or push `main` so Vercel creates a fresh Production build (or run an
+explicit `vercel --prod` deployment). Do not directly promote a Preview artifact
+when its build-time public variables differ from Production.
 
 Do not remove the legacy reCAPTCHA variables until the rollback window closes.
 The rebuilt form does not depend on them. The production `SENDGRID_API_KEY` is
@@ -25,16 +27,20 @@ revalidated before launch.
 ## Required environment
 
 Create separately scoped Preview and Production values from `.env.example`.
-Every environment requires:
+Both environments require:
 
 - `SITE_URL` with that environment's canonical HTTPS origin.
 - The three `NEXT_PUBLIC_SANITY_*` variables for the approved project and
   dataset.
-- `NEXT_PUBLIC_GTM_ID` set to the approved container for Production and a
-  separate non-production container for Preview. CI uses a non-live placeholder.
 - `LEAD_DELIVERY_PROVIDER` set explicitly to `sendgrid` or `webhook`.
 - `LEAD_RATE_LIMIT_HASH_SECRET` with at least 32 random characters.
 - `LEAD_DELIVERY_TIMEOUT_MS` if the default 8-second timeout is unsuitable.
+
+Production additionally requires `NEXT_PUBLIC_GTM_ID` set to the approved
+container. Preview should omit it so test traffic cannot pollute live analytics,
+unless a separate non-production GTM container is intentionally configured. A
+malformed non-empty Preview value fails readiness. CI uses a non-live
+placeholder.
 
 Production fails closed when `LEAD_DELIVERY_PROVIDER` is absent. It never falls
 back from one provider to another after a configuration or delivery failure.

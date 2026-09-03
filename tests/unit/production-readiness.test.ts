@@ -83,8 +83,9 @@ describe("production readiness", () => {
 		});
 	});
 
-	it("fails readiness when the production GTM container is absent or invalid", () => {
+	it("fails readiness when the Vercel Production GTM container is absent or invalid", () => {
 		configureReadyEnvironment();
+		vi.stubEnv("VERCEL_ENV", "production");
 		vi.stubEnv("NEXT_PUBLIC_GTM_ID", "");
 
 		expect(getProductionReadiness()).toEqual({
@@ -93,6 +94,35 @@ describe("production readiness", () => {
 		});
 
 		vi.stubEnv("NEXT_PUBLIC_GTM_ID", "G-ABC123");
+		expect(getProductionReadiness()).toEqual({
+			failures: ["analytics"],
+			ready: false,
+		});
+	});
+
+	it("allows Preview to omit GTM but rejects a malformed configured value", () => {
+		configureReadyEnvironment();
+		vi.stubEnv("VERCEL_ENV", "preview");
+		vi.stubEnv("NEXT_PUBLIC_GTM_ID", "");
+
+		expect(getProductionReadiness()).toEqual({ failures: [], ready: true });
+
+		vi.stubEnv("NEXT_PUBLIC_GTM_ID", "G-ABC123");
+		expect(getProductionReadiness()).toEqual({
+			failures: ["analytics"],
+			ready: false,
+		});
+
+		vi.stubEnv("NEXT_PUBLIC_GTM_ID", "GTM-PREVIEW1");
+		expect(getProductionReadiness()).toEqual({ failures: [], ready: true });
+	});
+
+	it("requires GTM for a non-Vercel production runtime", () => {
+		configureReadyEnvironment();
+		vi.stubEnv("VERCEL_ENV", "");
+		vi.stubEnv("NODE_ENV", "production");
+		vi.stubEnv("NEXT_PUBLIC_GTM_ID", "");
+
 		expect(getProductionReadiness()).toEqual({
 			failures: ["analytics"],
 			ready: false,
@@ -146,6 +176,8 @@ describe("production readiness", () => {
 	});
 
 	it("fails closed without leaking which runtime setting is absent", async () => {
+		vi.stubEnv("NODE_ENV", "production");
+		vi.stubEnv("VERCEL_ENV", "");
 		vi.stubEnv("SITE_URL", "http://localhost:3000/path?debug=1");
 		vi.stubEnv("NEXT_PUBLIC_SANITY_API_VERSION", "");
 		vi.stubEnv("NEXT_PUBLIC_SANITY_DATASET", "");
