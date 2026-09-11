@@ -1,10 +1,27 @@
 "use client";
 
-import { animate, motion, useMotionValue, useReducedMotion } from "motion/react";
-import { useEffect, useState } from "react";
+import { animate, motion, useMotionValue } from "motion/react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import useMeasure from "react-use-measure";
 
 import { cn } from "@/lib/utils";
+
+const reducedMotionQuery = "(prefers-reduced-motion: reduce)";
+
+function subscribeToReducedMotion(onChange: () => void) {
+  const mediaQuery = window.matchMedia(reducedMotionQuery);
+  mediaQuery.addEventListener("change", onChange);
+  return () => mediaQuery.removeEventListener("change", onChange);
+}
+
+function getReducedMotionSnapshot() {
+  return window.matchMedia(reducedMotionQuery).matches;
+}
+
+function getServerReducedMotionSnapshot() {
+  // Keep the server output and first hydration render identical.
+  return false;
+}
 
 export type InfiniteSliderProps = {
   children: React.ReactNode;
@@ -30,7 +47,11 @@ export function InfiniteSlider({
   const translation = useMotionValue(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [key, setKey] = useState(0);
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = useSyncExternalStore(
+    subscribeToReducedMotion,
+    getReducedMotionSnapshot,
+    getServerReducedMotionSnapshot,
+  );
 
   useEffect(() => {
     if (shouldReduceMotion) {

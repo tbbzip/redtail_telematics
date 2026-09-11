@@ -60,10 +60,9 @@ test("Platform & Apps presents the evidence-backed product story", async ({ page
 		await image.scrollIntoViewIfNeeded();
 	}
 
-	const imagesLoaded = await visibleImages.evaluateAll((images) =>
+	await expect.poll(() => visibleImages.evaluateAll((images) =>
 		images.every((image) => (image as HTMLImageElement).complete && (image as HTMLImageElement).naturalWidth > 0),
-	);
-	expect(imagesLoaded).toBe(true);
+	)).toBe(true);
 
 	const accessibility = await new AxeBuilder({ page })
 		.withTags(["wcag2a", "wcag2aa"])

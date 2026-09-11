@@ -22,6 +22,7 @@ import {
 import { type IconSvgElement } from "@hugeicons/react";
 
 import { HugeIcon } from "@/components/huge-icon";
+import { DeviceFamilyCarousel } from "@/components/device-family-carousel";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -34,49 +35,16 @@ import {
 import { InfiniteSlider } from "@/components/ui/infinite-slider";
 import { cn } from "@/lib/utils";
 
-const deviceSlides = [
-	{
-		name: "VAM-HUB",
-		image: "/devices/vam-hub.png",
-		href: "#vam-hub",
-	},
-	{
-		name: "VAM-OBD",
-		image: "/devices/obd.png",
-		href: "#vam-obd",
-	},
-	{
-		name: "VAM-HDR",
-		image: "/devices/vam-hdr.png",
-		href: "#vam-hdr",
-	},
-	{
-		name: "VAM-Rugged",
-		image: "/devices/rugged.png",
-		href: "#vam-rugged",
-	},
-	{
-		name: "VAM-HD (Plug & Play)",
-		image: "/devices/vam-hd.png",
-		href: "#vam-hd",
-	},
-];
-
 const quickValueItems = [
 	{
 		title: "HD Data in Seconds",
-		description: "Up to 1 kHz impact sampling and 350+ OTA settings.",
+		description: "Up to 1 kHz impact sampling and upgradeable over the air (OTA)",
 		icon: ChartLineData02Icon,
 	},
 	{
 		title: "Tamper-Proof Designs",
 		description: "IP67 rugged enclosures and covert installs keep data secure.",
 		icon: ShieldKeyIcon,
-	},
-	{
-		title: "6 Form Factors",
-		description: "Hard-wired, battery, OBD, BLE tag - pick the ideal install.",
-		icon: DeviceAccessIcon,
 	},
 ] satisfies {
 	title: string;
@@ -132,19 +100,12 @@ const deviceLineup = [
 		alt: "VAM-HUB",
 		description:
 			"Flagship HD recorder with advanced IMU. Hard-wired install and fully OTA-configurable - ideal for high-volume deployments.",
-		highlights: ["9-axis IMU @1 kHz", "AES-256 tamper seal", "Dual-CAN / J1939"],
+		highlights: [
+			"Up to 1 kHz impact sampling",
+			"Hard-wired installation",
+			"Upgradeable over the air (OTA)",
+		],
 		toneClass: "from-rb-peach/70",
-	},
-	{
-		name: "VAM-HDR",
-		id: "vam-hdr",
-		tagline: "Self-install or pro-fit with rechargeable battery",
-		image: "/devices/vam-hdr.png",
-		alt: "VAM-HDR",
-		description:
-			"Quick-fit form factor with integrated Li-ion pack - perfect for mixed fleets needing both portable and permanent options.",
-		highlights: ["LTE Cat-M / NB-IoT", "6-month battery", "Tool-less install"],
-		toneClass: "from-rb-light-blue/85",
 	},
 	{
 		name: "VAM-Rugged",
@@ -153,12 +114,8 @@ const deviceLineup = [
 		image: "/devices/rugged.png",
 		alt: "VAM-Rugged",
 		description:
-			"Solar-augmented, fully-potted electronics survive extremes of dust, moisture, and vibration on heavy equipment and containers.",
-		highlights: [
-			"IP67, -40 degrees C to 85 degrees C",
-			"Solar + backup cell",
-			"Mag-mount or bracket",
-		],
+			"Fully-potted electronics for heavy equipment and containers exposed to dust, moisture, and vibration.",
+		highlights: ["IP67, -40 degrees C to 85 degrees C"],
 		toneClass: "from-rb-light-green/85",
 	},
 	{
@@ -168,22 +125,28 @@ const deviceLineup = [
 		image: "/devices/obd.png",
 		alt: "VAM-OBD",
 		description:
-			"True plug-and-drive install in under 60 seconds. Reads VIN, DTCs, and high-res accelerometer data - perfect for UBI.",
-		highlights: ["OBD-II + J1962", "VIN & DTC pull", "Eco/idle scoring"],
+			"True plug-and-drive install in under 60 seconds. Reads VIN/DTC* and high-res accelerometer data - perfect for UBI.",
+		highlights: ["OBD-II + J1962", "VIN/DTC*", "Eco/idle scoring"],
 		toneClass: "from-rb-peach/60",
 	},
 	{
 		name: "Bluetooth Tag",
 		id: "bluetooth-tag",
-		tagline: "Driver ID & remote IoT sensor",
+		tagline: "BLE keyfob for driver identification",
 		image: "/devices/bluetooth.png",
 		alt: "Bluetooth Tag",
 		description:
-			"Tiny BLE beacon pairs with any VAM device to add driver ID and sensor data (temperature, door, tilt) with no wiring required.",
-		highlights: ["Multi-year coin cell", "iBeacon / Eddystone", "100 m line-of-sight"],
+			"BLE keyfob for driver identification with compatible VAM devices, with no wiring required. The tag has no cellular connection or GPS.",
+		highlights: ["Multi-year coin cell"],
 		toneClass: "from-rb-light-blue/80",
 	},
 ];
+
+const deviceSlides = deviceLineup.map((device) => ({
+	name: device.name,
+	image: device.image,
+	href: `#${device.id}`,
+}));
 
 const useCases = [
 	{
@@ -267,18 +230,10 @@ const specRows = [
 	{
 		model: "VAM-HUB",
 		install: "Pro",
-		power: "Vehicle + backup",
+		power: "Vehicle",
 		gpsRate: "1 Hz",
 		accelGyro: "10 Hz / 5 Hz",
-		battery: "1.3 Ah",
-	},
-	{
-		model: "VAM-HDR",
-		install: "Pro / DIY",
-		power: "Rechargeable",
-		gpsRate: "1 Hz",
-		accelGyro: "10 Hz / 5 Hz",
-		battery: "2.2 Ah",
+		battery: null,
 	},
 	{
 		model: "VAM-Rugged",
@@ -316,54 +271,10 @@ const commonUses = [
 	},
 ];
 
-function DeviceSlideCard({
-	device,
-	index,
-}: {
-	device: (typeof deviceSlides)[number];
-	index: number;
-}) {
-	const featured = index === 0;
-
-	return (
-		<Link
-			className={cn(
-				"group relative flex min-h-[18rem] min-w-[16.5rem] flex-col justify-between overflow-hidden rounded-2xl border border-white/14 bg-white/[0.075] p-4 text-white shadow-[0_20px_70px_rgba(0,0,0,0.24)] backdrop-blur-md transition duration-300 hover:-translate-y-1 hover:border-rb-red/55 hover:bg-white/[0.11] sm:min-w-[18rem]",
-				featured && "border-rb-red/44 bg-rb-red/12"
-			)}
-			href={device.href}
-		>
-			<div className="flex items-start justify-between gap-4">
-				<div>
-					<p className="text-[11px] font-semibold tracking-[0.2em] text-white/44 uppercase">
-						Device {String(index + 1).padStart(2, "0")}
-					</p>
-					<h3 className="mt-2 text-xl font-semibold leading-tight text-white">
-						{device.name}
-					</h3>
-				</div>
-				<span className="rounded-full border border-white/14 px-3 py-1 text-xs font-semibold text-white/68">
-					See Specs
-				</span>
-			</div>
-
-			<div className="relative mx-auto mt-5 aspect-square w-full max-w-[13rem]">
-				<Image
-					alt={device.name}
-					className="object-contain drop-shadow-[0_24px_40px_rgba(0,0,0,0.35)] transition duration-300 group-hover:scale-105"
-					fill
-					sizes="220px"
-					src={device.image}
-				/>
-			</div>
-		</Link>
-	);
-}
-
 function QuickValueStrip() {
 	return (
 		<div className="relative border-y border-white/10 bg-white/[0.045] backdrop-blur-md">
-			<div className="mx-auto grid max-w-7xl gap-4 px-4 py-5 sm:px-6 lg:grid-cols-[1fr_1fr_1fr_18rem] lg:px-8">
+			<div className="mx-auto grid max-w-7xl gap-4 px-4 py-5 sm:px-6 lg:grid-cols-[1fr_1fr_18rem] lg:px-8">
 				{quickValueItems.map((item) => (
 					<div className="flex gap-3" key={item.title}>
 						<div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-rb-red text-white">
@@ -378,7 +289,8 @@ function QuickValueStrip() {
 					</div>
 				))}
 				<p className="border-t border-white/10 pt-4 text-xs leading-5 text-white/58 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-5">
-					All models include GSM/GPRS, GNSS & Glonass with anti-jamming tech.
+					Connectivity and positioning capabilities vary by device. The BLE tag
+					has no cellular connection or GPS.
 				</p>
 			</div>
 		</div>
@@ -472,10 +384,10 @@ export function DeviceHeroSection() {
 						</Button>
 					</div>
 
-					<div className="mt-8 grid max-w-xl grid-cols-3 divide-x divide-white/18 border-y border-white/16 py-4 sm:py-5">
+					<div className="mt-8 grid max-w-xl grid-cols-2 divide-x divide-white/18 border-y border-white/16 py-4 sm:py-5">
 						<div className="pr-3 sm:pr-4">
 							<p className="text-lg font-semibold text-white sm:text-2xl">
-								1 kHz
+								Up to 1 kHz
 							</p>
 							<p className="mt-2 text-[11px] leading-4 text-white/52 sm:text-xs">
 								impact sampling
@@ -483,45 +395,16 @@ export function DeviceHeroSection() {
 						</div>
 						<div className="px-3 sm:px-4">
 							<p className="text-lg font-semibold text-white sm:text-2xl">
-								350+
+								OTA
 							</p>
 							<p className="mt-2 text-[11px] leading-4 text-white/52 sm:text-xs">
-								OTA settings
-							</p>
-						</div>
-						<div className="pl-3 sm:pl-4">
-							<p className="text-lg font-semibold text-white sm:text-2xl">
-								6
-							</p>
-							<p className="mt-2 text-[11px] leading-4 text-white/52 sm:text-xs">
-								form factors
+								upgradeable over the air
 							</p>
 						</div>
 					</div>
 				</div>
 
-				<div className="min-w-0">
-					<div className="mb-4 flex items-center justify-between gap-4">
-						<p className="text-xs font-semibold tracking-[0.22em] text-white/52 uppercase">
-							Device family
-						</p>
-						<div className="hidden items-center gap-2 text-xs text-white/48 sm:flex">
-							<span className="size-2 rounded-full bg-rb-red" />
-							Scroll lineup
-						</div>
-					</div>
-					<div className="mask-[linear-gradient(to_right,black_0%,black_82%,transparent)] overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-						<div className="flex gap-4">
-							{deviceSlides.map((device, index) => (
-								<DeviceSlideCard
-									device={device}
-									index={index}
-									key={device.name}
-								/>
-							))}
-						</div>
-					</div>
-				</div>
+				<DeviceFamilyCarousel devices={deviceSlides} />
 			</div>
 
 			<QuickValueStrip />
@@ -541,10 +424,7 @@ function DeviceLineupCard({
 
 	return (
 		<Card
-			className={cn(
-				"relative isolate border-black/10 bg-white py-0 shadow-[0_18px_50px_rgba(1,1,1,0.06)] ring-0 transition duration-300 hover:-translate-y-1 hover:border-rb-red/28 hover:shadow-[0_24px_70px_rgba(1,1,1,0.1)]",
-				featured && "lg:col-span-2"
-			)}
+			className="relative isolate scroll-mt-28 border-black/10 bg-white py-0 shadow-[0_18px_50px_rgba(1,1,1,0.06)] ring-0 transition duration-300 hover:-translate-y-1 hover:border-rb-red/28 hover:shadow-[0_24px_70px_rgba(1,1,1,0.1)]"
 			id={device.id}
 		>
 			<div
@@ -610,6 +490,14 @@ function DeviceLineupCard({
 						</div>
 					))}
 				</div>
+				{device.id === "vam-obd" && (
+					<p
+						className="mt-4 text-sm leading-6 text-rb-black/64"
+						id="vam-obd-compatibility"
+					>
+						* VIN/DTC support is not guaranteed across all vehicle manufacturers.
+					</p>
+				)}
 				<Link
 					className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-rb-red transition hover:text-rb-black"
 					href="#technical-specs"
@@ -645,7 +533,7 @@ export function DeviceLineupSection() {
 					</p>
 				</header>
 
-				<div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+				<div className="mt-10 grid gap-4 sm:grid-cols-2">
 					{deviceLineup.map((device, index) => (
 						<DeviceLineupCard
 							device={device}
@@ -796,7 +684,14 @@ function SpecsTable() {
 							<td className="px-5 py-4 text-rb-black/62">{row.power}</td>
 							<td className="px-5 py-4 text-rb-black/62">{row.gpsRate}</td>
 							<td className="px-5 py-4 text-rb-black/62">{row.accelGyro}</td>
-							<td className="px-5 py-4 text-rb-black/62">{row.battery}</td>
+							<td className="relative px-5 py-4 text-rb-black/62">
+								{row.battery ?? (
+									<>
+										<span aria-hidden="true">—</span>
+										<span className="sr-only">Not specified</span>
+									</>
+								)}
+							</td>
 						</tr>
 					))}
 				</tbody>
