@@ -16,6 +16,7 @@ const validFooterLead = {
 	lastName: "Lovelace",
 	phone: "+44 20 7946 0958",
 	source: "footer-demo",
+	turnstileToken: "turnstile-test-token",
 } as const;
 
 const validGetStartedLead = {
@@ -99,6 +100,27 @@ describe("leadSubmissionSchema", () => {
 			"consent",
 			"Consent to be contacted is required.",
 		);
+	});
+
+	it("requires a nonempty Turnstile token and bounds its length", () => {
+		const withoutToken = { ...validFooterLead };
+		Reflect.deleteProperty(withoutToken, "turnstileToken");
+
+		expectFieldIssue(withoutToken, "turnstileToken");
+		expectFieldIssue(
+			{ ...validFooterLead, turnstileToken: "   " },
+			"turnstileToken",
+		);
+		expectFieldIssue(
+			{ ...validFooterLead, turnstileToken: "x".repeat(2049) },
+			"turnstileToken",
+		);
+		expect(
+			leadSubmissionSchema.safeParse({
+				...validFooterLead,
+				turnstileToken: "x".repeat(2048),
+			}).success,
+		).toBe(true);
 	});
 
 	it("accepts a strict, privacy-bounded attribution object", () => {

@@ -12,6 +12,8 @@ function configureReadyEnvironment(provider: "sendgrid" | "webhook" = "webhook")
 	vi.stubEnv("NEXT_PUBLIC_SANITY_PROJECT_ID", "bulruaoh");
 	vi.stubEnv("NEXT_PUBLIC_GTM_ID", "GTM-NJBD87XB");
 	vi.stubEnv("LEAD_RATE_LIMIT_HASH_SECRET", "x".repeat(32));
+	vi.stubEnv("TURNSTILE_SECRET", "test-secret");
+	vi.stubEnv("TURNSTILE_HOSTNAMES", "www.redtailtelematics.com");
 	vi.stubEnv("LEAD_DELIVERY_PROVIDER", provider);
 
 	if (provider === "webhook") {
@@ -36,7 +38,7 @@ describe("production readiness", () => {
 		vi.unstubAllEnvs();
 	});
 
-	it("reports ready only when canonical, CMS, rate-limit, and delivery config pass", async () => {
+	it("reports ready only when canonical, CMS, rate-limit, Turnstile, and delivery config pass", async () => {
 		configureReadyEnvironment();
 
 		expect(getProductionReadiness()).toEqual({ failures: [], ready: true });
@@ -129,6 +131,34 @@ describe("production readiness", () => {
 		});
 	});
 
+	it("requires Turnstile secret and deployment hostnames", () => {
+		configureReadyEnvironment();
+		vi.stubEnv("TURNSTILE_SECRET", "");
+		expect(getProductionReadiness()).toEqual({ failures: ["turnstile"], ready: false });
+
+		vi.stubEnv("TURNSTILE_SECRET", "test-secret");
+		vi.stubEnv("TURNSTILE_HOSTNAMES", "");
+		expect(getProductionReadiness()).toEqual({ failures: ["turnstile"], ready: false });
+
+		vi.stubEnv("TURNSTILE_HOSTNAMES", "other.example.com");
+		expect(getProductionReadiness()).toEqual({ failures: ["turnstile"], ready: false });
+
+		vi.stubEnv("TURNSTILE_HOSTNAMES", "https://www.redtailtelematics.com");
+		expect(getProductionReadiness()).toEqual({ failures: ["turnstile"], ready: false });
+	});
+
+	it("rejects local Turnstile hostnames in Production", () => {
+		configureReadyEnvironment("sendgrid");
+		vi.stubEnv("TURNSTILE_HOSTNAMES", "www.redtailtelematics.com,localhost");
+		expect(getProductionReadiness()).toEqual({ failures: ["turnstile"], ready: false });
+
+		configureReadyEnvironment("webhook");
+		vi.stubEnv("VERCEL_ENV", "");
+		vi.stubEnv("NODE_ENV", "production");
+		vi.stubEnv("TURNSTILE_HOSTNAMES", "www.redtailtelematics.com,localhost");
+		expect(getProductionReadiness()).toEqual({ failures: ["turnstile"], ready: false });
+	});
+
 	it("fails closed when Preview is configured with a production recipient", () => {
 		configureReadyEnvironment("sendgrid");
 		vi.stubEnv("VERCEL_ENV", "preview");
@@ -184,6 +214,8 @@ describe("production readiness", () => {
 		vi.stubEnv("NEXT_PUBLIC_SANITY_PROJECT_ID", "");
 		vi.stubEnv("NEXT_PUBLIC_GTM_ID", "");
 		vi.stubEnv("LEAD_RATE_LIMIT_HASH_SECRET", "short");
+		vi.stubEnv("TURNSTILE_SECRET", "");
+		vi.stubEnv("TURNSTILE_HOSTNAMES", "");
 		vi.stubEnv("LEAD_WEBHOOK_URL", "");
 		vi.stubEnv("LEAD_WEBHOOK_ALLOWED_HOSTS", "");
 
@@ -194,6 +226,7 @@ describe("production readiness", () => {
 			"cms",
 			"analytics",
 			"rate-limit-secret",
+			"turnstile",
 			"lead-delivery",
 		]);
 

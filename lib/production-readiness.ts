@@ -2,6 +2,7 @@ import "server-only";
 
 import { normalizeGoogleTagManagerId } from "@/lib/analytics";
 import { assertLeadDeliveryConfiguration } from "@/lib/leads/deliver";
+import { isTurnstileConfigured } from "@/lib/leads/turnstile";
 
 function hasValue(name: string) {
 	return Boolean(process.env[name]?.trim());
@@ -62,6 +63,10 @@ export function getProductionReadiness() {
 
 	if ((process.env.LEAD_RATE_LIMIT_HASH_SECRET?.trim().length ?? 0) < 32) {
 		failures.push("rate-limit-secret");
+	}
+
+	if (!isTurnstileConfigured()) {
+		failures.push("turnstile");
 	}
 
 	try {

@@ -101,6 +101,7 @@ export const leadSubmissionSchema = z
 			),
 		source: z.enum(["footer-demo", "get-started"]),
 		submissionId: z.uuid("Submission ID must be a UUID.").optional(),
+		turnstileToken: z.string().trim().min(1).max(2048),
 		website: z.string().max(200).optional().default(""),
 	})
 	.superRefine((lead, context) => {
@@ -116,5 +117,5 @@ export const leadSubmissionSchema = z
 export type LeadSubmission = z.output<typeof leadSubmissionSchema>;
 export type DeliverableLead = Omit<
 	LeadSubmission,
-	"consentNoticeVersion" | "submissionId" | "website"
+	"consentNoticeVersion" | "submissionId" | "turnstileToken" | "website"
 >;

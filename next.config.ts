@@ -55,12 +55,12 @@ const thirdPartyFrameSources = ["https://www.googletagmanager.com"].join(" ");
 
 const contentSecurityPolicy = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline'${isDevelopment ? " 'unsafe-eval'" : ""} ${thirdPartyScriptSources}`,
+  `script-src 'self' 'unsafe-inline'${isDevelopment ? " 'unsafe-eval'" : ""} ${thirdPartyScriptSources} https://challenges.cloudflare.com`,
   `style-src 'self' 'unsafe-inline' ${thirdPartyStyleSources}`,
   `img-src 'self' blob: data: https://cdn.sanity.io ${thirdPartyImageSources}`,
   "font-src 'self' data: https://fonts.gstatic.com",
-  `connect-src 'self' https://*.api.sanity.io https://*.apicdn.sanity.io ${thirdPartyConnectSources}`,
-  `frame-src 'self' ${thirdPartyFrameSources}`,
+  `connect-src 'self' https://*.api.sanity.io https://*.apicdn.sanity.io ${thirdPartyConnectSources} https://challenges.cloudflare.com`,
+  `frame-src 'self' ${thirdPartyFrameSources} https://challenges.cloudflare.com`,
   "media-src 'self' blob: data:",
   "worker-src 'self' blob:",
   "object-src 'none'",

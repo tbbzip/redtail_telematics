@@ -5,6 +5,7 @@ import { deliverLead, LeadDeliveryError } from "@/lib/leads/deliver";
 import { checkLeadRateLimit } from "@/lib/leads/rate-limit";
 import { LEAD_CONSENT_NOTICE_VERSION } from "@/lib/leads/consent";
 import { leadSubmissionSchema } from "@/lib/leads/schema";
+import { verifyTurnstileToken } from "@/lib/leads/turnstile";
 
 export const runtime = "nodejs";
 
@@ -159,7 +160,7 @@ export async function POST(request: NextRequest) {
 		);
 	}
 
-	const { consentNoticeVersion, submissionId, website, ...lead } = parsed.data;
+	const { consentNoticeVersion, submissionId, turnstileToken, website, ...lead } = parsed.data;
 	const requestId = submissionId || randomUUID();
 
 	if (consentNoticeVersion !== LEAD_CONSENT_NOTICE_VERSION) {
@@ -168,6 +169,23 @@ export async function POST(request: NextRequest) {
 
 	if (website) {
 		return json({ ok: true, requestId }, 202);
+	}
+
+	const verification = await verifyTurnstileToken({
+		action: lead.source === "footer-demo" ? "footer_demo" : "get_started",
+		clientIp: getRequestIdentifier(request),
+		hostname: new URL(request.headers.get("origin")!).hostname,
+		token: turnstileToken,
+	});
+
+	if (verification !== "verified") {
+		const code =
+			verification === "not-configured"
+				? "TURNSTILE_NOT_CONFIGURED"
+				: verification === "unavailable"
+					? "TURNSTILE_UNAVAILABLE"
+					: "TURNSTILE_FAILED";
+		return json({ code, ok: false, requestId }, verification === "invalid" ? 403 : 503);
 	}
 
 	try {

@@ -16,6 +16,8 @@ const safeProcessEnv = Object.fromEntries(
 				"LEAD_WEBHOOK_TIMEOUT_MS",
 				"LEAD_WEBHOOK_URL",
 				"SENDGRID_API_KEY",
+				"TURNSTILE_SECRET",
+				"TURNSTILE_HOSTNAMES",
 			].includes(key),
 	),
 );
@@ -51,6 +53,8 @@ export default defineConfig({
 			LEAD_WEBHOOK_URL: "",
 			NEXT_TELEMETRY_DISABLED: "1",
 			SENDGRID_API_KEY: "",
+			TURNSTILE_SECRET: "",
+			TURNSTILE_HOSTNAMES: "",
 			SITE_URL: baseURL,
 		},
 		reuseExistingServer: false,

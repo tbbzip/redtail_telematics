@@ -6,6 +6,7 @@ import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 
 import { HugeIcon } from "@/components/huge-icon";
 import { LeadConsentNotice } from "@/components/lead-consent-notice";
+import { TurnstileWidget, type TurnstileWidgetHandle } from "@/components/turnstile-widget";
 import {
 	getAcceptedLeadRequestId,
 	publishLeadConversion,
@@ -41,11 +42,13 @@ export function FooterDemoForm() {
 		"error" | "idle" | "submitting" | "success"
 	>("idle");
 	const [submissionError, setSubmissionError] = useState("");
+	const [turnstileToken, setTurnstileToken] = useState("");
 	const [fieldErrors, setFieldErrors] = useState<
 		Partial<Record<FooterField, string>>
 	>({});
 	const submissionIdRef = useRef<string | null>(null);
 	const formRef = useRef<HTMLFormElement>(null);
+	const turnstileRef = useRef<TurnstileWidgetHandle>(null);
 	const pendingFocusFieldRef = useRef<FooterField | null>(null);
 
 	useEffect(() => {
@@ -84,6 +87,11 @@ export function FooterDemoForm() {
 
 		setSubmissionError("");
 		setFieldErrors({});
+		if (!turnstileToken) {
+			setSubmissionError("Please complete the security verification and try again.");
+			setSubmissionState("error");
+			return;
+		}
 		setSubmissionState("submitting");
 
 		try {
@@ -102,6 +110,7 @@ export function FooterDemoForm() {
 					phone: formData.get("phone"),
 					source: "footer-demo",
 					submissionId,
+					turnstileToken,
 					website: honeypot,
 				}),
 				headers: { "Content-Type": "application/json" },
@@ -137,6 +146,14 @@ export function FooterDemoForm() {
 				);
 			}
 
+			if (response.status === 403 && result?.code === "TURNSTILE_FAILED") {
+				throw new Error("Verification expired or failed. Please try again.");
+			}
+
+			if (response.status === 503 && result?.code?.startsWith("TURNSTILE_")) {
+				throw new Error("Verification is temporarily unavailable. Please try again shortly.");
+			}
+
 			const acceptedRequestId = getAcceptedLeadRequestId({
 				result,
 				status: response.status,
@@ -170,6 +187,8 @@ export function FooterDemoForm() {
 					: "We couldn't send your request. Please try again.",
 			);
 			setSubmissionState("error");
+		} finally {
+			turnstileRef.current?.reset();
 		}
 	}
 
@@ -360,6 +379,11 @@ export function FooterDemoForm() {
 				className="mt-4 text-center text-xs leading-5 text-rb-black/65"
 				id={`${formId}-consent-notice`}
 				linkClassName="font-semibold text-rb-black underline-offset-4 hover:text-rb-red hover:underline"
+			/>
+			<TurnstileWidget
+				action="footer_demo"
+				onTokenChange={setTurnstileToken}
+				ref={turnstileRef}
 			/>
 
 			<button

@@ -20,6 +20,7 @@ import { type IconSvgElement } from "@hugeicons/react";
 
 import { HugeIcon } from "@/components/huge-icon";
 import { LeadConsentNotice } from "@/components/lead-consent-notice";
+import { TurnstileWidget, type TurnstileWidgetHandle } from "@/components/turnstile-widget";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -243,7 +244,9 @@ export function GetStartedFlow() {
 		"error" | "idle" | "submitting" | "success"
 	>("idle");
 	const [submissionError, setSubmissionError] = useState("");
+	const [turnstileToken, setTurnstileToken] = useState("");
 	const submissionIdRef = useRef<string | null>(null);
+	const turnstileRef = useRef<TurnstileWidgetHandle>(null);
 	const stepHeadingRef = useRef<HTMLHeadingElement>(null);
 	const formRef = useRef<HTMLFormElement>(null);
 	const pendingFocusFieldRef = useRef<keyof ContactValues | null>(null);
@@ -287,6 +290,9 @@ export function GetStartedFlow() {
 	}
 
 	function goBack() {
+		if (step === 3) {
+			setTurnstileToken("");
+		}
 		setStep((current) => (current > 1 ? ((current - 1) as Step) : current));
 	}
 
@@ -318,6 +324,12 @@ export function GetStartedFlow() {
 			return;
 		}
 
+		if (!turnstileToken) {
+			setSubmissionError("Please complete the security verification and try again.");
+			setSubmissionState("error");
+			return;
+		}
+
 		setSubmissionError("");
 		setSubmissionState("submitting");
 
@@ -334,6 +346,7 @@ export function GetStartedFlow() {
 					industry,
 					source: "get-started",
 					submissionId,
+					turnstileToken,
 					website: honeypot,
 				}),
 				headers: { "Content-Type": "application/json" },
@@ -371,6 +384,14 @@ export function GetStartedFlow() {
 				);
 			}
 
+			if (response.status === 403 && result?.code === "TURNSTILE_FAILED") {
+				throw new Error("Verification expired or failed. Please try again.");
+			}
+
+			if (response.status === 503 && result?.code?.startsWith("TURNSTILE_")) {
+				throw new Error("Verification is temporarily unavailable. Please try again shortly.");
+			}
+
 			const acceptedRequestId = getAcceptedLeadRequestId({
 				result,
 				status: response.status,
@@ -402,6 +423,8 @@ export function GetStartedFlow() {
 					: "We couldn't send your request. Please try again.",
 			);
 			setSubmissionState("error");
+		} finally {
+			turnstileRef.current?.reset();
 		}
 	}
 
@@ -645,13 +668,18 @@ export function GetStartedFlow() {
 										</p>
 									</div>
 
-									<LeadConsentNotice
+					<LeadConsentNotice
 										className="mt-5 text-center text-sm leading-6 text-rb-black/54"
 										id={`${formId}-consent-notice`}
 										linkClassName="font-semibold text-rb-black underline underline-offset-4 hover:text-rb-red"
-									/>
+					/>
+					<TurnstileWidget
+						action="get_started"
+						onTokenChange={setTurnstileToken}
+						ref={turnstileRef}
+					/>
 
-									<Button
+					<Button
 										aria-describedby={`${formId}-consent-notice`}
 										className="mt-5 h-13 w-full rounded-full"
 										disabled={submissionState === "submitting"}

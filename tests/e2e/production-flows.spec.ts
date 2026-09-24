@@ -22,14 +22,94 @@ async function getLeadConversionEvents(page: Page) {
 	});
 }
 
+const turnstileScriptUrl =
+	/^https:\/\/challenges\.cloudflare\.com\/turnstile\/v0\/api\.js\?render=explicit(?:&.*)?$/;
+
+type TurnstileTestWindow = Window & {
+	__turnstileE2E?: {
+		actions: string[];
+		lastToken: string | null;
+		renderCount: number;
+		resetCount: number;
+		solveAll: () => void;
+	};
+};
+
+async function stubTurnstile(page: Page, autoSolve = true) {
+	await page.unroute(turnstileScriptUrl);
+	await page.route(turnstileScriptUrl, (route) =>
+		route.fulfill({
+			body: `
+(() => {
+	let widgetSequence = 0;
+	let tokenSequence = 0;
+	const widgets = new Map();
+	const state = {
+		actions: [],
+		lastToken: null,
+		renderCount: 0,
+		resetCount: 0,
+		solveAll() { for (const id of widgets.keys()) solve(id); },
+	};
+	const solve = (id) => {
+		const options = widgets.get(id);
+		if (!options) return;
+		const token = "e2e-turnstile-token-" + ++tokenSequence;
+		state.lastToken = token;
+		queueMicrotask(() => options.callback?.(token));
+	};
+	window.__turnstileE2E = state;
+	window.turnstile = {
+		render(_container, options) {
+			const id = "e2e-widget-" + ++widgetSequence;
+			widgets.set(id, options);
+			state.actions.push(options.action);
+			state.renderCount++;
+			if (${JSON.stringify(autoSolve)}) queueMicrotask(() => solve(id));
+			return id;
+		},
+		reset(id) {
+			state.resetCount++;
+			if (${JSON.stringify(autoSolve)}) {
+				if (id) queueMicrotask(() => solve(id));
+				else for (const widgetId of widgets.keys()) queueMicrotask(() => solve(widgetId));
+			}
+		},
+		remove(id) { widgets.delete(id); },
+	};
+})();`,
+			contentType: "application/javascript",
+			status: 200,
+		}),
+	);
+}
+
+async function waitForTurnstileToken(page: Page, action: string) {
+	await expect
+		.poll(() =>
+			page.evaluate(
+				() => (window as TurnstileTestWindow).__turnstileE2E?.lastToken,
+			),
+		)
+		.toMatch(/^e2e-turnstile-token-\d+$/);
+	await expect
+		.poll(() =>
+			page.evaluate(
+				() => (window as TurnstileTestWindow).__turnstileE2E?.actions,
+			),
+		)
+		.toContain(action);
+}
+
 test.beforeEach(async ({ page }) => {
 	// Never execute a real container while CI exercises the production build.
 	await page.route("https://www.googletagmanager.com/gtm.js?**", (route) =>
 		route.fulfill({ body: "", contentType: "application/javascript" }),
 	);
+	await stubTurnstile(page);
 });
 
-async function completeFooterForm(page: Page) {
+async function completeFooterForm(page: Page, waitForToken = true) {
 	const form = page.locator("footer form");
 	await form.getByRole("textbox", { name: "First name" }).fill("Ada");
 	await form.getByRole("textbox", { name: "Last name" }).fill("Lovelace");
@@ -37,6 +117,7 @@ async function completeFooterForm(page: Page) {
 	await form.getByRole("textbox", { name: "Company email" }).fill("ops@example.com");
 	await form.getByRole("textbox", { name: "Company name" }).fill("Acme Fleet");
 	await form.getByRole("combobox", { name: "Fleet size" }).selectOption("10-49");
+	if (waitForToken) await waitForTurnstileToken(page, "footer_demo");
 
 	return form;
 }
@@ -164,6 +245,7 @@ test("get-started supports native radio keys and shows success only after 202", 
 	await page.getByRole("textbox", { name: "Phone number" }).fill("+1 555 123 4567");
 	await page.getByRole("textbox", { name: "Company email" }).fill("ops@example.com");
 	await page.getByRole("textbox", { name: "Company name" }).fill("Acme Fleet");
+	await waitForTurnstileToken(page, "get_started");
 	await page.getByRole("button", { name: "Submit" }).click();
 
 	const successHeading = page.getByRole("heading", {
@@ -186,6 +268,7 @@ test("get-started supports native radio keys and shows success only after 202", 
 		fleetSize: "10-49",
 		industry: "construction",
 		source: "get-started",
+		turnstileToken: expect.stringMatching(/^e2e-turnstile-token-\d+$/),
 	});
 	expect(submittedLead?.submissionId).toMatch(
 		/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
@@ -227,6 +310,7 @@ test("server validation focuses the first rejected field", async ({ page }) => {
 	const email = page.getByRole("textbox", { name: "Company email" });
 	await email.fill("ops@example.com");
 	await page.getByRole("textbox", { name: "Company name" }).fill("Acme Fleet");
+	await waitForTurnstileToken(page, "get_started");
 	await page.getByRole("button", { name: "Submit" }).click();
 
 	await expect(page.locator("form").getByRole("alert")).toContainText(
@@ -269,6 +353,7 @@ test("footer form sends bounded context, exposes field errors, and focuses the r
 	await form.getByRole("textbox", { name: "Company email" }).fill("ops@example.com");
 	await form.getByRole("textbox", { name: "Company name" }).fill("Acme Fleet");
 	await form.getByRole("combobox", { name: "Fleet size" }).selectOption("10-49");
+	await waitForTurnstileToken(page, "footer_demo");
 	await form.getByRole("button", { name: "Schedule demo" }).click();
 
 	await expect(form.getByRole("alert")).toContainText(
@@ -282,6 +367,7 @@ test("footer form sends bounded context, exposes field errors, and focuses the r
 		consent: true,
 		consentNoticeVersion: "lead-contact-consent-v1",
 		source: "footer-demo",
+		turnstileToken: expect.stringMatching(/^e2e-turnstile-token-\d+$/),
 	});
 });
 
@@ -358,6 +444,47 @@ test("honeypot acknowledgements never become conversions in either form", async 
 	);
 	expect(await getLeadConversionEvents(page)).toEqual([]);
 	expect(honeypotValues).toEqual(["automated-entry", "automated-entry"]);
+});
+
+test("footer form waits for a Turnstile token before sending a lead", async ({ page }) => {
+	await stubTurnstile(page, false);
+	let postCount = 0;
+	await page.route("**/api/leads", (route) => {
+		postCount++;
+		const body = route.request().postDataJSON() as Record<string, unknown>;
+		return route.fulfill({
+			body: JSON.stringify({ ok: true, requestId: body.submissionId }),
+			contentType: "application/json",
+			status: 202,
+		});
+	});
+
+	await page.goto("/");
+	const form = await completeFooterForm(page, false);
+	await expect
+		.poll(() =>
+			page.evaluate(
+				() => (window as TurnstileTestWindow).__turnstileE2E?.renderCount,
+			),
+		)
+		.toBeGreaterThan(0);
+	const submit = form.getByRole("button", { name: "Schedule demo" });
+	if (await submit.isEnabled()) {
+		await submit.click();
+		await expect(form.getByRole("alert")).toBeVisible();
+	} else {
+		await expect(submit).toBeDisabled();
+	}
+	expect(postCount).toBe(0);
+
+	await page.evaluate(() =>
+		(window as TurnstileTestWindow).__turnstileE2E?.solveAll(),
+	);
+	await waitForTurnstileToken(page, "footer_demo");
+	await expect(submit).toBeEnabled();
+	await submit.click();
+	await expect(form.getByRole("status")).toContainText("demo request was received");
+	expect(postCount).toBe(1);
 });
 
 test("footer form tells a pre-version browser to reload", async ({ page }) => {
@@ -502,16 +629,24 @@ test("mobile navigation traps focus, closes with Escape, and restores focus", as
 	await expect(toggle).toBeFocused();
 });
 
-test("solution card dialog restores its trigger and the footer form fails closed", async ({
+test("solution card dialog restores its trigger and the footer form retries with a fresh token", async ({
 	page,
 }) => {
-	await page.route("**/api/leads", (route) =>
-		route.fulfill({
-			body: JSON.stringify({ code: "DELIVERY_NOT_CONFIGURED", ok: false }),
+	const postedTokens: string[] = [];
+	await page.route("**/api/leads", (route) => {
+		const body = route.request().postDataJSON() as Record<string, unknown>;
+		postedTokens.push(String(body.turnstileToken));
+		const failed = postedTokens.length === 1;
+		return route.fulfill({
+			body: JSON.stringify(
+				failed
+					? { code: "DELIVERY_NOT_CONFIGURED", ok: false }
+					: { ok: true, requestId: body.submissionId },
+			),
 			contentType: "application/json",
-			status: 503,
-		}),
-	);
+			status: failed ? 503 : 202,
+		});
+	});
 	await page.goto("/");
 	const cardTrigger = page.getByRole("button", { name: /Fleet Management/ });
 	await cardTrigger.click();
@@ -531,6 +666,7 @@ test("solution card dialog restores its trigger and the footer form fails closed
 	await form.getByRole("textbox", { name: "Company email" }).fill("ops@example.com");
 	await form.getByRole("textbox", { name: "Company name" }).fill("Acme Fleet");
 	await form.getByRole("combobox", { name: "Fleet size" }).selectOption("10-49");
+	await waitForTurnstileToken(page, "footer_demo");
 	const responsePromise = page.waitForResponse(
 		(response) => response.url().endsWith("/api/leads") && response.request().method() === "POST",
 	);
@@ -540,6 +676,26 @@ test("solution card dialog restores its trigger and the footer form fails closed
 	expect(response.status()).toBe(503);
 	await expect(form.getByRole("alert")).toContainText("We couldn't send your request");
 	expect(await getLeadConversionEvents(page)).toEqual([]);
+	await expect
+		.poll(() =>
+			page.evaluate(
+				() => (window as TurnstileTestWindow).__turnstileE2E?.resetCount,
+			),
+		)
+		.toBeGreaterThan(0);
+	await expect
+		.poll(() =>
+			page.evaluate(
+				() => (window as TurnstileTestWindow).__turnstileE2E?.lastToken,
+			),
+		)
+		.not.toBe(postedTokens[0]);
+	await form.getByRole("button", { name: "Schedule demo" }).click();
+	await expect(form.getByRole("status")).toContainText("demo request was received");
+	expect(postedTokens).toHaveLength(2);
+	expect(postedTokens[0]).toMatch(/^e2e-turnstile-token-\d+$/);
+	expect(postedTokens[1]).toMatch(/^e2e-turnstile-token-\d+$/);
+	expect(postedTokens[1]).not.toBe(postedTokens[0]);
 });
 
 test.use({ contextOptions: { reducedMotion: "reduce" } });

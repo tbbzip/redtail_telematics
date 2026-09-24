@@ -34,6 +34,11 @@ Both environments require:
   dataset.
 - `LEAD_DELIVERY_PROVIDER` set explicitly to `sendgrid` or `webhook`.
 - `LEAD_RATE_LIMIT_HASH_SECRET` with at least 32 random characters.
+- `TURNSTILE_SECRET` from the existing Cloudflare widget and
+  `TURNSTILE_HOSTNAMES` containing only exact frontend hostnames for that
+  deployment. Production must exclude `localhost` and `127.0.0.1`; local
+  development can list those hostnames alongside the `SITE_URL` hostname.
+  Confirm the widget itself allows each hostname before testing.
 - `LEAD_DELIVERY_TIMEOUT_MS` if the default 8-second timeout is unsuitable.
 
 Production additionally requires `NEXT_PUBLIC_GTM_ID` set to the approved
@@ -85,7 +90,11 @@ commits, client bundles, or an unapproved environment.
 
 `POST /api/leads` validates and normalizes submissions, rejects untrusted
 origins and oversized bodies, applies a process-local fallback rate limit, and
-calls only the explicitly selected server-side provider. Accepted payloads
+verifies the Turnstile token with Cloudflare before calling the explicitly
+selected server-side provider. The verification must succeed for the form's
+action and the exact frontend hostname; tokens expire after five minutes and
+can be used only once. The token is never forwarded to the delivery provider.
+Accepted payloads
 include the form placement, current site path, allowlisted UTM fields, external
 referrer origin, and the versioned consent record. The browser does not persist
 attribution in cookies or local storage.
@@ -93,6 +102,9 @@ attribution in cookies or local storage.
 The API returns:
 
 - `202` only after the selected provider accepts the request;
+- `403 TURNSTILE_FAILED` for an invalid, expired, replayed, or mismatched token;
+- `503 TURNSTILE_NOT_CONFIGURED` or `TURNSTILE_UNAVAILABLE` when verification
+  cannot safely run;
 - `503 DELIVERY_NOT_CONFIGURED` when its selected provider is not configured;
 - `502 DELIVERY_FAILED` for provider rejection, timeout, or network failure.
 
@@ -123,7 +135,7 @@ operator. Return non-2xx if durable acceptance did not occur.
 ## Health, edge protection, and monitoring
 
 `GET` or `HEAD /api/health` returns `200 {"status":"ready"}` only when the
-canonical URL, Sanity values, rate-limit secret, explicit provider selection,
+canonical URL, Sanity values, rate-limit secret, Turnstile settings, explicit provider selection,
 and selected provider configuration pass validation. It returns a
 non-descriptive 503 otherwise.
 
@@ -146,6 +158,11 @@ Before launch:
       22, and retains an independently verified rollback deployment.
 - [ ] Preview and Production environment values are separately scoped; Preview
       cannot send to production recipients.
+- [ ] The existing Turnstile widget allows each deployment hostname, and its
+      mode and pre-clearance setting have been checked against the published
+      privacy and cookie policies.
+- [ ] A real form token passes Siteverify on the intended deployment, then a
+      replay of that token is rejected without delivering a second lead.
 - [ ] The SendGrid key is rotated/revalidated, least-privilege, and never exposed
       client-side; the sender domain is authenticated.
 - [ ] `/api/health` returns 200 in Production and 503 when a required value is
