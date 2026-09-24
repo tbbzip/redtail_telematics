@@ -11,8 +11,8 @@ The established Vercel project `redtailtelematics` owns
 from `main` commit `655ac33`; the current GTM and form-conversion branch changes
 are newer and therefore not live.
 
-Keep this project, its domains, and its rollback history. The project setting,
-CI, and this repository now target Node.js 22 (`>=22.12 <23`). Before creating
+Keep this project, its domains, and its rollback history. The project setting
+and this repository target Node.js 22 (`>=22.12 <23`). Before creating
 the launch Preview, separate Preview and Production environment values and
 resolve the SendGrid credential warning. After the acceptance checks pass,
 merge or push `main` so Vercel creates a fresh Production build (or run an
@@ -44,8 +44,8 @@ Both environments require:
 Production additionally requires `NEXT_PUBLIC_GTM_ID` set to the approved
 container. Preview should omit it so test traffic cannot pollute live analytics,
 unless a separate non-production GTM container is intentionally configured. A
-malformed non-empty Preview value fails readiness. CI uses a non-live
-placeholder.
+malformed non-empty Preview value fails readiness. Use a non-live placeholder
+for local browser test builds.
 
 Production fails closed when `LEAD_DELIVERY_PROVIDER` is absent. It never falls
 back from one provider to another after a configuration or delivery failure.
@@ -168,7 +168,7 @@ Before launch:
 - [ ] `/api/health` returns 200 in Production and 503 when a required value is
       removed in a disposable Preview test.
 - [ ] `NEXT_PUBLIC_GTM_ID` is the approved Production container and is absent or
-      replaced with a non-production container in every Preview and CI build.
+      replaced with a non-production container in every Preview and local test build.
 - [ ] A real canary receives `202`, appears in SendGrid Activity, and reaches both
       approved Production mailboxes with the correct consent metadata.
 - [ ] Duplicate-email risk and mailbox ownership/retention are accepted, or a

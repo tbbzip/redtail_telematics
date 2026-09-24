@@ -24,7 +24,7 @@ Open `http://localhost:3000`. The Studio is available at `/studio`.
 
 ## Quality checks
 
-The complete local gate matches CI:
+Run these checks locally before deploying:
 
 ```bash
 npm run check
