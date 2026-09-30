@@ -36,7 +36,17 @@ const footerFields = new Set<FooterField>([
 const inputClassName =
 	"h-12 w-full rounded-md border border-black/15 bg-white px-4 text-sm text-rb-black outline-none transition placeholder:text-rb-black/42 focus:border-rb-red focus:ring-3 focus:ring-rb-red/12";
 
-export function FooterDemoForm() {
+type FooterDemoFormProps = {
+	buttonLabel?: string;
+	successMessage?: string;
+	title?: string;
+};
+
+export function FooterDemoForm({
+	buttonLabel = "Schedule demo",
+	successMessage = "Thanks. Your demo request was received and our team will be in touch.",
+	title = "Schedule a demo",
+}: FooterDemoFormProps = {}) {
 	const formId = useId();
 	const [submissionState, setSubmissionState] = useState<
 		"error" | "idle" | "submitting" | "success"
@@ -212,7 +222,7 @@ export function FooterDemoForm() {
 					Talk to Redtail
 				</p>
 				<h3 className="mt-3 text-2xl font-semibold tracking-tight text-rb-black">
-					Schedule a demo
+					{title}
 				</h3>
 			</div>
 
@@ -392,7 +402,7 @@ export function FooterDemoForm() {
 				disabled={submissionState === "submitting"}
 				type="submit"
 			>
-				{submissionState === "submitting" ? "Sending..." : "Schedule demo"}
+				{submissionState === "submitting" ? "Sending..." : buttonLabel}
 				<HugeIcon className="size-4" icon={ArrowRight01Icon} size={16} />
 			</button>
 
@@ -402,7 +412,7 @@ export function FooterDemoForm() {
 					className="mt-4 rounded-md border border-rb-red/20 bg-rb-peach px-4 py-3 text-center text-sm font-medium text-rb-black"
 					role="status"
 				>
-					Thanks. Your demo request was received and our team will be in touch.
+					{successMessage}
 				</p>
 			) : null}
 

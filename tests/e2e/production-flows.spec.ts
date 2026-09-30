@@ -173,6 +173,61 @@ test("fleet landing reaches one inline demo and retains the paid entry after nav
 	});
 });
 
+test("Turo host landing reaches one mobile form and records an accepted host inquiry", async ({ page }) => {
+	let submittedLead: Record<string, unknown> | undefined;
+	await page.setViewportSize({ width: 320, height: 900 });
+	await page.route("**/api/leads", async (route) => {
+		submittedLead = route.request().postDataJSON();
+		await route.fulfill({
+			contentType: "application/json",
+			body: JSON.stringify({ ok: true, requestId: submittedLead?.submissionId }),
+			status: 202,
+		});
+	});
+	const response = await page.goto("/solutions/turo-host-tracking?utm_source=google&utm_medium=cpc&utm_campaign=turo-hosts&gclid=LOCAL_TURO_CLICK-1&private_note=excluded");
+	expect(response?.status()).toBe(200);
+	await expect(page.getByRole("heading", { level: 1, name: "GPS Tracking for Turo Hosts" })).toBeVisible();
+	await expect(page.locator("#footer-demo-form")).toHaveCount(1);
+	await expect(page.locator("footer form")).toHaveCount(0);
+	await expect(page.getByRole("link", { name: "Call Sales: +1 866 711 4880" })).toHaveAttribute("href", "tel:+18667114880");
+	await expect(page.getByRole("link", { name: "View Tint / Turo device options" })).toHaveAttribute("href", "https://secure.redtailtelematics.com/tint-insurance/");
+	await page.getByRole("link", { name: "Request host guidance", exact: true }).click();
+	const form = await completeFooterForm(page, true, "#footer-demo-form");
+	await form.getByRole("combobox", { name: "Fleet size" }).selectOption("1-9");
+	await expect(form).toBeInViewport();
+	const controls = await form.locator("input:not([type=hidden]):not([name=website]), select, button, [data-testid=turnstile-display]").evaluateAll((elements) => elements.map((element) => {
+		const bounds = element.getBoundingClientRect();
+		return { left: bounds.left, right: bounds.right };
+	}));
+	for (const control of controls) {
+		expect(control.left).toBeGreaterThanOrEqual(0);
+		expect(control.right).toBeLessThanOrEqual(320);
+	}
+	expect(await getLeadConversionEvents(page)).toEqual([]);
+	await form.getByRole("button", { name: "Request host guidance", exact: true }).click();
+	await expect(form.getByRole("status")).toContainText("host guidance request was received");
+	expect(submittedLead).toMatchObject({
+		attribution: {
+			landingPath: "/solutions/turo-host-tracking",
+			utmSource: "google",
+			utmMedium: "cpc",
+			utmCampaign: "turo-hosts",
+			gclid: "LOCAL_TURO_CLICK-1",
+		},
+		fleetSize: "1-9",
+		source: "footer-demo",
+		turnstileToken: expect.stringMatching(/^e2e-turnstile-token-\d+$/),
+	});
+	expect(await getLeadConversionEvents(page)).toEqual([{
+		event: "redtail_lead_submitted",
+		form_source: "footer-demo",
+		transaction_id: submittedLead?.submissionId,
+	}]);
+	await page.goto("/contact-us");
+	await expect(page.locator("footer form")).toHaveCount(1);
+	await expect(page.locator("#footer-demo-form")).toHaveCount(1);
+});
+
 test("fleet demo keeps fields and verification within a narrow mobile viewport", async ({ page }) => {
 	await page.setViewportSize({ width: 320, height: 900 });
 	await page.goto("/solutions/fleet-management");

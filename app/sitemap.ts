@@ -26,6 +26,7 @@ const staticPaths = [
 	"/solutions/devices",
 	"/solutions/fleet-management",
 	"/solutions/reseller-program",
+	"/solutions/turo-host-tracking",
 	"/solutions/usage-based-insurance",
 	"/solutions/white-label",
 	"/terms-and-conditions",

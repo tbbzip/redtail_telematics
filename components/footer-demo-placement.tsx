@@ -2,9 +2,12 @@
 
 import { usePathname } from "next/navigation";
 
-/** The fleet page places the same demo form directly below its hero. */
+/** These landing pages place the same lead form directly below their heroes. */
 export function FooterDemoPlacement({ children }: { children: React.ReactNode }) {
 	const pathname = usePathname();
 
-	return pathname === "/solutions/fleet-management" ? null : children;
+	return pathname === "/solutions/fleet-management" ||
+		pathname === "/solutions/turo-host-tracking"
+		? null
+		: children;
 }
