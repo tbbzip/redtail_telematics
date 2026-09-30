@@ -2,6 +2,7 @@ import { GoogleTagManager } from "@next/third-parties/google";
 
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
+import LeadAttributionCapture from "@/components/lead-attribution-capture";
 import { normalizeGoogleTagManagerId } from "@/lib/analytics";
 
 const organizationJsonLd = {
@@ -29,6 +30,7 @@ export default function SiteLayout({
 			className="flex min-h-dvh flex-col bg-background text-foreground"
 			id="site-root"
 		>
+			<LeadAttributionCapture />
 			<script
 				dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
 				type="application/ld+json"

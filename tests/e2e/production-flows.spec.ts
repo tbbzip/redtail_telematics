@@ -29,6 +29,7 @@ type TurnstileTestWindow = Window & {
 	__turnstileE2E?: {
 		actions: string[];
 		lastToken: string | null;
+		sizes: string[];
 		renderCount: number;
 		resetCount: number;
 		solveAll: () => void;
@@ -47,6 +48,7 @@ async function stubTurnstile(page: Page, autoSolve = true) {
 	const state = {
 		actions: [],
 		lastToken: null,
+		sizes: [],
 		renderCount: 0,
 		resetCount: 0,
 		solveAll() { for (const id of widgets.keys()) solve(id); },
@@ -64,6 +66,13 @@ async function stubTurnstile(page: Page, autoSolve = true) {
 			const id = "e2e-widget-" + ++widgetSequence;
 			widgets.set(id, options);
 			state.actions.push(options.action);
+			state.sizes.push(options.size || "normal");
+			const display = document.createElement("div");
+			display.setAttribute("data-testid", "turnstile-display");
+			display.style.width = options.size === "compact" ? "150px" : "300px";
+			display.style.height = options.size === "compact" ? "140px" : "65px";
+			_container.appendChild(display);
+			options.__testDisplay = display;
 			state.renderCount++;
 			if (${JSON.stringify(autoSolve)}) queueMicrotask(() => solve(id));
 			return id;
@@ -75,7 +84,7 @@ async function stubTurnstile(page: Page, autoSolve = true) {
 				else for (const widgetId of widgets.keys()) queueMicrotask(() => solve(widgetId));
 			}
 		},
-		remove(id) { widgets.delete(id); },
+		remove(id) { widgets.get(id)?.__testDisplay?.remove(); widgets.delete(id); },
 	};
 })();`,
 			contentType: "application/javascript",
@@ -109,8 +118,8 @@ test.beforeEach(async ({ page }) => {
 	await stubTurnstile(page);
 });
 
-async function completeFooterForm(page: Page, waitForToken = true) {
-	const form = page.locator("footer form");
+async function completeFooterForm(page: Page, waitForToken = true, selector = "footer form") {
+	const form = page.locator(selector);
 	await form.getByRole("textbox", { name: "First name" }).fill("Ada");
 	await form.getByRole("textbox", { name: "Last name" }).fill("Lovelace");
 	await form.getByRole("textbox", { name: "Phone number" }).fill("+1 555 123 4567");
@@ -121,6 +130,67 @@ async function completeFooterForm(page: Page, waitForToken = true) {
 
 	return form;
 }
+
+test("fleet landing reaches one inline demo and retains the paid entry after navigation", async ({ page }) => {
+	let submittedLead: Record<string, unknown> | undefined;
+	await page.route("**/api/leads", async (route) => {
+		submittedLead = route.request().postDataJSON();
+		await route.fulfill({
+			contentType: "application/json",
+			body: JSON.stringify({ ok: true, requestId: submittedLead?.submissionId }),
+			status: 202,
+		});
+	});
+	await page.goto("/solutions/fleet-management?utm_source=google&utm_medium=cpc&utm_campaign=fleet-test&gclid=LOCAL_TEST_CLICK-1&private_note=excluded");
+	await expect(page.getByRole("heading", { level: 1, name: "GPS Tracking and Telematics for Business Fleets" })).toBeVisible();
+	await expect(page.locator("#footer-demo-form")).toHaveCount(1);
+	await expect(page.locator("footer form")).toHaveCount(0);
+	await page.getByRole("link", { name: "Request a Fleet Demo", exact: true }).first().click();
+	await expect(page.locator("#footer-demo-form")).toBeInViewport();
+	const form = await completeFooterForm(page, true, "#footer-demo-form");
+	await form.getByRole("button", { name: "Schedule demo", exact: true }).click();
+	await expect.poll(() => getLeadConversionEvents(page)).toHaveLength(1);
+	expect(submittedLead?.attribution).toEqual({
+		landingPath: "/solutions/fleet-management",
+		utmSource: "google",
+		utmMedium: "cpc",
+		utmCampaign: "fleet-test",
+		gclid: "LOCAL_TEST_CLICK-1",
+	});
+	const [event] = await getLeadConversionEvents(page);
+	expect(Object.keys(event).sort()).toEqual(["event", "form_source", "transaction_id"]);
+
+	// A full navigation must preserve attribution without forwarding arbitrary URL data.
+	await page.goto("/contact-us");
+	await expect(page.locator("#footer-demo-form")).toHaveCount(1);
+	const contactForm = await completeFooterForm(page);
+	await contactForm.getByRole("button", { name: "Schedule demo", exact: true }).click();
+	await expect.poll(() => getLeadConversionEvents(page)).toHaveLength(1);
+	expect(submittedLead?.attribution).toMatchObject({
+		landingPath: "/solutions/fleet-management",
+		utmCampaign: "fleet-test",
+		gclid: "LOCAL_TEST_CLICK-1",
+	});
+});
+
+test("fleet demo keeps fields and verification within a narrow mobile viewport", async ({ page }) => {
+	await page.setViewportSize({ width: 320, height: 900 });
+	await page.goto("/solutions/fleet-management");
+	await waitForTurnstileToken(page, "footer_demo");
+	await expect(page.locator("#footer-demo-form")).toHaveCount(1);
+	expect(await page.evaluate(() => (window as TurnstileTestWindow).__turnstileE2E?.sizes.at(-1))).toBe("compact");
+	const form = page.locator("#footer-demo-form");
+	const controls = await form.locator("input:not([type=hidden]):not([name=website]), select, button, [data-testid=turnstile-display]").evaluateAll((elements) => elements.map((element) => {
+		const bounds = element.getBoundingClientRect();
+		return { left: bounds.left, right: bounds.right };
+	}));
+	for (const control of controls) {
+		expect(control.left).toBeGreaterThanOrEqual(0);
+		expect(control.right).toBeLessThanOrEqual(320);
+	}
+	await page.setViewportSize({ width: 1024, height: 900 });
+	await expect.poll(() => page.evaluate(() => (window as TurnstileTestWindow).__turnstileE2E?.sizes.at(-1))).toBe("flexible");
+});
 
 test("homepage renders cleanly and clears automated accessibility checks", async ({
 	page,
@@ -538,7 +608,7 @@ test("public readiness, legal, industry, and careers routes match implemented be
 	);
 
 	await page.goto("/privacy-policy");
-	await expect(page.getByText("Last updated: 2026-09-02")).toBeVisible();
+	await expect(page.getByText("Last updated: 2026-09-29")).toBeVisible();
 	await expect(page.getByText("Registration Number UK: 07407204")).toBeVisible();
 	await expect(page.getByText("010894475")).toHaveCount(0);
 	await expect(page.getByText(/standard UTM campaign fields/)).toBeVisible();

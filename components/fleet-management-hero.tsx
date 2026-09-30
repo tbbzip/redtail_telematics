@@ -3,14 +3,11 @@ import Link from "next/link";
 import {
 	Alert02Icon,
 	ArrowRight01Icon,
-	Calendar03Icon,
 	Call02Icon,
 	CarSignalIcon,
 	DeliveryTruckIcon,
 	MapsLocation01Icon,
-	PlayIcon,
 	Route03Icon,
-	SmartPhone01Icon,
 	Wrench01Icon,
 } from "@hugeicons/core-free-icons";
 import { type IconSvgElement } from "@hugeicons/react";
@@ -30,7 +27,7 @@ const heroStats = [
 	},
 	{
 		value: "Reports",
-		label: "fleet analytics and ROI insight",
+		label: "fleet activity and reporting",
 	},
 ];
 
@@ -339,65 +336,48 @@ export function FleetManagementHero() {
 							<HugeIcon icon={Route03Icon} />
 						</span>
 						<p className="text-xs font-semibold tracking-[0.28em] text-white/78 uppercase">
-							Fleet Intelligence, Reimagined
+							Built for Business Fleets
 						</p>
 					</div>
 
 					<h1 className="mt-7 max-w-xl text-[2.5rem] leading-[1.02] font-semibold text-balance text-white sm:text-5xl sm:leading-tight lg:text-[3.35rem]">
-						Optimize Your Fleet with Redtail Telematics
+						GPS Tracking and Telematics for Business Fleets
 					</h1>
 
 					<p className="mt-5 max-w-2xl text-sm leading-6 text-white/72 sm:text-lg sm:leading-8">
-						Real-time GPS tracking, driver behavior insights, and data-driven
-						tools that enhance safety, efficiency, and operational intelligence.
+						See vehicle locations, review driver behavior, and plan maintenance
+						from one fleet platform. Talk with Redtail about your vehicles,
+						routes, and operational needs.
 					</p>
 
-					<div className="mt-8 flex flex-col gap-3 sm:flex-row">
+					<div className="mt-8">
 						<Button asChild className="w-full sm:w-auto" size="lg">
-							<Link href="/get-started">
-								Get Started
+							<Link href="#footer-demo-form">
+								Request a Fleet Demo
 								<HugeIcon data-icon="inline-end" icon={ArrowRight01Icon} />
-							</Link>
-						</Button>
-						<Button
-							asChild
-							className="w-full border-white/32 bg-white/8 text-white hover:border-white/48 hover:bg-white/14 hover:text-white sm:w-auto"
-							size="lg"
-							variant="outline"
-						>
-							<Link href="#fleet-solutions">
-								<HugeIcon data-icon="inline-start" icon={PlayIcon} />
-								Explore Solutions
 							</Link>
 						</Button>
 					</div>
 
 					<p className="mt-3 text-sm font-medium text-white/56">
-						Tell us about your fleet
+						Tell us about your company and fleet size to start the conversation.
 					</p>
 
-					<div className="mt-6 flex flex-wrap gap-2">
-						<Link
-							className="inline-flex h-9 items-center gap-2 rounded-md border border-white/16 bg-white/8 px-3 text-xs font-semibold text-white/78 transition hover:border-white/32 hover:bg-white/13 hover:text-white"
-							href="/contact-us#footer-demo-form"
-						>
-							<HugeIcon icon={Calendar03Icon} size={15} />
-							Schedule a Demo
-						</Link>
-						<Link
-							className="inline-flex h-9 items-center gap-2 rounded-md border border-white/16 bg-white/8 px-3 text-xs font-semibold text-white/78 transition hover:border-white/32 hover:bg-white/13 hover:text-white"
-							href="/platform-and-apps#mobile-apps"
-						>
-							<HugeIcon icon={SmartPhone01Icon} size={15} />
-							Download RT Fleet App
-						</Link>
+					<div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
 						<a
-							className="inline-flex h-9 items-center gap-2 rounded-md border border-white/16 bg-white/8 px-3 text-xs font-semibold text-white/78 transition hover:border-white/32 hover:bg-white/13 hover:text-white"
-							href="tel:+16195469061"
+							className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-white/78 underline-offset-4 transition hover:text-white hover:underline"
+							href="tel:+18667114880"
 						>
 							<HugeIcon icon={Call02Icon} size={15} />
-							Call (619) 546-9061
+							Call Sales (866) 711-4880
 						</a>
+						<Link
+							className="inline-flex min-h-11 items-center gap-2 text-sm text-white/58 underline-offset-4 transition hover:text-white hover:underline"
+							href="#fleet-solutions"
+						>
+							See fleet capabilities
+							<HugeIcon icon={ArrowRight01Icon} size={15} />
+						</Link>
 					</div>
 
 					<div className="mt-7 grid max-w-xl grid-cols-3 divide-x divide-white/18 border-y border-white/16 py-4 sm:mt-9 sm:py-5">

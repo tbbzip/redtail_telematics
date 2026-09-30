@@ -76,7 +76,12 @@ const sections: LegalSection[] = [
 					As appropriate, you may be asked to enter your name, work email,
 					phone number, company name, fleet size, or industry. When you submit
 					a form, we also process the page path, the origin of an external
-					referring website, and standard UTM campaign fields when present.
+					referring website, standard UTM campaign fields, and Google Ads
+					click identifiers (GCLID, GBRAID, or WBRAID) when present. A limited
+					campaign record in the current tab&apos;s session storage has a
+					30-minute attribution window so these details can accompany an inquiry
+					after navigation to another page. This browser record does not
+					contain your name, email, phone number, or other form contact details.
 					We do not include arbitrary query parameters or the full referring
 					page URL in the lead record. You may otherwise visit our site
 					without submitting this information.
@@ -339,7 +344,7 @@ export default function PrivacyPolicyPage() {
 		<LegalPolicyPage
 			currentPath="/privacy-policy"
 			description="This Privacy Policy sets out how Redtail collects, uses, and protects personal data submitted through this website, including requests for information or a demonstration."
-			lastUpdated="2026-09-02"
+			lastUpdated="2026-09-29"
 			sections={sections}
 			title="Privacy Policy"
 		/>

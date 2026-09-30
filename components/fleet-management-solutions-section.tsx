@@ -362,16 +362,19 @@ export function FleetManagementSolutionsSection() {
 								</p>
 							</div>
 						</div>
-						<div className="flex flex-col gap-3 sm:flex-row">
+						<div className="flex flex-col items-center gap-3">
 							<Button asChild size="lg">
-								<Link href="/contact-us">
-									Talk to our team
+								<Link href="#footer-demo-form">
+									Request a Fleet Demo
 									<HugeIcon data-icon="inline-end" icon={ArrowRight01Icon} />
 								</Link>
 							</Button>
-							<Button asChild size="lg" variant="outline">
-								<Link href="/platform-and-apps">Explore platform</Link>
-							</Button>
+							<Link
+								className="inline-flex min-h-11 items-center text-sm font-medium text-rb-black/60 underline-offset-4 hover:text-rb-black hover:underline"
+								href="/platform-and-apps"
+							>
+								Explore platform
+							</Link>
 						</div>
 					</div>
 				</div>

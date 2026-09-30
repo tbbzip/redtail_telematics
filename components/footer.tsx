@@ -22,6 +22,7 @@ import {
 	topLevelLink,
 } from "@/components/nav-links";
 import { FooterDemoForm } from "@/components/footer-demo-form";
+import { FooterDemoPlacement } from "@/components/footer-demo-placement";
 import { HugeIcon } from "@/components/huge-icon";
 import { InfiniteSlider } from "@/components/ui/infinite-slider";
 
@@ -237,9 +238,10 @@ export function Footer() {
 				className="pointer-events-none absolute right-0 bottom-0 h-64 w-64 translate-x-1/3 translate-y-1/3 rounded-full bg-rb-red/12 blur-3xl"
 			/>
 			<div className="relative mx-auto max-w-7xl px-6 py-14 sm:px-8 sm:py-20 lg:px-10 lg:py-24">
+				<FooterDemoPlacement>
 					<section
 						aria-labelledby="footer-demo-heading"
-						className="grid gap-10 border-b border-white/10 pb-14 sm:pb-16 lg:grid-cols-[1fr_28rem] lg:items-start lg:gap-20 lg:pb-20"
+						className="grid grid-cols-1 gap-10 border-b border-white/10 pb-14 sm:pb-16 lg:grid-cols-[1fr_28rem] lg:items-start lg:gap-20 lg:pb-20"
 					>
 						<div className="max-w-2xl">
 							<p className="text-xs font-semibold tracking-[0.28em] text-[#ff5f63] uppercase">
@@ -329,6 +331,7 @@ export function Footer() {
 
 						<FooterDemoForm />
 					</section>
+				</FooterDemoPlacement>
 
 					<div className="mx-auto mt-14 max-w-3xl sm:mt-16 lg:mt-20">
 						<div className="relative overflow-hidden">

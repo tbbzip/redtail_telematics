@@ -17,6 +17,7 @@ type TurnstileApi = {
 			"expired-callback": () => void;
 			"response-field": boolean;
 			sitekey: string;
+			size: "compact" | "flexible";
 		},
 	) => string;
 	remove: (widgetId: string) => void;
@@ -41,6 +42,7 @@ export const TurnstileWidget = forwardRef<
 	const widgetIdRef = useRef<string | null>(null);
 	const [scriptReady, setScriptReady] = useState(false);
 	const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
+	const [size, setSize] = useState<"compact" | "flexible">("compact");
 
 	useImperativeHandle(ref, () => ({
 		reset() {
@@ -51,6 +53,21 @@ export const TurnstileWidget = forwardRef<
 			}
 		},
 	}), [onTokenChange]);
+
+	useEffect(() => {
+		const container = containerRef.current;
+		if (!container || typeof ResizeObserver === "undefined") {
+			return;
+		}
+
+		const observer = new ResizeObserver(([entry]) => {
+			if (entry) {
+				setSize(entry.contentRect.width < 300 ? "compact" : "flexible");
+			}
+		});
+		observer.observe(container);
+		return () => observer.disconnect();
+	}, []);
 
 	useEffect(() => {
 		if (!scriptReady || !containerRef.current || !window.turnstile) {
@@ -75,6 +92,7 @@ export const TurnstileWidget = forwardRef<
 				},
 				"response-field": false,
 				sitekey: TURNSTILE_SITE_KEY,
+				size,
 			});
 		} catch {
 			queueMicrotask(() => setStatus("error"));
@@ -86,11 +104,12 @@ export const TurnstileWidget = forwardRef<
 		return () => {
 			window.turnstile?.remove(widgetId);
 			widgetIdRef.current = null;
+			onTokenChange("");
 		};
-	}, [action, onTokenChange, scriptReady]);
+	}, [action, onTokenChange, scriptReady, size]);
 
 	return (
-		<div aria-label="Security verification" className="mt-4" role="group">
+		<div aria-label="Security verification" className="mt-4 min-w-0" role="group">
 			<Script
 				onError={() => setStatus("error")}
 				onReady={() => {
@@ -100,7 +119,7 @@ export const TurnstileWidget = forwardRef<
 				src={TURNSTILE_SCRIPT}
 				strategy="afterInteractive"
 			/>
-			<div ref={containerRef} />
+			<div className="w-full" ref={containerRef} />
 			{status === "loading" ? (
 				<p className="mt-2 text-xs text-rb-black/65" role="status">
 					Loading verification…

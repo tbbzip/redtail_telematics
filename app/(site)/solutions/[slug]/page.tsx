@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { DevicesPageSections } from "@/components/devices-page";
+import { FleetManagementDemoSection } from "@/components/fleet-management-demo-section";
 import { FleetManagementFaqSection } from "@/components/fleet-management-faq";
 import { FleetManagementHero } from "@/components/fleet-management-hero";
 import { FleetManagementSolutionsSection } from "@/components/fleet-management-solutions-section";
@@ -24,7 +25,7 @@ const solutionDescriptions: Record<string, string> = {
 	"usage-based-insurance":
 		"Telematics data and connected vehicle technology for usage-based insurance programs, driver insight, and policyholder engagement.",
 	"fleet-management":
-		"Fleet visibility, vehicle tracking, maintenance insight, alerts, and connected workflows from Redtail Telematics.",
+		"GPS tracking and telematics for business fleets. Explore vehicle visibility, driver behavior, maintenance reminders, and reporting, then request a Redtail fleet demo.",
 	"reseller-program":
 		"A partner-ready telematics platform, devices, apps, and operational support for resellers building recurring customer programs.",
 	"white-label":
@@ -51,7 +52,10 @@ export async function generateMetadata({
 		return {};
 	}
 
-	const title = `${entry.label} | Redtail Telematics`;
+	const title =
+		slug === "fleet-management"
+			? "GPS Tracking for Business Fleets | Redtail Telematics"
+			: `${entry.label} | Redtail Telematics`;
 	const description =
 		solutionDescriptions[slug] ||
 		`Explore Redtail Telematics ${entry.label.toLowerCase()} capabilities and connected vehicle workflows.`;
@@ -98,6 +102,7 @@ export default async function SolutionPage({
 		return (
 			<main className="flex-1 overflow-x-clip bg-background">
 				<FleetManagementHero />
+				<FleetManagementDemoSection />
 				<FleetManagementSolutionsSection />
 				<FleetManagementFaqSection />
 			</main>

@@ -1,4 +1,5 @@
 import { GoogleTagManager } from "@next/third-parties/google";
+import LeadAttributionCapture from "@/components/lead-attribution-capture";
 
 import { normalizeGoogleTagManagerId } from "@/lib/analytics";
 
@@ -11,6 +12,7 @@ export default function GetStartedLayout({
 
 	return (
 		<>
+			<LeadAttributionCapture />
 			{children}
 			{gtmId ? <GoogleTagManager gtmId={gtmId} /> : null}
 		</>

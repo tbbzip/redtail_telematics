@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { ArrowDown01Icon, MessageQuestionIcon } from "@hugeicons/core-free-icons";
 
 import { HugeIcon } from "@/components/huge-icon";
@@ -15,55 +15,39 @@ type FaqItem = {
 
 const faqItems: FaqItem[] = [
 	{
-		question: "What is the first step to registering with Redtail Telematics?",
+		question: "How do I request a demo for my business fleet?",
 		answer:
-			"To begin, purchase a GPS tracking product from an authorized reseller or directly from Redtail. Install it in your vehicle and use the Redtail Installer App to verify connectivity.",
+			"Use the fleet demo form to share your contact details, company name, and fleet size. This gives the Redtail team context for a conversation about your vehicles and operational needs.",
 	},
 	{
-		question: "How do I activate my device and service plan?",
+		question: "What can our operations team review with Redtail?",
 		answer:
-			"Select a service plan, follow the activation instructions sent via email, and use the login information from Redtail to get started immediately.",
+			"Redtail supports real-time vehicle tracking, geofence alerts, driver behavior monitoring, maintenance reminders, and fleet reporting. Discuss the locations, events, and reports your team needs to make daily decisions.",
 	},
 	{
-		question: "How do I start monitoring my fleet?",
+		question: "Can our managers use both web and mobile apps?",
 		answer:
-			"Download the RT Fleet app or access it through the website to monitor real-time data and manage your fleet effectively.",
+			"Yes. Fleet information is available through the RT Fleet app and web dashboard, including real-time vehicle locations and fleet activity.",
 	},
 	{
-		question:
-			"How can I become an authorized reseller of Redtail Telematics products?",
+		question: "How do maintenance reminders work?",
 		answer:
-			"To apply, complete the reseller form on our website. For immediate inquiries, email sales@redtailtelematics.com or call +1 866 711 4880.",
+			"Maintenance reminders can be based on mileage, engine hours, or time intervals. Talk with Redtail about the device and setup your fleet needs and the maintenance information your team wants to monitor.",
 	},
 	{
-		question: "What payment methods does Redtail Telematics accept?",
+		question: "How should we discuss devices and installation?",
 		answer:
-			"Redtail Telematics accepts major credit and debit cards to facilitate convenient payment.",
+			"Share your vehicle types, fleet size, and rollout plans with the sales team. Redtail can discuss device and installation options for your requirements before you choose a setup.",
 	},
 	{
-		question: "Can Redtail Telematics help me save on my insurance costs?",
+		question: "What should we bring to the fleet conversation?",
 		answer:
-			"Yes, telematics technology can lead to insurance discounts as many providers reward safer driving habits monitored by telematics data.",
-	},
-	{
-		question: "What are your customer support hours?",
-		answer:
-			"Our support team is available Monday to Friday, 9:00 AM to 6:00 PM. For urgent issues outside these hours, email support@redtailtelematics.com.",
-	},
-	{
-		question: "Can I track my fleet in real-time with Redtail Telematics?",
-		answer:
-			"Yes, real-time tracking is available through the RT Fleet app and web dashboard, allowing you to monitor locations and make timely decisions.",
-	},
-	{
-		question:
-			"What is the process to update my Redtail Telematics service plan?",
-		answer:
-			"Log into your Redtail account, navigate to the Service Plans section, and select a plan. For assistance, our support team is available to help.",
+			"Your vehicle mix, routes, fleet size, and current operational priorities are a useful starting point. Bring questions about visibility, driver behavior, alerts, maintenance, and reporting so the team can focus on what matters to your business.",
 	},
 ];
 
 export function FleetManagementFaqSection() {
+	const faqId = useId();
 	const [openQuestion, setOpenQuestion] = useState(0);
 
 	return (
@@ -77,11 +61,11 @@ export function FleetManagementFaqSection() {
 						FAQ
 					</p>
 					<h2 className="mt-4 text-[2rem] font-semibold leading-tight tracking-tight text-rb-black sm:text-4xl lg:text-5xl">
-						Common questions, clear answers
+						Questions from fleet teams
 					</h2>
 					<p className="mt-4 max-w-2xl text-base leading-7 text-rb-black/58 sm:text-lg">
-						Everything you need to know about the platform, installation, and
-						support.
+						Start with the platform capabilities and rollout questions that
+						matter to your business.
 					</p>
 				</header>
 
@@ -89,6 +73,8 @@ export function FleetManagementFaqSection() {
 					<div className="overflow-hidden rounded-xl border border-black/12 bg-white">
 						{faqItems.map((item, index) => {
 							const isOpen = openQuestion === index;
+							const questionId = `${faqId}-question-${index}`;
+							const answerId = `${faqId}-answer-${index}`;
 
 							return (
 								<div
@@ -96,7 +82,9 @@ export function FleetManagementFaqSection() {
 									key={item.question}
 								>
 									<button
+										aria-controls={answerId}
 										aria-expanded={isOpen}
+										id={questionId}
 										className={cn(
 											"group flex w-full items-center justify-between gap-5 px-5 py-5 text-left transition sm:px-6",
 											isOpen
@@ -119,12 +107,16 @@ export function FleetManagementFaqSection() {
 										/>
 									</button>
 									<div
+										aria-hidden={!isOpen}
+										aria-labelledby={questionId}
 										className={cn(
 											"grid transition-all duration-300 ease-out",
 											isOpen
 												? "grid-rows-[1fr] opacity-100"
 												: "grid-rows-[0fr] opacity-0"
 										)}
+										id={answerId}
+										role="region"
 									>
 										<div className="overflow-hidden">
 											<p className="px-5 pb-5 text-sm leading-7 text-rb-black/58 sm:px-6 sm:text-base">
@@ -147,18 +139,18 @@ export function FleetManagementFaqSection() {
 							/>
 						</div>
 						<h3 className="mt-5 text-lg font-semibold text-rb-black">
-							Still have questions?
+							Talk through your fleet needs
 						</h3>
 						<p className="mx-auto mt-3 max-w-xs text-sm leading-6 text-rb-black/58">
-							Talk to our team about devices, activation, fleet monitoring,
-							service plans, and support.
+							Bring your vehicle types, fleet size, and operational priorities
+							to the conversation.
 						</p>
 						<Button
 							asChild
 							className="mt-6 w-full border-rb-black bg-rb-black text-white hover:border-rb-red hover:bg-rb-red"
 							size="lg"
 						>
-							<Link href="/contact-us">Talk to our team</Link>
+							<Link href="#footer-demo-form">Request a Fleet Demo</Link>
 						</Button>
 					</aside>
 				</div>

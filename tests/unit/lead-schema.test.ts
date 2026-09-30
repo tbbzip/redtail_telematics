@@ -150,11 +150,28 @@ describe("leadSubmissionSchema", () => {
 		{ referrerOrigin: "https://www.linkedin.com/private/path" },
 		{ utmCampaign: "fleet\u0000reset" },
 		{ utmSource: "x".repeat(201) },
+		{ utmSource: "private@example.com" },
+		{ utmSource: "private%40example.com" },
+		{ gclid: "bad/identifier" },
+		{ gbraid: " spaced " },
+		{ wbraid: "x".repeat(513) },
+		{ landingPath: "/private%40example.com" },
+		{ landingPath: "/get-started", arbitraryQuery: "account=private" },
 		{},
 	])("rejects unsafe attribution %#", (attribution) => {
 		expect(
 			leadSubmissionSchema.safeParse({ ...validFooterLead, attribution }).success,
 		).toBe(false);
+	});
+
+	it.each(["gclid", "gbraid", "wbraid"])("preserves a bounded %s for downstream lead attribution", (field) => {
+		const value = "Valid_Click-123";
+		const result = leadSubmissionSchema.parse({
+			...validFooterLead,
+			attribution: { landingPath: "/solutions/fleet-management", [field]: value },
+		});
+		expect(result.attribution?.[field as "gclid" | "gbraid" | "wbraid"]).toBe(value);
+		expect(leadSubmissionSchema.safeParse({ ...validFooterLead, attribution: { [field]: "x".repeat(512) } }).success).toBe(true);
 	});
 
 	it.each([

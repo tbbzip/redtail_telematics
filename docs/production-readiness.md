@@ -95,9 +95,12 @@ selected server-side provider. The verification must succeed for the form's
 action and the exact frontend hostname; tokens expire after five minutes and
 can be used only once. The token is never forwarded to the delivery provider.
 Accepted payloads
-include the form placement, current site path, allowlisted UTM fields, external
-referrer origin, and the versioned consent record. The browser does not persist
-attribution in cookies or local storage.
+include the form placement, original landing path, allowlisted UTM fields,
+external referrer origin, bounded Google Ads click identifiers when present,
+and the versioned consent record. Public marketing pages retain this limited
+campaign context in same-tab session storage for up to 30 minutes, with an
+in-memory fallback. No form contact details are stored there, and attribution
+is not persisted in cookies or local storage. The embedded Studio is excluded.
 
 The API returns:
 

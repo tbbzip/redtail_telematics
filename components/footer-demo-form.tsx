@@ -194,7 +194,7 @@ export function FooterDemoForm() {
 
 	return (
 		<form
-			className="scroll-mt-20 rounded-2xl border border-white/10 bg-white p-5 text-rb-black shadow-[0_28px_90px_rgba(1,1,1,0.36)] sm:p-7 lg:p-8"
+			className="min-w-0 scroll-mt-20 rounded-2xl border border-white/10 bg-white p-5 text-rb-black shadow-[0_28px_90px_rgba(1,1,1,0.36)] sm:p-7 lg:p-8"
 			id="footer-demo-form"
 			onSubmit={handleSubmit}
 			ref={formRef}

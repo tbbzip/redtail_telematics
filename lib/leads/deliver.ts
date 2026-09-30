@@ -263,7 +263,7 @@ function formatIndustry(industry: NonNullable<DeliverableLead["industry"]>) {
 }
 
 function formatLeadSource(source: DeliverableLead["source"]) {
-	return source === "get-started" ? "Get Started flow" : "Homepage demo form";
+	return source === "get-started" ? "Get Started flow" : "Website demo form";
 }
 
 function formatTimestamp(value: string) {
@@ -350,6 +350,9 @@ function createEmailContent(envelope: LeadEnvelope) {
 		["UTM campaign", attribution?.utmCampaign],
 		["UTM term", attribution?.utmTerm],
 		["UTM content", attribution?.utmContent],
+		["Google click ID (gclid)", attribution?.gclid],
+		["Google app click ID (gbraid)", attribution?.gbraid],
+		["Google web click ID (wbraid)", attribution?.wbraid],
 	] as const) {
 		if (value) {
 			attributionRows.push({

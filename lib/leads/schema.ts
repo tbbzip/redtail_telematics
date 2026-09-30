@@ -1,5 +1,13 @@
 import { z } from "zod";
 
+import {
+	hasAttributionEmail,
+	LEAD_ATTRIBUTION_LIMITS,
+	LEAD_ATTRIBUTION_TEXT_PATTERN,
+	LEAD_CLICK_ID_PATTERN,
+	LEAD_LANDING_PATH_PATTERN,
+} from "./attribution-fields";
+
 export const industryValues = [
 	"logistics",
 	"construction",
@@ -32,25 +40,36 @@ const optionalAttributionValue = z
 	.string()
 	.trim()
 	.min(1)
-	.max(200)
-	.regex(/^[^\u0000-\u001f\u007f]+$/, "Attribution contains invalid characters.")
+	.max(LEAD_ATTRIBUTION_LIMITS.utm)
+	.regex(LEAD_ATTRIBUTION_TEXT_PATTERN, "Attribution contains invalid characters.")
+	.refine((value) => !hasAttributionEmail(value), "Attribution cannot contain contact details.")
+	.optional();
+
+const optionalClickId = z
+	.string()
+	.min(1)
+	.max(LEAD_ATTRIBUTION_LIMITS.clickId)
+	.regex(LEAD_CLICK_ID_PATTERN, "Click identifier contains invalid characters.")
 	.optional();
 
 export const leadAttributionSchema = z
 	.strictObject({
+		gclid: optionalClickId,
+		gbraid: optionalClickId,
 		landingPath: z
 			.string()
 			.trim()
 			.min(1)
-			.max(500)
+			.max(LEAD_ATTRIBUTION_LIMITS.landingPath)
 			.regex(
-				/^\/(?!\/)[^?#\u0000-\u001f\u007f]*$/,
+				LEAD_LANDING_PATH_PATTERN,
 				"Landing path must be a relative site path without a query or fragment.",
 			)
+			.refine((value) => !hasAttributionEmail(value), "Landing path cannot contain contact details.")
 			.optional(),
 		referrerOrigin: z
 			.url()
-			.max(2048)
+			.max(LEAD_ATTRIBUTION_LIMITS.referrerOrigin)
 			.refine((value) => {
 				const url = new URL(value);
 				return ["http:", "https:"].includes(url.protocol) && value === url.origin;
@@ -61,6 +80,7 @@ export const leadAttributionSchema = z
 		utmMedium: optionalAttributionValue,
 		utmSource: optionalAttributionValue,
 		utmTerm: optionalAttributionValue,
+		wbraid: optionalClickId,
 	})
 	.refine((value) => Object.values(value).some(Boolean), {
 		message: "Attribution must contain at least one value.",

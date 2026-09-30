@@ -11,6 +11,8 @@ import type { DeliverableLead } from "@/lib/leads/schema";
 
 const lead: DeliverableLead = {
 	attribution: {
+		gclid: "Google_Click-123",
+		gbraid: "Google_App-123",
 		landingPath: "/get-started",
 		referrerOrigin: "https://www.linkedin.com",
 		utmCampaign: "fleet-reset",
@@ -18,6 +20,7 @@ const lead: DeliverableLead = {
 		utmMedium: "paid-social",
 		utmSource: "linkedin",
 		utmTerm: "fleet telematics",
+		wbraid: "Google_Web-123",
 	},
 	company: "Acme Fleet",
 	consent: true,
@@ -88,6 +91,11 @@ describe("deliverLead", () => {
 		expect(headers.get("authorization")).toBe("Bearer test-token");
 		expect(headers.get("idempotency-key")).toBe(requestId);
 		expect(payload.lead).toEqual(lead);
+		expect(payload.lead.attribution).toMatchObject({
+			gclid: "Google_Click-123",
+			gbraid: "Google_App-123",
+			wbraid: "Google_Web-123",
+		});
 		expect(payload.consent).toMatchObject({
 			method: "form-submit",
 			noticeText:
@@ -153,6 +161,12 @@ describe("deliverLead", () => {
 			"fleet-reset",
 			"fleet telematics",
 			"hero-cta",
+			"Google_Click-123",
+			"Google_App-123",
+			"Google_Web-123",
+			"Google click ID (gclid)",
+			"Google app click ID (gbraid)",
+			"Google web click ID (wbraid)",
 			"Consent to contact",
 			"Yes",
 			"Consent method",
@@ -287,7 +301,7 @@ describe("deliverLead", () => {
 
 		expect(html).not.toContain("Campaign attribution");
 		expect(text).not.toContain("CAMPAIGN ATTRIBUTION");
-		expect(html).toContain("Homepage demo form (footer-demo)");
+		expect(html).toContain("Website demo form (footer-demo)");
 		expect(html).not.toContain("Industry</td>");
 	});
 

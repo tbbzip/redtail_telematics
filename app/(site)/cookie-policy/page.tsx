@@ -50,14 +50,28 @@ const sections: LegalSection[] = [
 					network information.
 				</p>
 				<p>
-					The Schedule a Demo and Get Started forms do not themselves write
-					campaign-attribution details to persistent browser storage. Google
+					To connect an inquiry with the visit that led to it, the public
+					website uses a limited campaign record in the current tab&apos;s
+					session storage with a 30-minute attribution window. It contains the landing page
+					path, standard UTM fields, the origin of an external referring
+					website, and Google Ads click identifiers (GCLID, GBRAID, or WBRAID)
+					when present. It does not contain the contact details you enter in
+					the form, and it is not written to cookies or local storage. These
+					campaign details accompany an inquiry sent to our lead-management
+					provider. If session storage is unavailable, the form still works,
+					although attribution across page loads may be incomplete. Google
 					Analytics and Google Ads technologies available on those pages may
 					use cookies or similar storage to attribute an inquiry to a campaign.
 					The embedded Sanity Studio at <code>/studio</code> is an
 					administrative tool for authorised editors and may use authentication
 					storage supplied by Sanity. Hosting and security providers may also
 					process request metadata to operate and protect the site.
+				</p>
+				<p>
+					Expired campaign values are no longer used and are removed when
+					the record is next checked. A limited marker remains for that tab
+					to prevent an old campaign URL from renewing the same attribution.
+					Closing the tab clears its session storage.
 				</p>
 			</>
 		),
@@ -120,7 +134,7 @@ export default function CookiePolicyPage() {
 		<LegalPolicyPage
 			currentPath="/cookie-policy"
 			description={description}
-			lastUpdated="2026-09-02"
+			lastUpdated="2026-09-29"
 			sections={sections}
 			title="Cookie Policy"
 		/>
