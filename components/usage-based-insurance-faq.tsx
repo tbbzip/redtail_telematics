@@ -51,6 +51,11 @@ const faqItems = [
 			"Redtail offers flexible connectivity options that allow for direct data flow into your existing processes. Our dedicated integration team ensures a smooth setup, enabling real-time access to telematics insights for underwriting, incident classification, driver scoring, claims processing, and continuous policyholder engagement.",
 	},
 	{
+		question: "How can telematics data support policy administration?",
+		answer:
+			"Vehicle usage, driving behaviour, and incident data can inform your insurer's policy administration workflows. Work with Redtail to define the data, reporting, and integration requirements for your existing policy systems and processes.",
+	},
+	{
 		question: "Does Redtail provide support for both B2B and B2C applications?",
 		answer:
 			"Yes. Redtail offers white-label solutions for both B2B and B2C use cases. Our customizable applications allow insurers to engage fleet managers, operators, and individual customers by providing relevant data insights, driver feedback, and easy access to telematics services.",

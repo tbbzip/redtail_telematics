@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import {
 	ArrowRight01Icon,
 	BookOpenTextIcon,
@@ -16,6 +15,7 @@ import {
 import { useMemo, useState } from "react";
 
 import { HugeIcon } from "@/components/huge-icon";
+import { ResourceVisual } from "@/components/resource-visual";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -30,7 +30,6 @@ import {
 	type ResourceIndexConfig,
 	type ResourceIndexItem,
 } from "@/lib/resource-index";
-import { cn } from "@/lib/utils";
 
 const ITEMS_PER_PAGE = 9;
 
@@ -130,17 +129,7 @@ function ResourceCard({ item }: { item: ResourceIndexItem }) {
 		>
 			<CardHeader className="gap-5 px-6 pt-6 sm:px-7 sm:pt-7">
 				<div className="relative aspect-[1.48] overflow-hidden rounded-xl bg-linear-to-br from-white via-rb-peach/30 to-rb-red/12">
-					<Image
-						alt={item.imageAlt || item.title}
-						className={cn(
-							"transition duration-500 group-hover:scale-[1.03]",
-							item.imageFit === "contain" ? "object-contain p-6" : "object-cover",
-						)}
-						fill
-						sizes="(max-width: 768px) 100vw, 420px"
-						src={item.image}
-					/>
-					<div className="absolute inset-0 bg-linear-to-t from-rb-black/18 to-transparent" />
+					<ResourceVisual src={item.image} alt={item.imageAlt || item.title} title={item.title} category={item.category} kind={item.resourceType || item.category} fit={item.imageFit} sizes="(max-width: 768px) 100vw, 420px" />
 				</div>
 				<div className="flex items-center justify-between gap-3">
 					<Badge className="border-black/10 bg-white text-rb-black/58" variant="outline">
@@ -331,12 +320,12 @@ export function ResourceIndexPageSections({
 	return (
 		<section className="border-b border-black/10 bg-[#fcfbf9] px-4 pt-28 pb-16 sm:px-6 sm:pt-32 sm:pb-20 lg:px-8 lg:pb-24">
 			<div className="mx-auto max-w-7xl">
-				<header className="grid gap-6 lg:grid-cols-[0.78fr_1fr] lg:items-end">
+				<header className="grid gap-8 border-b border-black/15 pb-10 lg:grid-cols-[1.05fr_0.85fr] lg:items-end">
 					<div>
 						<p className="text-xs font-semibold tracking-[0.26em] text-rb-red uppercase">
 							{config.eyebrow}
 						</p>
-						<h1 className="mt-4 text-[2.35rem] leading-tight font-semibold text-rb-black sm:text-5xl">
+						<h1 className="mt-4 text-[2.9rem] leading-[1.08] font-semibold tracking-[-0.04em] text-balance text-rb-black sm:text-6xl lg:text-7xl">
 							{config.title}
 						</h1>
 					</div>

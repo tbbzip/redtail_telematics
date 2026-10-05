@@ -7,7 +7,6 @@ import {
 	Call02Icon,
 	ChatUserIcon,
 	CustomerSupportIcon,
-	Location01Icon,
 	Mail01Icon,
 	ShieldUserIcon,
 } from "@hugeicons/core-free-icons";
@@ -160,6 +159,7 @@ const offices = [
 		emailHref: "mailto:sales@redtailtelematics.com",
 		image: "/about/redtail_telematics_hq.jpg",
 		imageAlt: "Redtail Telematics UK headquarters",
+		mapHref: "https://www.google.com/maps/search/?api=1&query=Plextek+Building+London+Road+Great+Chesterford+Essex+CB10+1NY+UK",
 	},
 	{
 		label: "United States office",
@@ -170,6 +170,7 @@ const offices = [
 		email: "sales@redtailtelematics.com",
 		emailHref: "mailto:sales@redtailtelematics.com",
 		imageAlt: "Redtail Telematics San Diego office",
+		mapHref: "https://www.google.com/maps/search/?api=1&query=1420+Kettner+Blvd+Suite+100+San+Diego+CA+92101+United+States",
 	},
 ];
 
@@ -204,35 +205,20 @@ function ContactLink({
 	);
 }
 
-function OfficeVisual({
-	alt,
-	src,
-}: {
-	alt: string;
-	src?: string;
-}) {
-	if (src) {
+function OfficeVisual({ office }: { office: (typeof offices)[number] }) {
+	if (office.image) {
 		return (
-			<div className="relative aspect-[1.68] overflow-hidden rounded-lg bg-rb-black">
-				<Image
-					alt={alt}
-					className="object-cover"
-					fill
-					sizes="(max-width: 768px) 100vw, 560px"
-					src={src}
-				/>
-			</div>
+			<figure className="relative aspect-[1.68] overflow-hidden rounded-lg bg-rb-black">
+				<Image alt={office.imageAlt} className="object-cover" fill sizes="(max-width: 767px) 92vw, (max-width: 1023px) 46vw, 600px" src={office.image} />
+			</figure>
 		);
 	}
 
 	return (
-		<div className="relative aspect-[1.68] overflow-hidden rounded-lg border border-black/10 bg-[#f3f2ef]">
-			<div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(207,19,23,0.12),transparent_34%),radial-gradient(circle_at_76%_28%,rgba(1,1,1,0.12),transparent_18%),linear-gradient(to_bottom,rgba(255,255,255,0.5),transparent)]" />
-			<div className="absolute inset-x-8 top-1/2 h-px bg-black/10" />
-			<div className="absolute inset-y-8 left-1/2 w-px bg-black/10" />
-			<div className="absolute top-1/2 left-1/2 flex size-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-rb-red text-white shadow-[0_18px_55px_rgba(207,19,23,0.28)]">
-				<HugeIcon icon={Location01Icon} size={25} />
-			</div>
+		<div className="flex min-h-72 flex-col justify-between rounded-lg bg-[#121c28] p-7 text-white sm:aspect-[1.68] sm:p-9">
+			<p className="text-[10px] font-semibold tracking-[0.2em] text-white/65 uppercase">United States office</p>
+			<div className="mt-6"><p className="text-4xl leading-tight font-semibold tracking-[-0.035em] sm:text-5xl">San Diego.</p><address className="mt-4 text-sm leading-6 text-white/75 not-italic">1420 Kettner Blvd, Suite 100<br />San Diego, CA 92101</address></div>
+			<a className="mt-6 inline-flex min-h-11 w-fit items-center gap-3 border-b border-white/35 text-sm font-semibold hover:border-white" href={office.mapHref} rel="noopener noreferrer" target="_blank">View this address on Google Maps<HugeIcon icon={ArrowRight01Icon} size={17} /></a>
 		</div>
 	);
 }
@@ -240,29 +226,21 @@ function OfficeVisual({
 export default function ContactUsPage() {
 	return (
 		<main className="flex-1 bg-white">
-			<section className="bg-[#f5f4f2] px-4 pt-28 pb-16 sm:px-6 sm:pt-32 sm:pb-20 lg:px-8">
-				<div className="mx-auto max-w-6xl">
-					<header className="mx-auto max-w-3xl text-center">
-						<p className="text-xs font-semibold tracking-[0.26em] text-rb-red uppercase">
-							Contact Redtail
-						</p>
-						<h1 className="mt-5 text-[3.1rem] leading-tight font-semibold tracking-[-0.02em] text-rb-black sm:text-6xl">
-							We&apos;re here to help
-						</h1>
-						<p className="mt-5 text-lg leading-8 text-rb-black/62">
-							Find the right Redtail team for sales, support, technical
-							questions, partnerships, or office details.
-						</p>
+			<section className="border-b border-black/10 bg-[#f4f5f6] px-5 pt-28 pb-16 sm:px-8 sm:pt-36 sm:pb-24 lg:px-12 lg:pt-40">
+				<div className="mx-auto max-w-[83rem]">
+					<header className="grid gap-8 border-b border-black/15 pb-10 sm:pb-14 lg:grid-cols-[1.2fr_0.8fr] lg:items-end lg:gap-20">
+						<div><p className="text-[11px] font-semibold tracking-[0.2em] text-rb-red uppercase">Contact Redtail</p><h1 className="mt-6 max-w-3xl text-[2.8rem] leading-[1.04] font-semibold tracking-[-0.04em] text-rb-black sm:text-6xl lg:text-[4.5rem]">We&apos;re here to help</h1></div>
+						<div><p className="max-w-lg text-lg leading-8 text-rb-black/65">Find the right Redtail team for sales, support, technical questions, partnerships, or office details.</p></div>
 					</header>
 
 					<div className="mt-12 grid gap-5 lg:grid-cols-3">
 						{contactCards.map((card) => (
 							<Card
-								className="rounded-lg border-black/8 bg-white shadow-[0_18px_55px_rgba(1,1,1,0.08)] ring-0"
+								className="rounded-lg border-black/12 bg-white shadow-none ring-0"
 								key={card.title}
 							>
 								<CardHeader className="gap-4 px-6 pt-7">
-									<div className="flex size-11 items-center justify-center rounded-lg bg-rb-peach text-rb-red">
+									<div className="flex size-10 items-center justify-center rounded-md border border-black/10 text-rb-red">
 										<HugeIcon icon={card.icon} size={23} />
 									</div>
 									<div>
@@ -315,22 +293,17 @@ export default function ContactUsPage() {
 				</div>
 			</section>
 
-			<section className="px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
-				<div className="mx-auto max-w-6xl">
-					<header className="mx-auto max-w-2xl text-center">
-						<h2 className="text-4xl leading-tight font-semibold tracking-[-0.01em] text-rb-black sm:text-5xl">
-							Office Locations
-						</h2>
-						<p className="mt-4 text-base leading-7 text-rb-black/58">
-							Redtail supports customers from our UK headquarters and our United
-							States office.
-						</p>
+			<section className="px-5 py-16 sm:px-8 sm:py-24 lg:px-12 lg:py-28">
+				<div className="mx-auto max-w-[83rem]">
+					<header className="grid gap-6 lg:grid-cols-[1fr_0.8fr] lg:items-end lg:gap-20">
+						<div><p className="text-[11px] font-semibold tracking-[0.2em] text-rb-red uppercase">Our offices</p><h2 className="mt-5 text-4xl leading-[1.1] font-semibold tracking-[-0.035em] text-rb-black sm:text-5xl">Connected across the Atlantic.</h2></div>
+						<p className="max-w-lg text-base leading-7 text-rb-black/65 sm:text-lg sm:leading-8">Contact our UK headquarters or United States office for help with your deployment, devices, and platform.</p>
 					</header>
 
 					<div className="mt-10 grid gap-8 lg:grid-cols-2">
 						{offices.map((office) => (
 							<article key={office.title}>
-								<OfficeVisual alt={office.imageAlt} src={office.image} />
+								<OfficeVisual office={office} />
 								<p className="mt-5 text-sm font-semibold text-rb-black/52">
 									{office.label}
 								</p>
@@ -351,6 +324,7 @@ export default function ContactUsPage() {
 										icon={Mail01Icon}
 										label={office.email}
 									/>
+									{office.image ? <a className="mt-2 inline-flex min-h-11 w-fit items-center gap-2 text-sm font-semibold text-rb-red hover:underline" href={office.mapHref} rel="noopener noreferrer" target="_blank">View this address on Google Maps<HugeIcon icon={ArrowRight01Icon} size={16} /></a> : null}
 								</div>
 							</article>
 						))}

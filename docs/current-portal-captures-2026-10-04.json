@@ -1,0 +1,95 @@
+{
+  "version": 1,
+  "captureDate": "2026-10-04",
+  "source": "Authenticated current Redtail portal",
+  "captureMethod": "Browser screenshot crops of the actual interface",
+  "sourceVerification": "Live capture verified by parent reviewer; saved images independently inspected",
+  "deliveryState": "Locally implemented and verified: source images inspected; lint, Node 22 production build, desktop/mobile fonts/layout/enumeration and final image-load checks passed; no push or production deployment",
+  "verification": {
+    "lintExitCode": 0,
+    "productionBuildExitCode": 0,
+    "nodeMajorVersion": 22,
+    "nextVersion": "16.3.0",
+    "staticPagesGenerated": 159,
+    "browserViewports": [
+      { "width": 1440, "height": 1000 },
+      { "width": 390, "height": 844 }
+    ],
+    "checkedRoutes": [
+      "/solutions/fleet-management",
+      "/platform-and-apps",
+      "/solutions/usage-based-insurance",
+      "/solutions/white-label",
+      "/our-technology",
+      "/industries/auto-oem",
+      "/industries/car-rental"
+    ],
+    "horizontalOverflowFound": false,
+    "pureDecorativeNumericLabelsFound": false,
+    "headingFontStack": "Merriweather, Merriweather Fallback, Georgia, serif",
+    "bodyFontStack": "Verdana, Geneva, Arial, sans-serif",
+    "additionalImageLoadSpotChecks": "Complete",
+    "currentPlatformBodyImagesLoaded": 7,
+    "currentPlatformBodyImagesObjectFit": "contain",
+    "currentPlatformBodyImagesNativeProportions": true,
+    "currentPlatformSectionFullImageLinksPresent": true,
+    "platformHeroFinalLoadConfirmation": {
+      "loaded": true,
+      "viewportWidth": 1440,
+      "displayWidth": 1022,
+      "displayHeight": 565.0546875,
+      "note": "Settled-image confirmation after an initial immediate-navigation check"
+    },
+    "browserEvidencePath": "output/playwright/final-brand-screenshot-review-2026-10-04.json"
+  },
+  "assets": [
+    {
+      "path": "public/platform-screenshots/current/fleet-map.jpg",
+      "width": 1380,
+      "height": 763,
+      "sha256": "70592520a92fa3383ac65ac2b04bbda5bfe0cb4a9ba140aefe55088595831722"
+    },
+    {
+      "path": "public/platform-screenshots/current/odometer.jpg",
+      "width": 1126,
+      "height": 295,
+      "sha256": "752e5c11cc685b90839b46f84cb93493fc04f1675819487c3eb5aa7fb0ba5721"
+    },
+    {
+      "path": "public/platform-screenshots/current/location-prediction.jpg",
+      "width": 1126,
+      "height": 424,
+      "sha256": "4acfc17b44e6573fdc6f1a996252e2f4aa6466348f3c42bf5c0ababceaec3579"
+    },
+    {
+      "path": "public/platform-screenshots/current/maintenance-calendar.jpg",
+      "width": 1338,
+      "height": 483,
+      "sha256": "c5cd925baa0f5826d2ad178df6303dffa9a76fc35cd712f6b854dea74130daee"
+    },
+    {
+      "path": "public/platform-screenshots/current/driving-behaviour.jpg",
+      "width": 1126,
+      "height": 1033,
+      "sha256": "2f7fa904b514c3b496a3ab39dbbd16cf640ccb338ea2cacd489bf613849aa71f"
+    },
+    {
+      "path": "public/platform-screenshots/current/journey-activity.jpg",
+      "width": 1126,
+      "height": 345,
+      "sha256": "641d396e7a3309b8ac920ccf0aaaac313da5cdd3de058019a1e99aa6873e6947"
+    },
+    {
+      "path": "public/platform-screenshots/current/alert-channels.jpg",
+      "width": 1126,
+      "height": 223,
+      "sha256": "c293ab83aba7a629b20f51ba4949d58d6746d51b6da039cbe9611ba4d9a6c761"
+    },
+    {
+      "path": "public/platform-screenshots/current/circuit-directory.jpg",
+      "width": 1324,
+      "height": 500,
+      "sha256": "61900989e40371f7194b5a1a039275f2c63d48075d46acb510f95539bf39ce1f"
+    }
+  ]
+}

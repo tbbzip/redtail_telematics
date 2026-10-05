@@ -3,11 +3,12 @@ export type BlogPost = {
 	category: string;
 	excerpt: string;
 	href: string;
-	image: string;
+	image?: string;
 	imageAlt?: string;
 	imageFit?: "cover" | "contain";
 	publishedAt: string;
 	readTime: string;
+	resourceType?: string;
 	slug: string;
 	title: string;
 };

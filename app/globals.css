@@ -15,9 +15,9 @@
   --color-rb-light-green: #f3f8ef;
   --color-rb-light-blue: #ebf6f9;
   --color-rb-peach: #fdefe8;
-  --font-sans: Verdana, Geneva, sans-serif;
+  --font-sans: Verdana, Geneva, Arial, sans-serif;
   --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-merriweather);
+  --font-heading: var(--font-merriweather), Georgia, serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);

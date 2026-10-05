@@ -43,35 +43,12 @@ type SanityEvent = {
 	title?: string | null;
 };
 
-const caseStudyFallbackImages = [
-	"/carousel/fleet-web.jpg",
-	"/carousel/insurance-web.jpg",
-	"/carousel/resellers-web.jpg",
-	"/carousel/iot-web.jpg",
-];
-
-const guideFallbackImages = [
-	"/platform-screenshots/redtail_lap-mob.png",
-	"/carousel/iot-web.jpg",
-	"/carousel/fleet-web.jpg",
-];
-
-const eventFallbackImages = [
-	"/navigation/featured-resources.png",
-	"/carousel/fleet-web.jpg",
-	"/carousel/insurance-web.jpg",
-];
-
-function getImageUrl(
-	source: SanityImageSource | null | undefined,
-	index: number,
-	fallbacks: string[],
-) {
+function getImageUrl(source: SanityImageSource | null | undefined) {
 	if (!source) {
-		return fallbacks[index % fallbacks.length];
+		return undefined;
 	}
 
-	return urlForImage(source).width(1200).height(760).fit("crop").url();
+	return urlForImage(source).width(1200).fit("max").url();
 }
 
 function formatEventType(value?: string | null) {
@@ -86,22 +63,20 @@ function formatEventType(value?: string | null) {
 		.join(" ");
 }
 
-function toCaseStudyItem(
-	item: SanityCaseStudy,
-	index: number,
-): ResourceIndexItem | null {
+function toCaseStudyItem(item: SanityCaseStudy): ResourceIndexItem | null {
 	if (!item.title || !item.slug || !item.publishedAt) {
 		return null;
 	}
 
 	return {
 		category: item.category || "Case Study",
+		resourceType: "Case Study",
 		excerpt:
 			item.excerpt ||
 			"See how Redtail telematics helps organizations improve visibility, reliability, and operational confidence.",
 		actionLabel: "Read story",
 		href: `/resources/case-studies/${item.slug}`,
-		image: getImageUrl(item.mainImage, index, caseStudyFallbackImages),
+		image: getImageUrl(item.mainImage),
 		imageAlt: item.title,
 		publishedAt: item.publishedAt,
 		secondaryMeta: item.authorName || "Customer story",
@@ -111,7 +86,7 @@ function toCaseStudyItem(
 	};
 }
 
-function toGuideItem(item: SanityGuide, index: number): ResourceIndexItem | null {
+function toGuideItem(item: SanityGuide): ResourceIndexItem | null {
 	if (!item.title || !item.pdfUrl || !item.publishedAt) {
 		return null;
 	}
@@ -119,13 +94,14 @@ function toGuideItem(item: SanityGuide, index: number): ResourceIndexItem | null
 	return {
 		actionLabel: "Download PDF",
 		category: "Guide",
+		resourceType: "Guide",
 		excerpt:
 			item.description ||
 			"Download a practical Redtail guide for telematics planning, deployment, and operational improvement.",
 		href: item.pdfUrl,
-		image: getImageUrl(item.mainImage, index, guideFallbackImages),
+		image: getImageUrl(item.mainImage),
 		imageAlt: item.title,
-		imageFit: item.mainImage ? "cover" : "contain",
+		imageFit: "contain",
 		publishedAt: item.publishedAt,
 		secondaryMeta: "PDF guide",
 		secondaryMetaIcon: "file",
@@ -134,19 +110,20 @@ function toGuideItem(item: SanityGuide, index: number): ResourceIndexItem | null
 	};
 }
 
-function toEventItem(item: SanityEvent, index: number): ResourceIndexItem | null {
+function toEventItem(item: SanityEvent): ResourceIndexItem | null {
 	if (!item.title || !item.slug || !item.publishedAt) {
 		return null;
 	}
 
 	return {
 		category: formatEventType(item.eventType),
+		resourceType: "Event",
 		excerpt:
 			item.excerpt ||
 			"Join Redtail for telematics conversations, product insight, and practical guidance for connected fleet programs.",
 		actionLabel: "View event",
 		href: `/resources/events/${item.slug}`,
-		image: getImageUrl(item.mainImage, index, eventFallbackImages),
+		image: getImageUrl(item.mainImage),
 		imageAlt: item.title,
 		publishedAt: item.publishedAt,
 		secondaryMeta: item.location || item.organizer || "Redtail event",
@@ -178,7 +155,7 @@ export async function getAllCaseStudies(): Promise<ResourceIndexItem[]> {
 		const items = await client.fetch<SanityCaseStudy[]>(ALL_CASE_STUDIES_QUERY);
 
 		return items
-			.map((item, index) => toCaseStudyItem(item, index))
+			.map(toCaseStudyItem)
 			.filter((item): item is ResourceIndexItem => Boolean(item));
 	} catch (error) {
 		console.error("[Sanity] Failed to fetch the case-study index.");
@@ -191,7 +168,7 @@ export async function getAllGuides(): Promise<ResourceIndexItem[]> {
 		const items = await client.fetch<SanityGuide[]>(ALL_GUIDES_QUERY);
 
 		return items
-			.map((item, index) => toGuideItem(item, index))
+			.map(toGuideItem)
 			.filter((item): item is ResourceIndexItem => Boolean(item));
 	} catch (error) {
 		console.error("[Sanity] Failed to fetch the guide index.");
@@ -203,7 +180,7 @@ export async function getAllEvents(): Promise<ResourceIndexItem[]> {
 	try {
 		const items = await client.fetch<SanityEvent[]>(ALL_EVENTS_QUERY);
 		const mappedItems = items
-			.map((item, index) => toEventItem(item, index))
+			.map(toEventItem)
 			.filter((item): item is ResourceIndexItem => Boolean(item));
 
 		return sortEvents(mappedItems);

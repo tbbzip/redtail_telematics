@@ -27,7 +27,7 @@ const faqItems: FaqItem[] = [
 	{
 		question: "How can Redtail Telematics help reduce operational costs?",
 		answer:
-			"Redtail Telematics provides comprehensive data on vehicle performance, driver behavior, and best practices. By analyzing this data, you can identify inefficiencies, schedule proactive maintenance to prevent costly breakdowns, optimize routes to reduce fuel usage, and encourage safer driving habits - all of which contribute to lowering your operational expenses.",
+			"Redtail Telematics provides data on vehicle usage and driver behavior. By analyzing this data, you can identify inefficiencies, review idling, plan vehicle maintenance, and encourage safer driving habits. Journey records can also help with trip preparation and reviewing how vehicles are used.",
 	},
 	{
 		question: "How do I set up Redtail Telematics devices on my fleet vehicles?",
@@ -42,12 +42,12 @@ const faqItems: FaqItem[] = [
 	{
 		question: "How does Redtail Telematics enhance fleet efficiency?",
 		answer:
-			"By providing real-time insights into vehicle locations, driver behaviors, and route efficiencies, Redtail Telematics helps you make informed decisions to optimize your fleet operations. You can reduce idle times, improve dispatching, optimize routes, and enhance communication between drivers and management, leading to increased productivity and efficiency.",
+			"By providing real-time insights into vehicle locations, driver behaviors, and journey history, Redtail Telematics helps you make informed decisions about fleet operations. Review idling and completed journeys, use those journeys to prepare for upcoming trips, and improve communication between drivers and management.",
 	},
 	{
 		question: "What type of data can I track with Redtail Telematics solutions?",
 		answer:
-			"Our solutions enable you to track a wide range of data, including real-time vehicle location, speed, engine diagnostics, driver behavior such as harsh braking or acceleration, and more. This data is critical for managing fleet performance, scheduling maintenance, and improving safety protocols.",
+			"Our solutions enable you to track vehicle location, mileage, speed, and driver behavior such as harsh braking or acceleration. This data helps you understand fleet usage, plan maintenance, and review driver safety. The available information depends on the device and vehicle setup.",
 	},
 	{
 		question: "Can using Redtail Telematics help reduce my insurance premiums?",
@@ -62,7 +62,7 @@ const faqItems: FaqItem[] = [
 	{
 		question: "How can Redtail Telematics assist with maintenance scheduling?",
 		answer:
-			"Our telematics devices monitor engine health and vehicle performance indicators in real-time. By analyzing this data, you can schedule maintenance proactively based on actual vehicle condition rather than just time or mileage intervals, preventing unexpected breakdowns, reducing downtime, and extending the lifespan of your assets.",
+			"Vehicle usage and maintenance records help your team plan service and keep track of fleet maintenance. Talk with Redtail about the maintenance information your team needs and the setup available for your vehicles.",
 	},
 	{
 		question: "What kind of customer support does Redtail Telematics offer?",

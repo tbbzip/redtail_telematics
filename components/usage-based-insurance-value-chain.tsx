@@ -127,22 +127,15 @@ const chainHighlights = [
 
 function ChainHighlight({
 	highlight,
-	index,
 }: {
 	highlight: (typeof chainHighlights)[number];
-	index: number;
 }) {
 	return (
 		<div className="relative flex items-center gap-3">
 			<div className="flex size-11 items-center justify-center rounded-xl border border-white/12 bg-white/8 text-white">
 				<HugeIcon icon={highlight.icon} size={20} />
 			</div>
-			<div>
-				<p className="text-[10px] font-semibold tracking-[0.2em] text-white/36 uppercase">
-					Step {String(index + 1).padStart(2, "0")}
-				</p>
-				<p className="mt-1 text-sm font-semibold text-white">{highlight.label}</p>
-			</div>
+			<p className="text-sm font-semibold text-white">{highlight.label}</p>
 		</div>
 	);
 }
@@ -181,9 +174,6 @@ function ValueChainCard({
 						<Badge className="bg-white/10 text-white" variant="secondary">
 							{step.phase}
 						</Badge>
-						<span className="text-xs font-semibold text-white/34">
-							{String(index + 1).padStart(2, "0")}
-						</span>
 					</div>
 				</div>
 				<CardTitle className="text-lg font-semibold leading-tight text-white sm:text-xl">
@@ -226,10 +216,9 @@ export function UsageBasedInsuranceValueChainSection() {
 
 					<div className="mt-8 rounded-2xl border border-white/10 bg-white/[0.045] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.28)]">
 						<div className="grid gap-5">
-							{chainHighlights.map((highlight, index) => (
+							{chainHighlights.map((highlight) => (
 								<ChainHighlight
 									highlight={highlight}
-									index={index}
 									key={highlight.label}
 								/>
 							))}

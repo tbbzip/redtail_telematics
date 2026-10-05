@@ -112,12 +112,6 @@ function FeatureCard({
 					>
 						<HugeIcon icon={feature.icon} size={22} />
 					</div>
-					<Badge
-						className="border-black/10 bg-white/70 text-rb-black/54 backdrop-blur-sm"
-						variant="outline"
-					>
-						{String(index + 1).padStart(2, "0")}
-					</Badge>
 				</div>
 				<div>
 					<Badge

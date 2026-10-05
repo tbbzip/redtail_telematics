@@ -8,6 +8,7 @@ import {
 	Mail01Icon,
 } from "@hugeicons/core-free-icons";
 
+import { EditorialHero } from "@/components/editorial-hero";
 import { HugeIcon } from "@/components/huge-icon";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -85,44 +86,16 @@ function CareersImage({
 
 export function CareersHero() {
 	return (
-		<section className="relative isolate overflow-hidden rounded-b-3xl bg-rb-black px-4 pt-24 pb-14 text-white sm:px-6 sm:pt-32 sm:pb-18 lg:px-8 lg:pt-28">
-			<div
-				aria-hidden="true"
-				className="absolute inset-0 bg-[radial-gradient(circle_at_18%_12%,rgba(207,19,23,0.24),transparent_28%),radial-gradient(circle_at_84%_18%,rgba(255,255,255,0.1),transparent_24%),linear-gradient(135deg,#010101,#171514_58%,#010101)]"
-			/>
-			<div
-				aria-hidden="true"
-				className="absolute inset-0 opacity-30 [background-image:linear-gradient(120deg,rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(30deg,rgba(255,255,255,0.05)_1px,transparent_1px)] [background-size:36px_36px,58px_58px]"
-			/>
-
-			<div className="relative mx-auto grid max-w-7xl gap-10 lg:min-h-[40rem] lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
-				<div className="max-w-3xl">
-					<div className="inline-flex items-center gap-3">
-						<span className="flex size-10 items-center justify-center rounded-md bg-rb-red text-white shadow-[0_16px_34px_rgba(207,19,23,0.32)]">
-							<HugeIcon icon={Briefcase01Icon} />
-						</span>
-						<p className="text-xs font-semibold tracking-[0.28em] text-white/78 uppercase">
-							Careers
-						</p>
-					</div>
-
-					<h1 className="mt-7 max-w-3xl text-[2.65rem] leading-[1.02] font-semibold text-balance text-white sm:text-6xl sm:leading-tight">
-						Careers at Redtail Telematics
-					</h1>
-
-					<p className="mt-5 max-w-2xl text-base leading-7 text-white/72 sm:text-lg sm:leading-8">
-						We&apos;re always on the lookout for exceptional talent.
-					</p>
-				</div>
-
-				<CareersImage
-					alt="Exterior of the Great Chesterford office used by Redtail Telematics"
-					className="min-h-[28rem] border-white/14 bg-white/[0.055] shadow-[0_34px_120px_rgba(0,0,0,0.34)]"
-					label="Great Chesterford workplace"
-					src="/careers-building.jpg"
-				/>
-			</div>
-		</section>
+		<EditorialHero
+			eyebrow="Careers"
+			title="Careers at Redtail Telematics"
+			description="We're always on the lookout for exceptional talent."
+			imageSrc="/careers-building.jpg"
+			imageAlt="The Great Chesterford workplace used by Redtail Telematics"
+			imagePosition="62% center"
+		>
+			<p className="mt-12 text-xs tracking-[0.12em] text-white/65">Redtail careers / Great Chesterford workplace</p>
+		</EditorialHero>
 	);
 }
 

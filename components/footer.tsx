@@ -152,7 +152,7 @@ const certificationBadges: CertificationBadge[] = [
 const demoBenefits = [
 	"Real-time vehicle and asset visibility",
 	"Driver risk, incident insight, and operational alerts",
-	"Device health and deployment support as programs scale",
+	"Device selection and deployment support as programs scale",
 ];
 
 const contactDetails = [

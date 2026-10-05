@@ -34,6 +34,8 @@ type TocItem = {
 	title: string;
 };
 
+const enumerationPrefix = /^\s*\d{1,2}[.)]\s+/;
+
 function LinkedinGlyph() {
 	return (
 		<svg aria-hidden="true" className="size-4 fill-current" viewBox="0 0 24 24">
@@ -130,7 +132,7 @@ function getTocItems(content: PortableNode[]) {
 			return items;
 		}
 
-		const title = getBlockText(node);
+		const title = getBlockText(node).replace(enumerationPrefix, "");
 
 		if (!title) {
 			return items;
@@ -197,9 +199,21 @@ function renderSpan(
 }
 
 function renderBlockChildren(block: PortableBlock) {
-	return (block.children || []).map((child, index) =>
-		renderSpan(child, index, block.markDefs),
-	);
+	const spans = block.children || [];
+	const text = spans.map((child) => child.text || "").join("");
+	let prefixLength = text.match(enumerationPrefix)?.[0].length ?? 0;
+
+	return spans.map((child, index) => {
+		const childText = child.text || "";
+		const removedLength = Math.min(prefixLength, childText.length);
+		prefixLength -= removedLength;
+
+		return renderSpan(
+			removedLength ? { ...child, text: childText.slice(removedLength) } : child,
+			index,
+			block.markDefs,
+		);
+	});
 }
 
 function PortableImageBlock({ node }: { node: PortableImage }) {
@@ -235,22 +249,16 @@ function PortableImageBlock({ node }: { node: PortableImage }) {
 function renderList(
 	items: PortableBlock[],
 	key: string,
-	type: "bullet" | "number",
 ) {
-	const ListTag = type === "number" ? "ol" : "ul";
-
 	return (
-		<ListTag
-			className={cn(
-				"my-8 flex flex-col gap-3 pl-7 text-xl leading-9 text-rb-black/64",
-				type === "number" ? "list-decimal" : "list-disc",
-			)}
+		<ul
+			className="my-8 flex list-disc flex-col gap-3 pl-7 text-xl leading-9 text-rb-black/64"
 			key={key}
 		>
 			{items.map((item, index) => (
 				<li key={item._key || index}>{renderBlockChildren(item)}</li>
 			))}
-		</ListTag>
+		</ul>
 	);
 }
 
@@ -322,7 +330,7 @@ function PortableContent({ content }: { content: PortableNode[] }) {
 				index += 1;
 			}
 
-			rendered.push(renderList(listItems, listItems[0]?._key || `list-${index}`, listType));
+			rendered.push(renderList(listItems, listItems[0]?._key || `list-${index}`));
 			continue;
 		}
 
@@ -575,7 +583,7 @@ export function ResourceDetailPage({ detail }: { detail: ResourceDetail }) {
 						<p className="text-xs font-semibold tracking-[0.26em] text-rb-red uppercase">
 							{detail.resourceLabel}
 						</p>
-						<h1 className="mt-5 max-w-6xl text-[3.35rem] leading-[0.98] font-semibold tracking-[-0.02em] text-rb-black sm:text-7xl lg:text-[5.6rem]">
+						<h1 className="mt-5 max-w-6xl text-[2.8rem] leading-[1.07] font-semibold tracking-[-0.04em] text-balance text-rb-black sm:text-6xl lg:text-[5rem]">
 							{detail.title}
 						</h1>
 						<DetailMeta detail={detail} />

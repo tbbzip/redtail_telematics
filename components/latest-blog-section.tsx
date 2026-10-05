@@ -1,10 +1,9 @@
 import { ArrowRight01Icon, News01Icon } from "@hugeicons/core-free-icons";
-import Image from "next/image";
 import Link from "next/link";
 
 import { HugeIcon } from "@/components/huge-icon";
+import { ResourceVisual } from "@/components/resource-visual";
 import { type BlogPost } from "@/lib/blog-posts";
-import { cn } from "@/lib/utils";
 import { getLatestBlogPosts } from "@/sanity/lib/blog-posts";
 
 function formatPostDate(value: string) {
@@ -20,18 +19,7 @@ function FeaturedPost({ post }: { post: BlogPost }) {
 		<Link className="group block" href={post.href}>
 			<article>
 				<div className="relative flex aspect-[1.45] overflow-hidden rounded-2xl bg-linear-to-br from-white via-rb-peach/30 to-rb-red/12 ring-1 ring-black/8 sm:rounded-[1.35rem]">
-					<Image
-						alt=""
-						className={cn(
-							"transition duration-500 group-hover:scale-[1.025]",
-							post.imageFit === "contain" ? "object-contain p-8" : "object-cover"
-						)}
-						fill
-						priority={false}
-						sizes="(max-width: 1024px) 100vw, 52vw"
-						src={post.image}
-					/>
-					<div className="pointer-events-none absolute inset-0 bg-linear-to-t from-rb-black/8 to-transparent" />
+					<ResourceVisual src={post.image} alt={post.imageAlt || post.title} title={post.title} category={post.category} kind={post.resourceType || "Blog"} fit={post.imageFit} sizes="(max-width: 1024px) 100vw, 52vw" />
 				</div>
 
 				<div className="mt-8">
@@ -62,17 +50,7 @@ function CompactPost({ post }: { post: BlogPost }) {
 	return (
 		<Link className="group grid gap-5 sm:grid-cols-[13.5rem_1fr]" href={post.href}>
 			<div className="relative aspect-[1.75] overflow-hidden rounded-xl bg-linear-to-br from-white via-rb-peach/30 to-rb-red/12 ring-1 ring-black/8 sm:aspect-auto sm:min-h-36">
-				<Image
-					alt=""
-					className={cn(
-						"transition duration-500 group-hover:scale-[1.03]",
-						post.imageFit === "contain" ? "object-contain p-5" : "object-cover"
-					)}
-					fill
-					sizes="(max-width: 640px) 100vw, 216px"
-					src={post.image}
-				/>
-				<div className="absolute inset-0 bg-linear-to-t from-rb-black/20 to-transparent" />
+				<ResourceVisual src={post.image} alt={post.imageAlt || post.title} title={post.title} category={post.category} kind={post.resourceType || "Blog"} fit={post.imageFit} compact sizes="(max-width: 640px) 100vw, 216px" />
 			</div>
 
 			<article className="flex min-w-0 flex-col justify-center border-b border-black/10 pb-7 sm:pb-0">

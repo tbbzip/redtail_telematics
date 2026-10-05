@@ -1,10 +1,7 @@
 import Image from "next/image";
-import Link from "next/link";
 import {
 	AiInnovation01Icon,
-	ArrowRight01Icon,
 	ArrowUpRight01Icon,
-	Building02Icon,
 	Call02Icon,
 	CheckmarkCircle02Icon,
 	ComputerChartUpIcon,
@@ -16,9 +13,9 @@ import {
 } from "@hugeicons/core-free-icons";
 import { type IconSvgElement } from "@hugeicons/react";
 
+import { EditorialHero } from "@/components/editorial-hero";
 import { HugeIcon } from "@/components/huge-icon";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardContent,
@@ -27,26 +24,11 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 
-const heroStats = [
-	{
-		value: "6M+",
-		label: "Devices delivered worldwide",
-	},
-	{
-		value: "30B+",
-		label: "Miles processed and analyzed",
-	},
-	{
-		value: "30+ years",
-		label: "Telematics expertise",
-	},
-];
-
 const whatWeDo = [
 	{
 		title: "Devices and hardware",
 		description:
-			"OEM-grade devices engineered for reliability with install quality and health monitoring.",
+			"OEM-grade devices engineered for reliable vehicle and asset tracking, with professional-fit and self-fit options.",
 		icon: DeviceAccessIcon,
 	},
 	{
@@ -166,77 +148,21 @@ function SectionHeading({
 
 export function AboutUsHero() {
 	return (
-		<section className="relative isolate min-h-[94svh] overflow-hidden rounded-b-3xl bg-rb-black text-white">
-			<Image
-				alt="Redtail Telematics headquarters"
-				className="object-cover object-center"
-				fill
-				priority
-				sizes="100vw"
-				src="/about/redtail_telematics_hq.jpg"
-			/>
-			<div className="absolute inset-0 bg-black/58" />
-			<div className="absolute inset-0 bg-linear-to-r from-black/88 via-black/66 to-black/24" />
-			<div className="absolute inset-0 bg-linear-to-t from-black/56 via-transparent to-black/24" />
-
-			<div className="relative mx-auto grid min-h-[94svh] max-w-7xl gap-10 px-4 pt-24 pb-12 sm:px-6 sm:pt-32 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:px-8 lg:pt-28">
-				<div className="max-w-3xl">
-					<div className="inline-flex items-center gap-3">
-						<span className="flex size-10 items-center justify-center rounded-md bg-rb-red text-white shadow-[0_16px_34px_rgba(207,19,23,0.32)]">
-							<HugeIcon icon={Building02Icon} />
-						</span>
-						<p className="text-xs font-semibold tracking-[0.28em] text-white/78 uppercase">
-							About Redtail
-						</p>
-					</div>
-
-					<h1 className="mt-7 max-w-3xl text-[2.6rem] leading-[1.02] font-semibold text-balance text-white sm:text-5xl sm:leading-tight lg:text-[3.65rem]">
-						Telematics built on quality, insight, and 30+ years of engineering
-					</h1>
-
-					<p className="mt-5 max-w-2xl text-sm leading-6 text-white/72 sm:text-lg sm:leading-8">
-						REDTAIL delivers full-stack telematics solutions that connect fleets
-						to real-time data, safer operations, and measurable ROI.
-					</p>
-
-					<div className="mt-8 flex flex-col gap-3 sm:flex-row">
-						<Button asChild className="w-full sm:w-auto" size="lg">
-							<Link href="/contact-us">
-								Talk to our team
-								<HugeIcon data-icon="inline-end" icon={ArrowRight01Icon} />
-							</Link>
-						</Button>
-						<Button
-							asChild
-							className="w-full border-white/32 bg-white/8 text-white hover:border-white/48 hover:bg-white/14 hover:text-white sm:w-auto"
-							size="lg"
-							variant="outline"
-						>
-							<Link href="/platform-and-apps">
-								Explore the platform
-								<HugeIcon data-icon="inline-end" icon={ArrowUpRight01Icon} />
-							</Link>
-						</Button>
-					</div>
-				</div>
-
-				<div className="grid gap-3 self-end lg:max-w-lg lg:justify-self-end">
-					{heroStats.map((stat) => (
-						<div
-							className="rounded-2xl border border-white/14 bg-white/9 p-5 backdrop-blur-md"
-							key={stat.label}
-						>
-							<p className="text-4xl font-semibold leading-none text-white">
-								{stat.value}
-							</p>
-							<p className="mt-2 text-sm leading-6 text-white/60">
-								{stat.label}
-							</p>
-						</div>
-					))}
-				</div>
-			</div>
-		</section>
+		<EditorialHero
+			eyebrow="About Redtail"
+			title="Telematics built on quality, insight, and 30+ years of engineering"
+			description="REDTAIL delivers full-stack telematics solutions that connect fleets to real-time data, safer operations, and measurable ROI."
+			imageSrc="/about/redtail_telematics_hq.jpg"
+			imageAlt="Redtail Telematics headquarters at the Plextek Building in Great Chesterford"
+			imagePosition="58% center"
+			primaryCta={{ href: "/contact-us", label: "Talk to our team" }}
+			secondaryCta={{ href: "/platform-and-apps", label: "Explore the platform" }}
+			proof={[
+				{ label: "6M+", detail: "Devices delivered worldwide" },
+				{ label: "30B+", detail: "Miles processed and analyzed" },
+				{ label: "30+ years", detail: "Telematics expertise" },
+			]}
+		/>
 	);
 }
 
@@ -305,7 +231,7 @@ export function WhatWeDoSection() {
 				</div>
 
 				<div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-					{whatWeDo.map((item, index) => (
+					{whatWeDo.map((item) => (
 						<Card
 							className="relative isolate border-black/10 bg-white py-0 shadow-[0_18px_50px_rgba(1,1,1,0.06)] ring-0 transition duration-300 hover:-translate-y-1 hover:border-rb-red/28 hover:shadow-[0_24px_70px_rgba(1,1,1,0.1)]"
 							key={item.title}
@@ -319,12 +245,6 @@ export function WhatWeDoSection() {
 									<div className="flex size-12 items-center justify-center rounded-xl bg-rb-black text-white">
 										<HugeIcon icon={item.icon} size={22} />
 									</div>
-									<Badge
-										className="border-black/10 bg-white/70 text-rb-black/54"
-										variant="outline"
-									>
-										{String(index + 1).padStart(2, "0")}
-									</Badge>
 								</div>
 								<CardTitle className="text-xl font-semibold leading-tight text-rb-black">
 									{item.title}

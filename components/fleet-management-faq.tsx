@@ -6,11 +6,13 @@ import { ArrowDown01Icon, MessageQuestionIcon } from "@hugeicons/core-free-icons
 
 import { HugeIcon } from "@/components/huge-icon";
 import { Button } from "@/components/ui/button";
+import { section179Benefit } from "@/lib/tax-benefits";
 import { cn } from "@/lib/utils";
 
 type FaqItem = {
 	question: string;
 	answer: string;
+	guidance?: { href: string; label: string };
 };
 
 const faqItems: FaqItem[] = [
@@ -30,14 +32,24 @@ const faqItems: FaqItem[] = [
 			"Yes. Fleet information is available through the RT Fleet app and web dashboard, including real-time vehicle locations and fleet activity.",
 	},
 	{
-		question: "How do maintenance reminders work?",
+		question: "How can Redtail help with vehicle maintenance?",
 		answer:
-			"Maintenance reminders can be based on mileage, engine hours, or time intervals. Talk with Redtail about the device and setup your fleet needs and the maintenance information your team wants to monitor.",
+			"Redtail helps teams keep track of vehicle maintenance and plan service using fleet usage and maintenance records. Talk with Redtail about the setup your fleet needs and the maintenance information your team wants to review.",
 	},
 	{
 		question: "How should we discuss devices and installation?",
 		answer:
 			"Share your vehicle types, fleet size, and rollout plans with the sales team. Redtail can discuss device and installation options for your requirements before you choose a setup.",
+	},
+	{
+		question: "Can Redtail support Hours of Service (HOS) workflows?",
+		answer:
+			"Journey timing, stops, mileage, and vehicle-use records provide context for Hours of Service reviews. Share the driver records, reports, and integrations your operation needs with Redtail so our team can confirm the appropriate deployment and reporting scope.",
+	},
+	{
+		question: section179Benefit.question,
+		answer: section179Benefit.answer,
+		guidance: { href: section179Benefit.guidanceHref, label: section179Benefit.guidanceLabel },
 	},
 	{
 		question: "What should we bring to the fleet conversation?",
@@ -122,6 +134,11 @@ export function FleetManagementFaqSection() {
 											<p className="px-5 pb-5 text-sm leading-7 text-rb-black/58 sm:px-6 sm:text-base">
 												{item.answer}
 											</p>
+											{item.guidance && isOpen ? (
+												<a className="mx-5 mb-5 inline-block text-sm font-semibold text-rb-red hover:underline sm:mx-6" href={item.guidance.href} rel="noreferrer" target="_blank">
+													{item.guidance.label}
+												</a>
+											) : null}
 										</div>
 									</div>
 								</div>

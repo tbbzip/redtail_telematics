@@ -64,6 +64,15 @@ const solutionBenefits = [
 		toneClass: "from-rb-light-blue/80",
 		className: "lg:col-span-2",
 	},
+	{
+		title: "Policy Administration Workflows",
+		description:
+			"Connect vehicle usage, driving behaviour, and incident data with your insurer's policy administration workflows. Work with Redtail to define the required data, reporting, and integration with your existing systems.",
+		icon: Database01Icon,
+		outcome: "Connect",
+		toneClass: "from-rb-light-green/85",
+		className: "lg:col-span-6",
+	},
 ] satisfies {
 	title: string;
 	description: string;
@@ -106,12 +115,6 @@ function BenefitCard({
 					>
 						<HugeIcon icon={benefit.icon} size={22} />
 					</div>
-					<Badge
-						className="border-black/10 bg-white/70 text-rb-black/54 backdrop-blur-sm"
-						variant="outline"
-					>
-						{String(index + 1).padStart(2, "0")}
-					</Badge>
 				</div>
 				<div>
 					<Badge

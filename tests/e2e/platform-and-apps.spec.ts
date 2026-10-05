@@ -29,7 +29,11 @@ test("Platform & Apps presents the evidence-backed product story", async ({ page
 	);
 	await expect(page.locator("#mobile-apps")).toContainText("Redtail Fleet App");
 	await expect(page.locator("#mobile-apps")).toContainText("Redtail Installer App");
-	await expect(page.getByText("32 report templates", { exact: false }).first()).toBeVisible();
+	await expect(page.locator("#reports-proof")).toContainText("Odometer records");
+	await expect(page.locator("#location-intelligence")).toContainText("Predicted location");
+	await expect(page.locator("#fleet-visibility")).toContainText("Trip preparation");
+	await expect(page.locator("#fleet-visibility")).toContainText("deployment testing must be confirmed");
+	await expect(page.locator("#device-health")).toHaveCount(0);
 
 	const bodyText = await page.locator("body").innerText();
 	for (const unsupportedClaim of [
@@ -41,6 +45,7 @@ test("Platform & Apps presents the evidence-backed product story", async ({ page
 		/instant activation/i,
 		/crash detection|crashboard/i,
 		/route optimi[sz]ation/i,
+		/device diagnostics|installation monitoring|system health|live ETAs/i,
 		/safe disable/i,
 		/automatic reminders?/i,
 		/guaranteed delivery/i,

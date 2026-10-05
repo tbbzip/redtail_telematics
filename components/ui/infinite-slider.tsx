@@ -1,10 +1,23 @@
 "use client";
 
-import { animate, motion, useMotionValue, useReducedMotion } from "motion/react";
-import { useEffect, useState } from "react";
+import { animate, motion, useMotionValue } from "motion/react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import useMeasure from "react-use-measure";
 
 import { cn } from "@/lib/utils";
+
+const subscribeToHydration = () => () => {};
+const getClientHydrationSnapshot = () => true;
+const getServerHydrationSnapshot = () => false;
+
+const reducedMotionQuery = "(prefers-reduced-motion: reduce)";
+const subscribeToReducedMotion = (onChange: () => void) => {
+  const mediaQuery = window.matchMedia(reducedMotionQuery);
+  mediaQuery.addEventListener("change", onChange);
+  return () => mediaQuery.removeEventListener("change", onChange);
+};
+const getReducedMotionSnapshot = () => window.matchMedia(reducedMotionQuery).matches;
+const getServerReducedMotionSnapshot = () => false;
 
 export type InfiniteSliderProps = {
   children: React.ReactNode;
@@ -30,10 +43,22 @@ export function InfiniteSlider({
   const translation = useMotionValue(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [key, setKey] = useState(0);
-  const shouldReduceMotion = useReducedMotion();
+  const prefersReducedMotion = useSyncExternalStore(
+    subscribeToReducedMotion,
+    getReducedMotionSnapshot,
+    getServerReducedMotionSnapshot,
+  );
+  const hasHydrated = useSyncExternalStore(
+    subscribeToHydration,
+    getClientHydrationSnapshot,
+    getServerHydrationSnapshot,
+  );
+  // Keep the server and hydration renders identical before applying browser preferences.
+  const shouldReduceMotion = hasHydrated && prefersReducedMotion;
 
   useEffect(() => {
-    if (shouldReduceMotion) {
+    // Never start an animation before the client's motion preference is applied.
+    if (!hasHydrated || shouldReduceMotion) {
       translation.set(0);
       return;
     }
@@ -84,9 +109,11 @@ export function InfiniteSlider({
     direction,
     reverse,
     shouldReduceMotion,
+    hasHydrated,
   ]);
 
-  const hoverProps = speedOnHover && !shouldReduceMotion
+  // Track pointer changes in static mode so the correct speed resumes afterward.
+  const hoverProps = speedOnHover && hasHydrated
     ? {
         onHoverStart: () => {
           setIsTransitioning(true);
@@ -100,10 +127,10 @@ export function InfiniteSlider({
     : {};
 
   return (
-    <div className={cn(shouldReduceMotion ? "overflow-visible" : "overflow-hidden", className)}>
+    <div className={cn("motion-reduce:overflow-visible", shouldReduceMotion ? "overflow-visible" : "overflow-hidden", className)}>
       <motion.div
         className={cn(
-          "flex",
+          "flex motion-reduce:w-full motion-reduce:flex-wrap motion-reduce:justify-center",
           shouldReduceMotion ? "w-full flex-wrap justify-center" : "w-max",
         )}
         style={{
@@ -118,7 +145,7 @@ export function InfiniteSlider({
       >
         {children}
         {shouldReduceMotion ? null : (
-          <div aria-hidden="true" className="contents">
+          <div aria-hidden="true" className="contents motion-reduce:hidden">
             {children}
           </div>
         )}

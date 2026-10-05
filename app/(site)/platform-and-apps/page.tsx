@@ -9,7 +9,7 @@ import {
 export const metadata: Metadata = {
 	title: "Fleet Telematics Platform & Mobile Apps | Redtail",
 	description:
-		"Explore Redtail's fleet telematics platform for fleet status, journey replay, driving behaviour, alerts, device health, maintenance, reports, circuit session analysis, and focused mobile apps.",
+		"Explore Redtail's fleet telematics platform for fleet status, journey replay, driving behaviour, alerts, maintenance, reports, circuit session analysis, and focused mobile apps.",
 	keywords: [
 		"Fleet Telematics Platform",
 		"Fleet Tracking and Status",
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 		"Driving Behaviour Analysis",
 		"Fleet Alerts and Geofences",
 		"Fleet Maintenance Planning",
-		"Telematics Device Diagnostics",
+		"Location Intelligence",
 		"Fleet Report Templates",
 		"Circuit Lap Replay",
 		"Fleet Management App",
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
 	openGraph: {
 		title: "Fleet Telematics Platform & Mobile Apps | Redtail",
 		description:
-			"See fleet status, journey replay, driving behaviour, alerts, device health, maintenance, reports, circuit session analysis, and Redtail's focused mobile apps.",
+			"See fleet status, journey replay, driving behaviour, alerts, maintenance, reports, circuit session analysis, and Redtail's focused mobile apps.",
 		url: "https://www.redtailtelematics.com/platform-and-apps",
 		locale: "en_US",
 		images: [defaultSocialImage],
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
 		site: "@RedtailTele",
 		title: "Fleet Telematics Platform & Mobile Apps | Redtail",
 		description:
-			"See fleet status, journey replay, driving behaviour, alerts, device health, maintenance, reports, circuit session analysis, and Redtail's focused mobile apps.",
+			"See fleet status, journey replay, driving behaviour, alerts, maintenance, reports, circuit session analysis, and Redtail's focused mobile apps.",
 		images: [
 			{
 				alt: defaultSocialImageAlt,

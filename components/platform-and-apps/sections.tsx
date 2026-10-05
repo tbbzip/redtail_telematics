@@ -21,6 +21,7 @@ import type { IconSvgElement } from "@hugeicons/react";
 
 import { HugeIcon } from "@/components/huge-icon";
 import { Button } from "@/components/ui/button";
+import { section179Benefit } from "@/lib/tax-benefits";
 import { cn } from "@/lib/utils";
 
 type Detail = { title: string; description: string };
@@ -29,9 +30,9 @@ const capabilities = [
 	["#fleet-visibility", "Fleet & journeys", "Status, maps and route replay", MapsLocation01Icon],
 	["#driver-behaviour", "Driving behaviour", "Event patterns by place and time", CarSignalIcon],
 	["#alerts-proof", "Alerts & geofences", "Interests, history and channels", Alert02Icon],
-	["#maintenance-proof", "Maintenance", "Planning, tasks and due states", Wrench01Icon],
-	["#reports-proof", "Reports", "Templates, schedules and history", FileChartColumnIcon],
-	["#device-health", "Device health", "Power, connectivity and activity", GpsSignal01Icon],
+	["#maintenance-proof", "Maintenance", "Keep vehicles ready for work", Wrench01Icon],
+	["#reports-proof", "Reports & mileage", "Trip, driving and odometer records", FileChartColumnIcon],
+	["#location-intelligence", "Location intelligence", "Predicted location and map context", GpsSignal01Icon],
 	["#circuit-intelligence", "Circuit intelligence", "Sessions, laps and comparison", Route03Icon],
 	["#mobile-apps", "Mobile access", "Fleet and installer apps", SmartPhone01Icon],
 ] satisfies [string, string, string, IconSvgElement][];
@@ -40,19 +41,23 @@ const fleetAppDetails = [
 	"See fleet positions and vehicle direction",
 	"Follow recent trails and open past journeys",
 	"Filter vehicles by driving, idling or engine-off status",
+	"Review vehicles by name, activity or last update",
 	"Focus on one vehicle without returning to the office",
+	"Arm location monitoring and receive movement alerts",
+	"View and set vehicle mileage",
+	"Review vehicle and device battery status",
 ];
 
 const installerAppDetails = [
-	"Check whether a Redtail device is communicating",
-	"Record and review installation details",
-	"Review activity for managed installers",
+	"Fit Redtail devices using the appropriate installation guidance",
+	"Prepare vehicles for device setup and activation",
+	"Confirm fitting requirements with Redtail support",
 ];
 
 const proofItems = [
 	["Journey visibility", "Current and historical context"],
 	["Email · SMS · Push", "Configurable alert channels"],
-	["32 report templates", "Scheduled or on-demand"],
+	["Fleet reporting", "Trips, driving events and mileage"],
 	["Web · iOS · Android", "Portal and field access"],
 ] satisfies [string, string][];
 
@@ -175,38 +180,32 @@ function ProductCanvas({
 					src={src}
 				/>
 			</div>
-			<figcaption className="px-1 pt-3 text-xs leading-5 text-rb-black/60">{caption}</figcaption>
+			<figcaption className="grid gap-2 px-1 pt-3 text-xs leading-5 text-rb-black/60">
+				<span>{caption}</span>
+				<a
+					aria-label={`View full image: ${alt}`}
+					className="inline-flex shrink-0 items-center gap-1 font-semibold text-rb-red hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-rb-red"
+					href={src}
+					rel="noreferrer"
+					target="_blank"
+				>
+					View full image
+					<HugeIcon className="-rotate-45" icon={ArrowRight01Icon} size={14} />
+				</a>
+			</figcaption>
 		</figure>
 	);
 }
 
 function PlatformHero() {
 	return (
-		<section className="relative isolate overflow-hidden bg-rb-black text-white">
-			<Image
-				alt=""
-				aria-hidden="true"
-				className="object-cover object-[center_68%] opacity-[0.58] sm:object-[center_62%]"
-				fill
-				priority
-				sizes="100vw"
-				src="/carousel/fleet.jpg"
-			/>
-			<div
-				aria-hidden="true"
-				className="absolute inset-0 bg-[linear-gradient(180deg,rgba(1,1,1,0.74)_0%,rgba(1,1,1,0.62)_43%,rgba(1,1,1,0.94)_100%)]"
-			/>
-			<div
-				aria-hidden="true"
-				className="absolute inset-0 bg-[radial-gradient(circle_at_18%_28%,rgba(207,19,23,0.36),transparent_28%),radial-gradient(circle_at_84%_72%,rgba(61,187,211,0.16),transparent_25%)]"
-			/>
-
-			<div className="relative mx-auto max-w-7xl px-4 pt-28 pb-10 sm:px-6 sm:pt-36 sm:pb-14 lg:px-8">
+		<section className="relative isolate overflow-hidden bg-[#0b1118] text-white">
+			<div className="relative mx-auto max-w-7xl px-5 pt-30 pb-10 sm:px-8 sm:pt-34 sm:pb-14 lg:px-10">
 				<div className="mx-auto max-w-5xl text-center">
 					<p className="text-xs font-semibold tracking-[0.28em] text-white/74 uppercase">
 						Redtail platform + mobile apps
 					</p>
-					<h1 className="mt-6 text-[3rem] leading-[0.98] font-semibold text-balance text-white sm:text-6xl lg:text-[4.75rem]">
+					<h1 className="mt-6 text-[2.65rem] leading-[1.08] font-semibold tracking-[-0.045em] text-balance text-white sm:text-6xl lg:text-[4.75rem]">
 						<span>See every journey.</span>{" "}
 						<span className="block text-[#ff5459]">Understand every signal.</span>
 					</h1>
@@ -232,28 +231,25 @@ function PlatformHero() {
 					</div>
 				</div>
 
-				<figure className="relative mx-auto mt-10 max-w-6xl overflow-hidden rounded-2xl border border-white/22 bg-white shadow-[0_34px_120px_rgba(0,0,0,0.55)] sm:mt-12">
+				<figure className="relative mx-auto mt-10 max-w-5xl overflow-hidden rounded-lg border border-white/22 bg-white shadow-[0_34px_120px_rgba(0,0,0,0.55)] sm:mt-12">
 					<div className="flex h-10 items-center gap-2 border-b border-black/8 bg-[#f5f4f2] px-4">
-						<span className="size-2.5 rounded-full bg-rb-red/78" />
-						<span className="size-2.5 rounded-full bg-rb-orange/42" />
-						<span className="size-2.5 rounded-full bg-rb-green/42" />
-						<p className="ml-3 text-[10px] font-semibold tracking-[0.16em] text-rb-black/62 uppercase">
-							Journey Showcase
+						<p className="text-[10px] font-semibold tracking-[0.16em] text-rb-black/62 uppercase">
+							Redtail fleet portal
 						</p>
 					</div>
-					<div className="relative aspect-[1.15] bg-[#d8eef4] sm:aspect-[1.82] lg:aspect-[2.26]">
+					<div className="relative aspect-[1380/763] bg-white">
 						<Image
-							alt="Redtail Journey Showcase displaying a mapped route with distance, duration, speed, idle time and event details"
-							className="object-cover object-left"
+							alt="Current Redtail fleet map with vehicle status filters, map controls and journey replay controls"
+							className="object-contain"
 							fill
 							loading="eager"
 							sizes="(max-width: 1280px) 94vw, 1150px"
-							src="/platform-screenshots/journey-showcase.jpg"
+							src="/platform-screenshots/current/fleet-map.jpg"
 						/>
 					</div>
 					<figcaption className="flex flex-col gap-1 border-t border-black/8 px-4 py-3 text-xs leading-5 text-rb-black/60 sm:flex-row sm:items-center sm:justify-between">
-						<span>Route, speed, stops, idle time and events in one connected view.</span>
-						<span className="font-semibold">Redtail portal interface</span>
+						<span>Vehicle visibility, status filters and replay controls.</span>
+						<span className="font-semibold">Redtail web portal</span>
 					</figcaption>
 				</figure>
 			</div>
@@ -282,7 +278,7 @@ function PlatformIndex() {
 				<div className="mx-auto max-w-7xl">
 					<Heading
 						center
-						description="Move directly into the part of Redtail that answers the question in front of your team. Each capability has its own product view and purpose."
+						description="Live GPS, driver monitoring, reports and alerts bring vehicle intelligence into one Redtail platform. Explore the capabilities that support your fleet's everyday work."
 						eyebrow="Inside Redtail"
 						title="Everything you need to keep vehicles moving"
 					/>
@@ -347,11 +343,11 @@ function FleetAndJourneyStory() {
 	return (
 		<Story
 			className="border-y border-black/10 bg-white"
-			description="Move from the current fleet picture into the journey that explains it. Status filters, vehicle focus and geofence controls stay close to route replay and event detail."
+			description="View vehicle positions and activity, then replay past journeys to understand speed, stops and driving events. Use that journey history when preparing upcoming trips."
 			details={[
 				{ title: "Fleet status", description: "Find vehicles and filter active, engine-off or offline states." },
 				{ title: "Journey replay", description: "Review route, distance, duration, speed, stops and idle time." },
-				{ title: "Map controls", description: "Focus vehicle layers and work with geofence controls." },
+				{ title: "Trip preparation", description: "Use previous journeys as a reference for upcoming trips." },
 			]}
 			eyebrow="Fleet visibility + journeys"
 			id="fleet-visibility"
@@ -361,9 +357,9 @@ function FleetAndJourneyStory() {
 				<ProductCanvas
 					alt="Redtail journey view showing a mapped route and journey summary"
 					caption="Journey replay connects the map to the evidence behind each trip."
-					imageClassName="object-cover object-left sm:object-contain"
+					imageClassName="object-contain"
 					loading="eager"
-					mediaClassName="aspect-[1.2] sm:aspect-[2.26]"
+					mediaClassName="aspect-[2.26]"
 					sizes="(max-width: 1024px) 100vw, 760px"
 					src="/platform-screenshots/journey-showcase.jpg"
 				/>
@@ -379,6 +375,11 @@ function FleetAndJourneyStory() {
 					</div>
 				</figure>
 			</div>
+			<p className="mt-5 text-sm leading-6 text-rb-black/65">
+				<strong className="font-semibold text-rb-black">Remote-disable options.</strong>{" "}
+				Discuss availability and operating safeguards with Redtail for your proposed deployment.
+				Vehicle compatibility and deployment testing must be confirmed before use.
+			</p>
 		</Story>
 	);
 }
@@ -387,7 +388,7 @@ function DrivingBehaviourStory() {
 	return (
 		<Story
 			className="bg-[#f4f1ed]"
-			description="Select the behaviours you want to understand, see where events cluster and compare when they occur. The result is a pattern your team can investigate, not an isolated alert."
+			description="Understand how vehicles are driven so you can support driver coaching, improve efficiency and review risk. See where driving events happen and how patterns change over time."
 			details={[
 				{ title: "Choose the signal", description: "Filter the behaviour types that matter to the review." },
 				{ title: "Locate the pattern", description: "See where selected events concentrate." },
@@ -401,9 +402,9 @@ function DrivingBehaviourStory() {
 			<ProductCanvas
 				alt="Redtail driving behaviour analysis with behaviour filters, geographic heatmap and time-of-day activity"
 				caption="Driving behaviour analysis groups event types with location and time patterns."
-				imageClassName="object-cover object-left sm:object-contain"
-				mediaClassName="aspect-[1.05] sm:aspect-[1.68]"
-				src="/platform-screenshots/driving-behaviour.jpg"
+				imageClassName="object-contain"
+				mediaClassName="aspect-[1126/1033]"
+				src="/platform-screenshots/current/driving-behaviour.jpg"
 			/>
 		</Story>
 	);
@@ -425,17 +426,10 @@ function AlertsStory() {
 		>
 			<div className="grid gap-4">
 				<ProductCanvas
-					alt="Redtail alert interests grouped by misuse, comfort, efficiency, maintenance, compliance and device health"
-					caption="Alert interests grouped around common fleet needs."
-					imageClassName="object-cover object-left sm:object-contain"
-					mediaClassName="aspect-[3.15] sm:aspect-[6.74]"
-					src="/platform-screenshots/alert-categories.jpg"
-				/>
-				<ProductCanvas
 					alt="Redtail notification controls offering email, SMS and push notification channels"
 					caption="Email, SMS and push delivery controls."
-					mediaClassName="aspect-[3.08]"
-					src="/platform-screenshots/alert-channels.jpg"
+					mediaClassName="aspect-[1126/223]"
+					src="/platform-screenshots/current/alert-channels.jpg"
 				/>
 			</div>
 		</Story>
@@ -447,30 +441,30 @@ function MaintenanceStory() {
 		<Story
 			className="relative isolate overflow-hidden bg-rb-black text-white"
 			dark
-			description="Bring planned work, due states, calendar context, task presets, vehicles and recipients into one maintenance workspace."
+			description="Keep vehicle maintenance visible alongside everyday fleet activity. Help your team plan servicing and keep vehicles ready for work."
 			details={[
-				{ title: "See the workload", description: "Review planned, due, booked, overdue and on-hold states." },
-				{ title: "Use the calendar", description: "See upcoming maintenance in schedule context." },
-				{ title: "Create the task", description: "Select a preset, vehicle, interval and recipient." },
+				{ title: "Vehicle maintenance", description: "Keep routine servicing in view." },
+				{ title: "Fleet readiness", description: "Coordinate maintenance with vehicle availability." },
+				{ title: "Battery status", description: "Review vehicle and device battery status alongside fleet activity." },
 			]}
 			eyebrow="Maintenance"
 			id="maintenance-proof"
 			reverse
-			title="Plan the work before it becomes overdue"
+			title="Keep maintenance part of everyday fleet management"
 		>
 			<div className="grid gap-4">
 				<ProductCanvas
-					alt="Redtail fleet maintenance status and planning calendar"
-					caption="Maintenance status and calendar planning."
-					imageClassName="object-cover object-left sm:object-contain"
-					mediaClassName="aspect-[1.86] sm:aspect-[3.728]"
-					src="/platform-screenshots/maintenance-planning.jpg"
+					alt="Current Redtail Vehicle Maintenance page with upcoming and history views and a maintenance calendar"
+					caption="Upcoming maintenance, history and calendar views in the Redtail portal."
+					imageClassName="object-contain"
+					mediaClassName="aspect-[1338/483]"
+					src="/platform-screenshots/current/maintenance-calendar.jpg"
 				/>
 				<ProductCanvas
-					alt="Redtail add planned maintenance dialog with preset, vehicle, interval and recipient fields"
-					caption="Planned maintenance setup with presets and recipients."
-					mediaClassName="aspect-[1.95]"
-					src="/platform-screenshots/maintenance-task.jpg"
+					alt="Established Redtail Fleet App showing vehicle and device battery states beside recent journeys"
+					caption="Vehicle and device battery states in the established Fleet App."
+					mediaClassName="aspect-[1.498]"
+					src="/platform-screenshots/fleet-battery-journeys-legacy.png"
 				/>
 			</div>
 		</Story>
@@ -481,49 +475,103 @@ function ReportsStory() {
 	return (
 		<Story
 			className="border-b border-black/10 bg-white"
-			description="Run reports when you need them or schedule them for your team. The catalog spans vehicle health, driving behaviour, usage, devices and user management."
+			description="Use trip history, driving events and alert summaries to review fleet performance. Odometer and journey records help your team organise business mileage and support tax recordkeeping."
 			details={[
-				{ title: "Choose a template", description: "Start with one of 32 report templates." },
-				{ title: "Run or schedule", description: "Use on-demand setup or create a schedule." },
+				{ title: "Trip history", description: "Review journeys, distance and vehicle use." },
+				{ title: "Driving and alerts", description: "Review speed, braking, acceleration and recorded events." },
+				{ title: "Odometer records", description: "Keep mileage information for business reporting and tax records." },
 			]}
-			eyebrow="32 report templates"
+			eyebrow="Reporting + mileage"
 			id="reports-proof"
-			title="A ready-to-run catalog for common fleet questions"
+			title="Reporting that reflects how your fleet operates"
 		>
-			<ProductCanvas
-				alt="Redtail report catalog listing templates, categories, descriptions and scheduled or on-demand setup actions"
-				caption="32 report templates with scheduled and on-demand setup actions."
-				imageClassName="object-cover object-left sm:object-contain"
-				mediaClassName="aspect-[1.2] sm:aspect-[2.52]"
-				sizes="(max-width: 1024px) 100vw, 720px"
-				src="/platform-screenshots/report-catalog.jpg"
-			/>
+			<div className="grid gap-4">
+				<ProductCanvas
+					alt="Current Redtail journey activity calendar with distance and duration views, PDF and CSV export controls and selected-period totals"
+					caption="Review journey activity, distance and duration for a selected period."
+					imageClassName="object-contain"
+					mediaClassName="aspect-[1126/345]"
+					sizes="(max-width: 1024px) 100vw, 720px"
+					src="/platform-screenshots/current/journey-activity.jpg"
+				/>
+				<ProductCanvas
+					alt="Current Redtail odometer panel showing the mileage reading, projected mileage and how journey distances update the odometer"
+					caption="Odometer estimates use the last entered reading plus recorded journey distances."
+					imageClassName="object-contain"
+					mediaClassName="aspect-[1126/295]"
+					sizes="(max-width: 1024px) 100vw, 720px"
+					src="/platform-screenshots/current/odometer.jpg"
+				/>
+				<div className="border-l-2 border-rb-red pl-5">
+					<h3 className="text-base font-semibold text-rb-black">Hours of Service</h3>
+					<p className="mt-2 text-sm leading-6 text-rb-black/62">
+						Journey timing and vehicle-use records add context to Hours of Service
+						reviews. Discuss the driver records, reporting and integrations required
+						for your operation with Redtail.
+					</p>
+					<Link className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-rb-red hover:underline" href="/contact-us">
+					Discuss HOS requirements
+						<HugeIcon icon={ArrowRight01Icon} size={16} />
+					</Link>
+				</div>
+				<div className="border-l-2 border-rb-red pl-5">
+					<h3 className="text-base font-semibold text-rb-black">{section179Benefit.title}</h3>
+					<p className="mt-2 text-sm leading-6 text-rb-black/62">{section179Benefit.description}</p>
+					<a className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-rb-red hover:underline" href={section179Benefit.guidanceHref} rel="noreferrer" target="_blank">
+						{section179Benefit.guidanceLabel}
+						<HugeIcon className="-rotate-45" icon={ArrowRight01Icon} size={16} />
+					</a>
+				</div>
+			</div>
 		</Story>
 	);
 }
 
-function DeviceHealthStory() {
+function LocationIntelligenceStory() {
 	return (
 		<Story
 			className="bg-[#eef7fa]"
-			description="Device state is easier to trust when teams can see activity over time. The timeline brings faults, SIM state, power, first fix and heartbeat into the same review."
+			description="Use reported and predicted positions to review vehicle location, then explore the journeys and driving events associated with that place. Map views add context when your team reviews activity or prepares an upcoming trip."
 			details={[
-				{ title: "Connectivity", description: "Review SIM and heartbeat state over time." },
-				{ title: "Power", description: "See whether the device remained vehicle-powered." },
-				{ title: "Activity", description: "Connect device activity and idling to the timeline." },
+				{ title: "Predicted location", description: "Distinguish reported positions from predicted positions during a location review." },
+				{ title: "Satellite view", description: "Use an aerial view to understand where vehicles and assets are." },
+				{ title: "Map overlays", description: "Add geographic context to vehicle movement and geofence reviews." },
 			]}
-			eyebrow="Device health"
-			id="device-health"
+			eyebrow="Location intelligence"
+			id="location-intelligence"
 			reverse
-			title="See the signal behind the vehicle connection"
+			title="Understand location in context"
 		>
-			<ProductCanvas
-				alt="Redtail device activity timeline showing faults, SIM, activity, power, first fix and heartbeat"
-				caption="A time-based view of connectivity, activity and vehicle power."
-				imageClassName="object-cover object-left sm:object-contain"
-				mediaClassName="aspect-[2.2] sm:aspect-[4.66]"
-				src="/platform-screenshots/device-timeline.jpg"
-			/>
+			<div className="grid gap-4 sm:grid-cols-2">
+				<ProductCanvas
+					alt="Current Redtail Location Prediction panel showing confidence by day of week and hour, based on historical vehicle-location patterns"
+					caption="Location prediction uses historical patterns, with confidence shown by day and hour."
+					className="sm:col-span-2"
+					mediaClassName="aspect-[1126/424]"
+					sizes="(max-width: 1024px) 100vw, 720px"
+					src="/platform-screenshots/current/location-prediction.jpg"
+				/>
+				<ProductCanvas
+					alt="Established Redtail Fleet App artwork showing a satellite map with vehicle locations, event markers and activity filters"
+					caption="Fleet App satellite view with vehicle locations and activity filters."
+					imageClassName="object-cover object-center"
+					mediaClassName="aspect-[0.52]"
+					sizes="(max-width: 640px) 290vw, (max-width: 1024px) 145vw, 600px"
+					src="/platform-screenshots/fleet-satellite-app.png"
+				/>
+				<ProductCanvas
+					alt="Established Redtail Fleet App artwork showing a geofence boundary and entry and exit alert controls on a satellite map"
+					caption="Fleet App geofence boundaries and entry/exit alert controls."
+					imageClassName="object-cover object-center"
+					mediaClassName="aspect-[0.52]"
+					sizes="(max-width: 640px) 290vw, (max-width: 1024px) 145vw, 600px"
+					src="/platform-screenshots/fleet-geofence-app.png"
+				/>
+				<Link className="inline-flex items-center gap-2 text-sm font-semibold text-rb-red hover:underline sm:col-span-2" href="/contact-us">
+					See location intelligence in a demo
+					<HugeIcon icon={ArrowRight01Icon} size={16} />
+				</Link>
+			</div>
 		</Story>
 	);
 }
@@ -547,15 +595,15 @@ function CircuitStory() {
 				<ProductCanvas
 					alt="Redtail circuit directory listing venues with fastest lap, sessions, vehicles, laps, layout and recent activity"
 					caption="Venue-level session and lap context."
-					imageClassName="object-cover object-top"
-					mediaClassName="aspect-[1.12] sm:aspect-[1.35]"
-					src="/platform-screenshots/circuit-directory.jpg"
+					imageClassName="object-contain"
+					mediaClassName="aspect-[1324/500]"
+					src="/platform-screenshots/current/circuit-directory.jpg"
 				/>
 				<ProductCanvas
 					alt="Redtail circuit lap replay map showing a circuit layout"
 					caption="Circuit map for replay or comparison."
-					imageClassName="object-cover"
-					mediaClassName="aspect-[1.12] sm:aspect-[0.81]"
+					imageClassName="object-contain"
+					mediaClassName="aspect-[1.307]"
 					src="/platform-screenshots/circuit-map.jpg"
 				/>
 				<p className="text-xs leading-5 text-white/52 sm:col-span-2">
@@ -665,6 +713,7 @@ function MobileAppsSection() {
 								alt="Redtail portal on a laptop beside the established Redtail Fleet App map interface on a phone"
 								className="object-contain"
 								fill
+								loading="eager"
 								sizes="(max-width: 1024px) 100vw, 760px"
 								src="/platform-screenshots/redtail_lap-mob.png"
 							/>
@@ -694,8 +743,9 @@ function MobileAppsSection() {
 							<p className="text-xs font-semibold tracking-[0.2em] text-[#ff7377] uppercase">For installers</p>
 							<h3 className="mt-3 text-3xl font-semibold text-white sm:text-4xl">Redtail Installer App</h3>
 							<p className="mt-5 text-base leading-7 text-white/64">
-								Support device installation with communication checks, recorded
-								installation details and an overview of managed installer activity.
+								Support professional fitting and setup of Redtail devices with the
+								Redtail Installer App. Confirm vehicle compatibility and installation
+								requirements with our team before deployment.
 							</p>
 							<AppDetailList dark items={installerAppDetails} />
 							<StoreButtons
@@ -733,6 +783,12 @@ function AccessAndCtaSection() {
 							</div>
 						))}
 					</div>
+					<p className="text-sm leading-7 text-rb-black/65 lg:col-span-2">
+						Redtail&apos;s Quality Management System is ISO 9001 certified, and its
+						Information Security Management System is ISO 27001 certified.
+						These systems support the quality of our products and services and
+						the protection of customer information.
+					</p>
 				</div>
 			</section>
 
@@ -752,7 +808,7 @@ function AccessAndCtaSection() {
 							</h2>
 							<p className="mt-4 max-w-2xl text-base leading-7 text-white/76">
 								Walk through fleet status, journeys, behaviour, alerts, maintenance,
-								reports, device health and mobile access with your operating model in mind.
+								reports, location intelligence and mobile access with your operating model in mind.
 							</p>
 						</div>
 						<div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
@@ -792,7 +848,7 @@ export function PlatformAndAppsSections() {
 			<AlertsStory />
 			<MaintenanceStory />
 			<ReportsStory />
-			<DeviceHealthStory />
+			<LocationIntelligenceStory />
 			<CircuitStory />
 			<MobileAppsSection />
 			<AccessAndCtaSection />

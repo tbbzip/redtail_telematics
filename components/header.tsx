@@ -36,11 +36,11 @@ export function Header() {
 				mobileMenuOpen
 					? "border-border bg-background"
 					: overlay
-					? "border-transparent bg-transparent"
+						? "border-white/12 bg-[#0b1118]/30 backdrop-blur-sm"
 					: "border-border bg-background/95 backdrop-blur-sm supports-backdrop-filter:bg-background/70"
 			)}
 		>
-			<nav className="mx-auto flex h-14 w-full max-w-7xl items-center justify-between px-4">
+			<nav className="mx-auto flex h-18 w-full max-w-[1440px] items-center justify-between px-4 sm:px-6 lg:px-8 xl:px-14">
 				<div className="flex items-center gap-6">
 					<Link
 						className="px-2 py-1.5 transition-opacity hover:opacity-90"
@@ -50,7 +50,7 @@ export function Header() {
 							alt="Redtail"
 							className="h-7 w-auto sm:h-8"
 							height={48}
-							priority
+							preload
 							src={overlay ? "/logo-white.svg" : "/logo.svg"}
 							width={160}
 						/>

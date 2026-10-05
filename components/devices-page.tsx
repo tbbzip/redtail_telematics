@@ -21,6 +21,7 @@ import {
 } from "@hugeicons/core-free-icons";
 import { type IconSvgElement } from "@hugeicons/react";
 
+import { EditorialHero } from "@/components/editorial-hero";
 import { HugeIcon } from "@/components/huge-icon";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -58,7 +59,12 @@ const deviceSlides = [
 	{
 		name: "VAM-HD (Plug & Play)",
 		image: "/devices/vam-hd.png",
-		href: "#vam-hd",
+		href: "#technical-specs",
+	},
+	{
+		name: "Bluetooth Tag",
+		image: "/devices/bluetooth.png",
+		href: "#bluetooth-tag",
 	},
 ];
 
@@ -168,8 +174,8 @@ const deviceLineup = [
 		image: "/devices/obd.png",
 		alt: "VAM-OBD",
 		description:
-			"True plug-and-drive install in under 60 seconds. Reads VIN, DTCs, and high-res accelerometer data - perfect for UBI.",
-		highlights: ["OBD-II + J1962", "VIN & DTC pull", "Eco/idle scoring"],
+			"Plug-in installation with an OBD-II connection for compatible vehicles. Captures driving-event data for UBI programs.",
+		highlights: ["OBD-II + J1962", "Driving-event data", "Driver behaviour & idling"],
 		toneClass: "from-rb-peach/60",
 	},
 	{
@@ -194,7 +200,7 @@ const useCases = [
 	},
 	{
 		title: "Car Rental",
-		description: "Track mileage, damage & overdue returns.",
+		description: "Review mileage, journeys & incident context.",
 		href: "/industries/car-rental",
 		icon: CarTimeIcon,
 	},
@@ -206,31 +212,31 @@ const useCases = [
 	},
 	{
 		title: "Logistics",
-		description: "Live ETAs & cold-chain compliance.",
+		description: "Vehicle visibility & journey records.",
 		href: "/industries/transportation-and-logistics",
 		icon: DeliveryTruck01Icon,
 	},
 	{
 		title: "Field Services",
-		description: "Route optimisation & proof-of-service.",
+		description: "Trip preparation & jobsite visit history.",
 		href: "/industries/field-services",
 		icon: ToolboxIcon,
 	},
 	{
 		title: "Emergency Vehicles",
-		description: "High-priority dispatch & driver safety.",
+		description: "Emergency fleet visibility & driver safety.",
 		href: "/industries/emergency-vehicles",
 		icon: AmbulanceIcon,
 	},
 	{
 		title: "Passenger Transit",
-		description: "Improve on-time arrivals & capacity use.",
+		description: "Review transit journeys & vehicle use.",
 		href: "/industries/passenger-transit",
 		icon: SchoolBusIcon,
 	},
 	{
 		title: "Utilities",
-		description: "Grid-safe work-zone alerts & crew audit.",
+		description: "Vehicle visibility & jobsite activity.",
 		href: "/industries/utilities",
 		icon: ElectricTower01Icon,
 	},
@@ -312,7 +318,7 @@ const commonUses = [
 	{
 		name: "Plant and equipment",
 		description:
-			"Location, movement, and device-health signals can support equipment oversight across active sites.",
+			"Location, movement, and journey records can support equipment oversight across active sites.",
 	},
 ];
 
@@ -328,21 +334,18 @@ function DeviceSlideCard({
 	return (
 		<Link
 			className={cn(
-				"group relative flex min-h-[18rem] min-w-[16.5rem] flex-col justify-between overflow-hidden rounded-2xl border border-white/14 bg-white/[0.075] p-4 text-white shadow-[0_20px_70px_rgba(0,0,0,0.24)] backdrop-blur-md transition duration-300 hover:-translate-y-1 hover:border-rb-red/55 hover:bg-white/[0.11] sm:min-w-[18rem]",
-				featured && "border-rb-red/44 bg-rb-red/12"
+				"group relative flex min-h-[19rem] min-w-[16.5rem] flex-col justify-between overflow-hidden rounded-md border border-white/20 bg-[#e8ebef] p-5 text-[#141b24] transition duration-300 hover:-translate-y-1 hover:border-rb-red focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:min-w-[18rem]",
+				featured && "border-rb-red/70"
 			)}
 			href={device.href}
 		>
 			<div className="flex items-start justify-between gap-4">
 				<div>
-					<p className="text-[11px] font-semibold tracking-[0.2em] text-white/44 uppercase">
-						Device {String(index + 1).padStart(2, "0")}
-					</p>
-					<h3 className="mt-2 text-xl font-semibold leading-tight text-white">
+					<h3 className="text-xl font-semibold leading-tight text-[#141b24]">
 						{device.name}
 					</h3>
 				</div>
-				<span className="rounded-full border border-white/14 px-3 py-1 text-xs font-semibold text-white/68">
+				<span className="mt-1 shrink-0 text-[10px] font-semibold text-[#52606e]">
 					See Specs
 				</span>
 			</div>
@@ -350,7 +353,7 @@ function DeviceSlideCard({
 			<div className="relative mx-auto mt-5 aspect-square w-full max-w-[13rem]">
 				<Image
 					alt={device.name}
-					className="object-contain drop-shadow-[0_24px_40px_rgba(0,0,0,0.35)] transition duration-300 group-hover:scale-105"
+					className="object-contain transition duration-300 group-hover:scale-105"
 					fill
 					sizes="220px"
 					src={device.image}
@@ -418,115 +421,47 @@ function TrustedByStrip() {
 
 export function DeviceHeroSection() {
 	return (
-		<section className="relative isolate overflow-hidden rounded-b-3xl bg-rb-black text-white">
-			<div
-				aria-hidden="true"
-				className="absolute inset-0 bg-[radial-gradient(circle_at_18%_16%,rgba(207,19,23,0.24),transparent_28%),radial-gradient(circle_at_82%_20%,rgba(255,255,255,0.12),transparent_24%),linear-gradient(135deg,#010101,#161514_54%,#010101)]"
-			/>
-			<div
-				aria-hidden="true"
-				className="absolute inset-0 opacity-34 [background-image:linear-gradient(120deg,rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(30deg,rgba(255,255,255,0.05)_1px,transparent_1px)] [background-size:36px_36px,58px_58px]"
-			/>
-
-			<div className="relative mx-auto grid min-h-[86svh] max-w-7xl gap-10 px-4 pt-24 pb-10 sm:px-6 sm:pt-32 lg:grid-cols-[0.88fr_1.12fr] lg:items-center lg:px-8 lg:pt-28">
-				<div className="max-w-2xl">
-					<div className="inline-flex items-center gap-3">
-						<span className="flex size-10 items-center justify-center rounded-md bg-rb-red text-white shadow-[0_16px_34px_rgba(207,19,23,0.32)]">
-							<HugeIcon icon={DeviceAccessIcon} />
-						</span>
-						<p className="text-xs font-semibold tracking-[0.28em] text-white/78 uppercase">
-							Devices
-						</p>
-					</div>
-
-					<h1 className="mt-7 max-w-3xl text-[2.6rem] leading-[1.02] font-semibold tracking-tight text-balance text-white sm:text-5xl sm:leading-tight lg:text-[3.6rem]">
-						World-Class Telematics, Tailored to Your Fleet.
-					</h1>
-
-					<p className="mt-5 max-w-2xl text-sm leading-6 text-white/72 sm:text-lg sm:leading-8">
-						From covert installs to plug-and-play OBD, the Redtail VAM family
-						captures high-definition driver and vehicle data in any environment.
-					</p>
-
-					<p className="mt-5 text-sm font-semibold tracking-[0.18em] text-white/54 uppercase">
-						6 million+ devices deployed worldwide
-					</p>
-
-					<div className="mt-8 flex flex-col gap-3 sm:flex-row">
-						<Button asChild className="w-full sm:w-auto" size="lg">
-							<Link href="/contact-us">
-								Book a Demo
-								<HugeIcon data-icon="inline-end" icon={ArrowRight01Icon} />
-							</Link>
-						</Button>
-						<Button
-							asChild
-							className="w-full border-white/32 bg-white/8 text-white hover:border-white/48 hover:bg-white/14 hover:text-white sm:w-auto"
-							size="lg"
-							variant="outline"
-						>
-							<Link href="#technical-specs">
-								View Technical Specs
-								<HugeIcon data-icon="inline-end" icon={ArrowRight01Icon} />
-							</Link>
-						</Button>
-					</div>
-
-					<div className="mt-8 grid max-w-xl grid-cols-3 divide-x divide-white/18 border-y border-white/16 py-4 sm:py-5">
-						<div className="pr-3 sm:pr-4">
-							<p className="text-lg font-semibold text-white sm:text-2xl">
-								1 kHz
-							</p>
-							<p className="mt-2 text-[11px] leading-4 text-white/52 sm:text-xs">
-								impact sampling
-							</p>
+		<>
+			<EditorialHero
+				eyebrow="Devices"
+				title="World-Class Telematics, Tailored to Your Fleet."
+				description="From covert installs to plug-and-play OBD, the Redtail VAM family captures high-definition driver and vehicle data in any environment."
+				primaryCta={{ href: "/contact-us", label: "Book a Demo" }}
+				secondaryCta={{ href: "#technical-specs", label: "View Technical Specs" }}
+				visual={
+					<figure className="overflow-hidden rounded-lg border border-white/20 bg-[#e8ebef] shadow-[0_30px_80px_#0004]">
+						<div className="relative h-[330px] sm:h-[450px]">
+							<Image alt="Redtail VAM-HDR telematics device" src="/devices/vam-hdr.png" fill className="object-contain p-7 sm:p-10" sizes="(min-width: 1024px) 620px, 92vw" preload />
 						</div>
-						<div className="px-3 sm:px-4">
-							<p className="text-lg font-semibold text-white sm:text-2xl">
-								350+
-							</p>
-							<p className="mt-2 text-[11px] leading-4 text-white/52 sm:text-xs">
-								OTA settings
-							</p>
+						<figcaption className="flex justify-between gap-4 border-t border-black/10 bg-white px-5 py-4 text-sm text-[#141b24]"><span className="font-semibold">VAM-HDR</span><span className="text-[#52606e]">Device family</span></figcaption>
+					</figure>
+				}
+				proof={[
+					{ label: "1 kHz", detail: "impact sampling" },
+					{ label: "350+", detail: "OTA settings" },
+					{ label: "6", detail: "form factors" },
+				]}
+			>
+				<p className="mt-7 text-sm font-semibold tracking-[0.18em] text-white/65 uppercase">6 million+ devices deployed worldwide</p>
+			</EditorialHero>
+			<section aria-labelledby="device-family-heading" className="overflow-hidden bg-[#0b1118] text-white">
+				<div className="mx-auto max-w-[1440px] px-[22px] pb-10 sm:px-8 lg:px-14">
+					<div className="mb-5 flex flex-wrap items-end justify-between gap-4 border-t border-white/15 pt-8">
+						<div>
+							<h2 className="text-xs font-semibold tracking-[0.22em] text-white/65 uppercase" id="device-family-heading">Device family</h2>
 						</div>
-						<div className="pl-3 sm:pl-4">
-							<p className="text-lg font-semibold text-white sm:text-2xl">
-								6
-							</p>
-							<p className="mt-2 text-[11px] leading-4 text-white/52 sm:text-xs">
-								form factors
-							</p>
-						</div>
+						<p className="text-xs text-white/60">Scroll lineup</p>
 					</div>
-				</div>
-
-				<div className="min-w-0">
-					<div className="mb-4 flex items-center justify-between gap-4">
-						<p className="text-xs font-semibold tracking-[0.22em] text-white/52 uppercase">
-							Device family
-						</p>
-						<div className="hidden items-center gap-2 text-xs text-white/48 sm:flex">
-							<span className="size-2 rounded-full bg-rb-red" />
-							Scroll lineup
-						</div>
-					</div>
-					<div className="mask-[linear-gradient(to_right,black_0%,black_82%,transparent)] overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+					<div className="overflow-x-auto pb-4 [scrollbar-color:#cf1317_#ffffff12] [scrollbar-width:thin]">
 						<div className="flex gap-4">
-							{deviceSlides.map((device, index) => (
-								<DeviceSlideCard
-									device={device}
-									index={index}
-									key={device.name}
-								/>
-							))}
+							{deviceSlides.map((device, index) => <DeviceSlideCard device={device} index={index} key={device.name} />)}
 						</div>
 					</div>
 				</div>
-			</div>
-
-			<QuickValueStrip />
-			<TrustedByStrip />
-		</section>
+				<QuickValueStrip />
+				<TrustedByStrip />
+			</section>
+		</>
 	);
 }
 
@@ -564,12 +499,6 @@ function DeviceLineupCard({
 					>
 						<HugeIcon icon={DeviceAccessIcon} size={22} />
 					</div>
-					<Badge
-						className="border-black/10 bg-white/70 text-rb-black/54 backdrop-blur-sm"
-						variant="outline"
-					>
-						{String(index + 1).padStart(2, "0")}
-					</Badge>
 				</div>
 				<div className="grid gap-5 sm:grid-cols-[1fr_9rem] sm:items-end">
 					<div>

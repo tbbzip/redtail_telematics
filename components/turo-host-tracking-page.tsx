@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import {
 	ArrowRight01Icon,
@@ -5,8 +6,8 @@ import {
 } from "@hugeicons/core-free-icons";
 
 import { FooterDemoForm } from "@/components/footer-demo-form";
+import { EditorialHero } from "@/components/editorial-hero";
 import { HugeIcon } from "@/components/huge-icon";
-import { Button } from "@/components/ui/button";
 
 const tintProviderUrl =
 	"https://support.tint.ai/turo/gps-telematics-options-for-off-trip-insurance-coverage";
@@ -37,48 +38,29 @@ const connectionSteps = [
 export function TuroHostTrackingPage() {
 	return (
 		<main className="flex-1 overflow-x-clip bg-background">
-			<section
-				aria-labelledby="turo-host-heading"
-				className="relative isolate overflow-hidden rounded-b-3xl bg-rb-black px-4 pt-28 pb-12 text-white sm:px-6 sm:pt-32 sm:pb-16 lg:px-8 lg:pt-36 lg:pb-20"
+			<EditorialHero
+				eyebrow="For Turo Host Businesses"
+				title="GPS Tracking for Turo Hosts"
+				description="See where your vehicles are and review their journeys with Redtail. Talk with our team about tracking for your host business, device compatibility, and connecting Redtail devices to Tint."
+				primaryCta={{ href: "#footer-demo-form", label: "Request host guidance" }}
+				secondaryCta={{ href: "tel:+18667114880", label: "Call Sales: +1 866 711 4880" }}
+				visual={
+					<figure className="overflow-hidden rounded-lg border border-white/20 bg-[#e8ebef] shadow-[0_30px_80px_#0004]">
+						<div className="relative aspect-[1.25] sm:aspect-[1.4]">
+							<Image alt="Rental vehicles parked in a fleet" src="/industries/hero-rental.webp" fill preload className="object-cover" sizes="(min-width: 1024px) 620px, 92vw" />
+						</div>
+						<figcaption className="flex items-center gap-5 border-t border-black/10 px-5 py-5 text-[#141b24]">
+							<div className="relative h-20 w-28 shrink-0"><Image alt="Redtail VAM-HDR GPS tracking device" src="/devices/vam-hdr.png" fill className="object-contain" sizes="112px" /></div>
+							<p className="text-sm font-semibold">Redtail VAM-HDR</p>
+						</figcaption>
+					</figure>
+				}
 			>
-				<div aria-hidden="true" className="absolute inset-y-0 right-0 w-1/3 border-l border-white/8 bg-white/3" />
-				<div className="relative mx-auto max-w-7xl">
-					<p className="text-xs font-semibold uppercase tracking-[0.28em] text-white/70">
-						For Turo Host Businesses
-					</p>
-					<h1
-						className="mt-6 max-w-4xl text-[2.7rem] font-semibold leading-[1.04] tracking-tight text-balance sm:text-6xl lg:text-7xl"
-						id="turo-host-heading"
-					>
-						GPS Tracking for Turo Hosts
-					</h1>
-					<p className="mt-6 max-w-2xl text-base leading-7 text-white/74 sm:text-xl sm:leading-8">
-						See where your vehicles are and review their journeys with
-						Redtail. Talk with our team about tracking for your host business,
-						device compatibility, and connecting Redtail devices to Tint.
-					</p>
-					<div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-6">
-						<Button asChild className="w-full sm:w-auto" size="lg">
-							<Link href="#footer-demo-form">
-								Request host guidance
-								<HugeIcon data-icon="inline-end" icon={ArrowRight01Icon} />
-							</Link>
-						</Button>
-						<a
-							className="inline-flex min-h-11 items-center text-sm font-semibold text-white/85 underline-offset-4 hover:text-white hover:underline"
-							href="tel:+18667114880"
-						>
-							Call Sales: +1 866 711 4880
-						</a>
-					</div>
-					<p className="mt-8 max-w-2xl border-l-2 border-rb-red pl-4 text-sm leading-6 text-white/64">
-						Tint lists Redtail as an approved GPS provider. {" "}
-						<a className="font-semibold text-white underline underline-offset-4" href={tintProviderUrl} rel="noopener noreferrer" target="_blank">
-							View Tint’s provider list
-						</a>
-					</p>
-				</div>
-			</section>
+				<p className="mt-7 max-w-xl border-l-2 border-[#f04449] pl-4 text-sm leading-6 text-white/75">
+					Tint lists Redtail as an approved GPS provider. {" "}
+					<a className="font-semibold text-white underline underline-offset-4" href={tintProviderUrl} rel="noopener noreferrer" target="_blank">View Tint’s provider list</a>
+				</p>
+			</EditorialHero>
 
 			<section
 				aria-labelledby="turo-host-request-heading"
@@ -145,15 +127,14 @@ export function TuroHostTrackingPage() {
 							eligibility and coverage under its current terms.
 						</p>
 					</div>
-					<ol className="mt-9 grid gap-7 border-t border-black/12 pt-7 lg:grid-cols-3 lg:gap-10">
-						{connectionSteps.map((step, index) => (
+					<ul className="mt-9 grid gap-7 border-t border-black/12 pt-7 lg:grid-cols-3 lg:gap-10">
+						{connectionSteps.map((step) => (
 							<li key={step.title}>
-								<p aria-hidden="true" className="text-sm font-semibold text-rb-red">0{index + 1}</p>
-								<h3 className="mt-3 text-xl font-semibold leading-7 text-rb-black">{step.title}</h3>
+								<h3 className="text-xl font-semibold leading-7 text-rb-black">{step.title}</h3>
 								<p className="mt-3 text-sm leading-7 text-rb-black/62">{step.text}</p>
 							</li>
 						))}
-					</ol>
+					</ul>
 					<div className="mt-9 max-w-3xl border-l-2 border-rb-red pl-5">
 						<p className="text-sm leading-7 text-rb-black/65">
 							Tint’s current program requires at least three active vehicles

@@ -60,6 +60,12 @@ export const solutionLinks: LinkItemType[] = [
     description: "Visibility, alerts, and fleet insight.",
   },
   {
+    label: "Stolen Vehicle Tracking",
+    href: "/solutions/stolen-vehicle-tracking",
+    icon: <NavIcon icon={CarTimeIcon} />,
+    description: "Technology for specialist tracking programs.",
+  },
+  {
     label: "Reseller Program",
     href: "/solutions/reseller-program",
     icon: <NavIcon icon={HierarchySquare03Icon} />,
@@ -85,6 +91,11 @@ export const solutionFeaturedLinks: LinkItemType[] = [
 export const solutionMatchers = ["/solutions"] as const;
 
 export const industryLinks: LinkItemType[] = [
+  {
+    label: "Auto OEM",
+    href: "/industries/auto-oem",
+    icon: <NavIcon icon={CpuIcon} />,
+  },
   {
     label: "Car Rental",
     href: "/industries/car-rental",

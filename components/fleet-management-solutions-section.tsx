@@ -17,6 +17,7 @@ import { type IconSvgElement } from "@hugeicons/react";
 import { HugeIcon } from "@/components/huge-icon";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { section179Benefit } from "@/lib/tax-benefits";
 import { cn } from "@/lib/utils";
 
 type FleetCapability = {
@@ -24,6 +25,7 @@ type FleetCapability = {
 	description: string;
 	category: string;
 	icon: IconSvgElement;
+	guidanceHref?: string;
 };
 
 type FleetMoment = {
@@ -52,6 +54,13 @@ const fleetMoments = [
 				title: "Vehicle Tracking",
 				description:
 					"Monitor your fleet in real-time with accurate GPS tracking. Get instant updates on vehicle locations, routes, and stops to enhance fleet visibility and ensure timely deliveries.",
+				category: "Locate",
+				icon: MapsLocation01Icon,
+			},
+			{
+				title: "Predicted Location",
+				description:
+					"View reported and predicted locations alongside journey history to understand where your vehicles are and how they are being used.",
 				category: "Locate",
 				icon: MapsLocation01Icon,
 			},
@@ -110,7 +119,7 @@ const fleetMoments = [
 			{
 				title: "Maintenance Scheduling",
 				description:
-					"Keep your fleet in top condition with automated maintenance reminders and scheduling. Track vehicle health and schedule maintenance based on mileage, engine hours, or specific time intervals.",
+					"Keep track of vehicle maintenance and plan service across your fleet. Review vehicle and device battery levels to help identify vehicles needing attention.",
 				category: "Maintain",
 				icon: Wrench01Icon,
 			},
@@ -120,6 +129,13 @@ const fleetMoments = [
 					"Use telematics-backed safety and security information when reviewing coverage, claims history, and fleet risk with your insurance provider.",
 				category: "Review",
 				icon: MoneyBag02Icon,
+			},
+			{
+				title: section179Benefit.title,
+				description: section179Benefit.description,
+				category: "U.S. tax",
+				icon: MoneyBag02Icon,
+				guidanceHref: section179Benefit.guidanceHref,
 			},
 		],
 	},
@@ -138,6 +154,13 @@ const fleetMoments = [
 				description:
 					"Gain insights into your fleet performance with detailed reports and analytics. Customize reports to track key metrics, identify trends, and make data-driven decisions to improve fleet efficiency and reduce costs.",
 				category: "Improve",
+				icon: FileChartColumnIcon,
+			},
+			{
+				title: "Odometer & Mileage Records",
+				description:
+					"Keep odometer and journey records to support business mileage and tax recordkeeping.",
+				category: "Record",
 				icon: FileChartColumnIcon,
 			},
 		],
@@ -195,6 +218,17 @@ function CapabilityRow({
 				>
 					{capability.description}
 				</p>
+				{capability.guidanceHref ? (
+					<a
+						className={cn("mt-3 inline-flex items-center gap-2 text-sm font-semibold hover:underline", featured ? "text-white" : "text-rb-red")}
+						href={capability.guidanceHref}
+						rel="noreferrer"
+						target="_blank"
+					>
+						{section179Benefit.guidanceLabel}
+						<HugeIcon className="-rotate-45" icon={ArrowRight01Icon} size={16} />
+					</a>
+				) : null}
 			</div>
 		</article>
 	);
@@ -251,14 +285,6 @@ function MomentBand({
 		>
 			<div className={cn("p-5 sm:p-7 lg:p-8", reversed && "lg:order-2")}>
 				<div className="flex items-center gap-4">
-					<span
-						className={cn(
-							"text-xs font-semibold tracking-[0.24em] uppercase",
-							featured ? "text-rb-red" : "text-rb-red"
-						)}
-					>
-						{String(index + 1).padStart(2, "0")}
-					</span>
 					<div
 						className={cn(
 							"h-px flex-1",

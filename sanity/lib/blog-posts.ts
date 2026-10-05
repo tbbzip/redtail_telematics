@@ -20,21 +20,14 @@ type SanityBlogPost = {
 	title?: string | null;
 };
 
-const fallbackImages = [
-	"/carousel/fleet-web.jpg",
-	"/carousel/insurance-web.jpg",
-	"/carousel/resellers-web.jpg",
-	"/carousel/iot-web.jpg",
-];
-
-function toBlogPost(post: SanityBlogPost, index: number): BlogPost | null {
+function toBlogPost(post: SanityBlogPost): BlogPost | null {
 	if (!post.title || !post.slug || !post.publishedAt) {
 		return null;
 	}
 
 	const image = post.mainImage
-		? urlForImage(post.mainImage).width(1200).height(760).fit("crop").url()
-		: fallbackImages[index % fallbackImages.length];
+		? urlForImage(post.mainImage).width(1200).fit("max").url()
+		: undefined;
 	const slug = post.slug;
 
 	return {
@@ -48,6 +41,7 @@ function toBlogPost(post: SanityBlogPost, index: number): BlogPost | null {
 		imageAlt: post.title,
 		publishedAt: post.publishedAt,
 		readTime: post.readTime || "4 min read",
+		resourceType: "Blog",
 		slug,
 		title: post.title,
 	};
@@ -57,7 +51,7 @@ export async function getLatestBlogPosts(limit = 4): Promise<BlogPost[]> {
 	try {
 		const posts = await client.fetch<SanityBlogPost[]>(LATEST_BLOG_POSTS_QUERY);
 		const mappedPosts = posts
-			.map((post, index) => toBlogPost(post, index))
+			.map(toBlogPost)
 			.filter((post): post is BlogPost => Boolean(post))
 			.slice(0, limit);
 
@@ -75,7 +69,7 @@ export async function getAllBlogPosts(): Promise<BlogPost[]> {
 		const posts = await client.fetch<SanityBlogPost[]>(ALL_BLOG_POSTS_QUERY);
 
 		return posts
-			.map((post, index) => toBlogPost(post, index))
+			.map(toBlogPost)
 			.filter((post): post is BlogPost => Boolean(post));
 	} catch (error) {
 		console.error("[Sanity] Failed to fetch the blog index.");

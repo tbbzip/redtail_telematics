@@ -81,7 +81,7 @@ function FleetContent() {
 				Identifying a vehicle&apos;s exact location helps fleet managers:
 			</p>
 			<ul className="mt-2 list-disc pl-5 text-base leading-7 md:text-lg">
-				<li>Provide real-time traffic support.</li>
+				<li>Review vehicle locations and journey history.</li>
 				<li>
 					Improve customer service by sending the nearest vehicle to fulfill an
 					assigned task.

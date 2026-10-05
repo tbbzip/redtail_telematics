@@ -12,11 +12,14 @@ import {
 	Wrench01Icon,
 } from "@hugeicons/core-free-icons";
 import { type IconSvgElement } from "@hugeicons/react";
+import { section179Benefit } from "@/lib/tax-benefits";
 
 export type IndustrySolution = {
 	title: string;
 	description: string;
 	icon: IconSvgElement;
+	href?: string;
+	linkLabel?: string;
 };
 
 export type IndustryOutcome = {
@@ -161,15 +164,15 @@ const carRentalPage: IndustryPageContent = {
 			icon: FileChartColumnIcon,
 		},
 		{
-			title: "Automated Maintenance Scheduling",
+			title: "Vehicle Maintenance",
 			description:
-				"Use available mileage, diagnostic, and usage data to support maintenance reminders. Service decisions remain subject to manufacturer guidance and qualified inspection.",
+				"Keep track of vehicle maintenance and plan service across your rental fleet. Review vehicle and device battery levels to help identify vehicles needing attention.",
 			icon: Wrench01Icon,
 		},
 		{
 			title: "Geofencing",
 			description:
-				"Define virtual boundaries around your rental locations to monitor vehicle entry and exit. Receive instant alerts if a vehicle leaves designated areas, ensuring compliance with rental agreements and enhancing security.",
+				"Define virtual boundaries around rental locations and review alerts when a vehicle enters or leaves designated areas. Use those events to investigate unexpected activity and rental-agreement exceptions.",
 			icon: MapsLocation01Icon,
 		},
 		{
@@ -187,7 +190,7 @@ const carRentalPage: IndustryPageContent = {
 		{
 			title: "Operational Reporting",
 			description:
-				"Bring vehicle activity, exceptions, maintenance inputs, and device records into reports that can be reviewed by the appropriate operational teams.",
+				"Bring vehicle activity, exceptions, maintenance, and journey records into reports for your operational teams.",
 			icon: FileChartColumnIcon,
 		},
 		{
@@ -195,6 +198,40 @@ const carRentalPage: IndustryPageContent = {
 			description:
 				"Configure speed-event alerts to surface activity for operational review. Alert timing depends on the device, connectivity, and configured reporting behavior.",
 			icon: BellDotIcon,
+		},
+		{
+			title: "Location Intelligence",
+			description:
+				"View reported and predicted locations alongside journey history to understand where rental vehicles are and how they are being used.",
+			icon: MapsLocation01Icon,
+		},
+		{
+			title: "Odometer & Mileage Records",
+			description:
+				"Keep odometer and journey records to support business mileage and tax recordkeeping across your rental fleet.",
+			icon: FileChartColumnIcon,
+		},
+		{
+			title: section179Benefit.title,
+			description: section179Benefit.description,
+			icon: FileChartColumnIcon,
+			href: section179Benefit.guidanceHref,
+			linkLabel: section179Benefit.guidanceLabel,
+		},
+		{
+			title: "Circuit Driving",
+			description:
+				"Review circuit sessions, vehicle activity, and lap records to investigate track use by rental vehicles.",
+			icon: Route03Icon,
+			href: "#rental-circuit-driving",
+		},
+		{
+			title: "Remote Disable Options",
+			description:
+				"Discuss remote disable requirements with Redtail. Availability is subject to compatible vehicles, deployment configuration, and completion of testing.",
+			icon: ShieldKeyIcon,
+			href: "/contact-us",
+			linkLabel: "Discuss options",
 		},
 	],
 	workflow: [
@@ -216,7 +253,7 @@ const carRentalPage: IndustryPageContent = {
 			label: "Maintain",
 			title: "Keep vehicles ready for the next renter",
 			description:
-				"Use mileage, diagnostics, and usage patterns to schedule service before avoidable downtime affects availability.",
+				"Keep track of vehicle maintenance and usage so your teams can plan service around rental availability.",
 			icon: Wrench01Icon,
 		},
 		{
@@ -231,12 +268,12 @@ const carRentalPage: IndustryPageContent = {
 		{
 			question: "What is telematics and how does it benefit my car rental business?",
 			answer:
-				"Telematics combines vehicle devices, connectivity, and software to report data such as location, mileage, driving events, and supported diagnostics. Rental teams can use that information as an input to fleet availability, maintenance, incident, and vehicle-use workflows.",
+				"Telematics combines vehicle devices, connectivity, and software to report location, mileage, journeys, and driving events. Rental teams can use that information to support fleet availability, maintenance, incident review, and vehicle-use workflows.",
 		},
 		{
 			question: "How can telematics help reduce my operational costs?",
 			answer:
-				"Telematics can help teams identify unusual use, review mileage and supported diagnostics, and plan operational follow-up. Actual cost outcomes depend on fleet practices, implementation, and the actions taken from the data.",
+				"Telematics helps teams identify unusual use, review mileage and idling, and plan operational follow-up. Actual cost outcomes depend on fleet practices and the actions taken from the data.",
 		},
 		{
 			question: "How do I set up telematics devices in my rental fleet?",
@@ -251,12 +288,12 @@ const carRentalPage: IndustryPageContent = {
 		{
 			question: "How does telematics enhance the customer experience for car rentals?",
 			answer:
-				"Vehicle status, mileage, location, and supported diagnostic data can give branch teams more context for availability, returns, and service follow-up. The customer experience depends on how each rental operator integrates that data into its processes.",
+				"Vehicle status, mileage, location, and maintenance records give branch teams more context for availability, returns, and service follow-up. The customer experience depends on how each rental operator uses that information.",
 		},
 		{
 			question: "What type of data can I track with telematics?",
 			answer:
-				"Depending on the selected device, vehicle, connectivity, and integration, available data may include reported location, mileage, speed events, harsh braking, acceleration, trip history, and supported vehicle diagnostics. Compatibility should be confirmed for the proposed deployment.",
+				"Available data may include reported and predicted location, mileage, speed events, harsh braking, acceleration, journey history, and vehicle or device battery levels. Redtail can confirm what is available for the selected device, vehicle, and service setup.",
 		},
 		{
 			question: "Can telematics help reduce insurance premiums for my rental fleet?",
@@ -271,7 +308,7 @@ const carRentalPage: IndustryPageContent = {
 		{
 			question: "How can telematics help with maintenance scheduling?",
 			answer:
-				"Available mileage, engine-hour, diagnostic, and usage data can support maintenance reminders and planning. It does not replace manufacturer schedules, inspections, technician judgement, or required maintenance records.",
+				"Keep fleet usage and maintenance records together so your team can plan vehicle service around rental operations.",
 		},
 		{
 			question: "What kind of customer support is available for telematics setup and maintenance?",
@@ -403,8 +440,8 @@ const industryHeroPages = [
 		description:
 			"Maximize Fleet Efficiency, Ensure Timely Deliveries, and Reduce Operational Costs with Our Advanced Telematics Solutions",
 		imageSrc: "/industries/hero-logistics.webp",
-		imageAlt: "Logistics trucks traveling on a highway",
-		chips: ["Live ETAs", "Route visibility", "Driver performance"],
+		imageAlt: "Logistics trucks parked in a fleet yard",
+		chips: ["Journey visibility", "Route visibility", "Driver performance"],
 		imagePosition: "center",
 	}),
 	createIndustryHeroPage({
@@ -415,7 +452,7 @@ const industryHeroPages = [
 			"Improve Passenger Safety, Enhance Efficiency, and Ensure Reliable Service with Our Transit Solutions",
 		imageSrc: "/industries/hero-passenger.webp",
 		imageAlt: "Passenger bus being cleaned and prepared for service",
-		chips: ["Service reliability", "Vehicle health", "Route operations"],
+		chips: ["Service reliability", "Maintenance support", "Route operations"],
 		imagePosition: "center",
 	}),
 	createIndustryHeroPage({

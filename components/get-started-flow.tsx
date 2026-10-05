@@ -507,7 +507,7 @@ export function GetStartedFlow() {
 						{step === 1 && submissionState !== "success" ? (
 							<section className="text-center">
 								<p className="text-sm font-semibold tracking-[0.24em] text-white/52 uppercase">
-									Step 1 of 3
+									Your industry
 								</p>
 								<h1
 									className="mt-4 text-4xl leading-tight font-semibold outline-none sm:text-5xl"
@@ -537,7 +537,7 @@ export function GetStartedFlow() {
 						{step === 2 && submissionState !== "success" ? (
 							<section className="text-center">
 								<p className="text-sm font-semibold tracking-[0.24em] text-white/52 uppercase">
-									Step 2 of 3
+									Fleet size
 								</p>
 								<h1
 									className="mt-4 text-4xl leading-tight font-semibold outline-none sm:text-5xl"
@@ -568,7 +568,7 @@ export function GetStartedFlow() {
 						{step === 3 && submissionState !== "success" ? (
 							<section className="text-center">
 								<p className="text-sm font-semibold tracking-[0.24em] text-white/52 uppercase">
-									Step 3 of 3
+									Contact details
 								</p>
 								<h1
 									className="mt-4 text-4xl leading-tight font-semibold outline-none sm:text-5xl"

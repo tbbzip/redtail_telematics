@@ -3,10 +3,11 @@ export type ResourceIndexItem = {
 	category: string;
 	excerpt: string;
 	href?: string;
-	image: string;
+	image?: string;
 	imageAlt?: string;
 	imageFit?: "cover" | "contain";
 	publishedAt: string;
+	resourceType?: string;
 	secondaryMeta?: string;
 	secondaryMetaIcon?: "author" | "file" | "location" | "story";
 	slug: string;
