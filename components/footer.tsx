@@ -491,10 +491,24 @@ export function Footer() {
 								))}
 							</nav>
 						</div>
-							<p className="mt-6 text-sm text-white/58">
-							&copy; {new Date().getFullYear()} Redtail Telematics. All rights
-							reserved.
-						</p>
+						<div className="mt-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+							<p className="text-sm text-white/58">
+								&copy; {new Date().getFullYear()} Redtail Telematics. All rights
+								reserved.
+							</p>
+							<p className="text-xs text-white/58">
+								Website by{" "}
+								<a
+									className="inline-flex min-h-6 items-center rounded-sm underline decoration-white/25 underline-offset-4 transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+									href="https://thebrandingbull.com"
+									rel="noopener"
+									target="_blank"
+								>
+									The Branding Bull
+									<span className="sr-only"> (opens in a new tab)</span>
+								</a>
+							</p>
+						</div>
 					</div>
 			</div>
 		</footer>
